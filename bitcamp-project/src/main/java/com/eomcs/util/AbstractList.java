@@ -2,36 +2,17 @@ package com.eomcs.util;
 
 public abstract class AbstractList<E> implements List<E> {
 
-  protected int size;
+  public abstract void add(E value);
 
-  @Override
-  public Iterator<E> iterator() {
+  public abstract void add(int index, E value);
 
-    return new Iterator<>() {
-      List<E> list;
-      int cursor;
+  public abstract E get(int index);
 
-      {
-        this.list = AbstractList.this;
-      }
+  public abstract E remove(int index);
 
-      @Override
-      public boolean hasNext() {
-        return cursor < list.size();
-      }
+  public abstract E set(int index, E value);
 
-      @Override
-      public E next() {
-        return list.get(cursor++);
-      }
-    };
-  }
+  public abstract E[] toArray();
 
-  @Override
-  public int size() {
-    return this.size;
-  }
-
+  public abstract E[] toArray(E[] e);
 }
-
-

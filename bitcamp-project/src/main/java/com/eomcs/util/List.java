@@ -1,23 +1,22 @@
 package com.eomcs.util;
 
 public interface List<E> {
+  int size = 0;
 
-  void add(E e);
+  public abstract void add(E value);
 
-  void add(int index, E e);
+  public abstract void add(int index, E value);
 
-  E get(int index);
+  public abstract E get(int index);
 
-  E set(int index, E e);
+  public abstract E remove(int index);
 
-  E remove(int index);
-
-  E[] toArray();
-
-  E[] toArray(E[] arr);
+  public abstract E set(int index, E value);
 
   int size();
 
-  Iterator<E> iterator();
-  
+  public abstract E[] toArray();
+
+  public abstract E[] toArray(E[] e);
+
 }
