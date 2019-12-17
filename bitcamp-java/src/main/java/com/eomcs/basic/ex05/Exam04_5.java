@@ -1,6 +1,7 @@
 // 비트 이동 연산자 : 응용 II
 package com.eomcs.basic.ex05;
 
+// 실무에서 많이 씀!!
 public class Exam04_5 {
     public static void main(String[] args) {
         // Yes/No 또는 true/false 값을 저장할 때 
@@ -57,7 +58,7 @@ public class Exam04_5 {
         // 1010_1000 | 0000_0010 = 1010_1010
 
         //lang2 |= 0x00; // css = false
-
+        System.out.println(lang2);
         // 즉 비트를 이용하여 각 데이터의 true/false를 표현한다.
         
     }

@@ -34,7 +34,5 @@ public class Exam04_4 {
         System.out.println(Integer.toHexString(b));
         System.out.println(Integer.toHexString(c));
         System.out.println(Integer.toHexString(d));
-
-
     }
 }
