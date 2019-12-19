@@ -3,7 +3,7 @@ package com.eomcs.basic.ex04.assignment;
 import java.util.Scanner;
 import java.lang.Math;
 
-public class Test02 {
+public class RockScissorPaperGame {
   public static void main(String[] args) {
     java.io.InputStream inputStream = System.in;
     java.util.Scanner scanner = new java.util.Scanner(inputStream);
@@ -22,7 +22,7 @@ public class Test02 {
     scanner.close();
     
     System.out.print("컴퓨터 : ");
-    int computerChoice = (int)Math.random()*3;
+    int computerChoice = (int) (Math.random() * 3);
     String computerString = "";
     switch (computerChoice) {
       case 0: computerString = "가위"; break;

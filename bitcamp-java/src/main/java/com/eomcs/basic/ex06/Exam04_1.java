@@ -12,6 +12,7 @@ public class Exam04_1 {
         for (int i = 1; i <= 5; i++) 
             System.out.println(i);
 
+        //System.out.println(i); 컴파일 오류
         System.out.println("----------------------");
         for (int i = 1; i <= 5;) {
             System.out.println(i);

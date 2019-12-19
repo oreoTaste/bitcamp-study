@@ -7,8 +7,12 @@ public class Exam3 {
 
 
   }
-
-  @Override
+  @Deprecated
+  public String toString(String str) {
+    return str;
+  }
+  
+  @Override 
   public String toString(){
     return "okok";
   }

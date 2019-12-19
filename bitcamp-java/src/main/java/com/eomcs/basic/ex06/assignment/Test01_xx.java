@@ -12,7 +12,7 @@ public class Test01_xx {
         while (count <= len) {
             int starCnt = 1;
             while (starCnt <= count) {
-                System.out.print("*");
+                System.out.print("  *");
                 starCnt++;
             }
             System.out.println();

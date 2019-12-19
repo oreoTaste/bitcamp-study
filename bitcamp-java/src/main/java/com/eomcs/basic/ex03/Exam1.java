@@ -7,7 +7,7 @@ public class Exam1 {
     //정수 리터럴 (8진수)
     System.out.println(0116);
     System.out.println(-0116);
-.3
+
     //정수 리터럴 (16진수)
     System.out.println(0x4e);
     System.out.println(-0x4e);
