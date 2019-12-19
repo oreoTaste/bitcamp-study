@@ -3,60 +3,59 @@ import java.sql.Date;
 import java.util.Scanner;
 
 public class App {
+  static final int size = 100;
+  static Board[] boards = new Board[size];
+  static int count = 0;
+
   public static void main(String[] args) {
-    final int SIZE = 100;
+    // 키보드에서 사용자가 입력한 값을 읽어 문자열이나 정수, 부동소수점으로 리턴하는 역할
+   
+    inputFromUser();
+    printout();
 
-    class Lesson {
-      int no;
-      String title;
-      Date date;
-      int viewCount;
-      String context;
-      Date startDate;
-      Date endDate;
-      int totalHour;
-      int dailyHour;
-    }
+  }
 
-    Lesson[] lessons = new Lesson[SIZE];
-    int count = 0;
-
+  static void inputFromUser(){
     java.io.InputStream inputStream = System.in;
     java.util.Scanner scanner = new java.util.Scanner(inputStream);
 
     for(int i=0 ; ; i++){
-      Lesson les = new Lesson();
+      Board b = new Board();
       System.out.print("번호? ");
-      les.no = scanner.nextInt();
+      b.no = scanner.nextInt();
       scanner.nextLine();
       System.out.print("수업명? ");
-      les.title = scanner.nextLine();
+      b.title = scanner.nextLine();
       System.out.print("수업내용? ");
-      les.context = scanner.nextLine();
+      b.context = scanner.nextLine();
       System.out.print("시작일? (형식 : 2019-01-01) ");
-      les.startDate = Date.valueOf(scanner.nextLine());
+      b.startDate = Date.valueOf(scanner.nextLine());
       System.out.print("종료일? (형식 : 2019-01-01) ");
-      les.endDate = Date.valueOf(scanner.nextLine());
+      b.endDate = Date.valueOf(scanner.nextLine());
       System.out.print("총수업시간? (형식: 1000) ");
-      les.totalHour = scanner.nextInt();
+      b.totalHour = scanner.nextInt();
       System.out.print("일수업시간? (형식: 8) ");
-      les.dailyHour = scanner.nextInt();
+      b.dailyHour = scanner.nextInt();
       System.out.println();
       scanner.nextLine();
       count++;
-      lessons[i] = les;
+      boards[i] = b;
       System.out.print("계속입력하시겠습니까?(y/n) ");
       String check = scanner.nextLine();
-      if(check.equals("Y")||check.equals("y")) continue;
-      else if(check.equals("N")||check.equals("n")) break;
-    } scanner.close();
-
-    for(int i=0 ; i<count ; i++){
-      Lesson les = lessons[i];
-      System.out.printf("%d, %s     , %tF ~ %tF, %d\n", les.no, les.title, les.startDate, les.endDate, les.totalHour);
-    }
-
+        if(check.equals("Y")||check.equals("y")) continue;
+        else if(check.equals("N")||check.equals("n")) break;
+      } scanner.close();
   }
+
+
+  static void printout(){
+    for(int i=0 ; i<count ; i++){
+      Board b = boards[i];
+      System.out.printf("%d, %s     , %tF ~ %tF, %d\n", b.no, b.title, b.startDate, b.endDate, b.totalHour);
+    }
+  }
+
+
 }
 /*
 번호? 1
@@ -92,4 +91,4 @@ public class App {
 1, 자바 프로젝트 실습     , 2019-01-02 ~ 2019-05-28, 1000
 2, 자바 프로그래밍 기초    , 2019-02-01 ~ 2019-02-28,  160
 3, 자바 프로그래밍 고급    , 2019-03-02 ~ 2019-03-30,  160
- */
+*/
