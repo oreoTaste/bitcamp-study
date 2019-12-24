@@ -1,9 +1,5 @@
 package com.eomcs.lms;
 
-import com.eomcs.lms.handler.BoardHandler;
-import com.eomcs.lms.handler.LessonHandler;
-import com.eomcs.lms.handler.MemberHandler;
-
 public class App {
   static java.io.InputStream inputStream = System.in;
   static java.util.Scanner scanner = new java.util.Scanner(inputStream);
@@ -12,7 +8,7 @@ public class App {
 
   public static void main(String[] args) {
     // LessonHandler, MemberHandler, BoardHandler에 있는 Scanner는 
-    // App에있는 Scanner를 사용한다.(이때, public인 것을 받아온다)
+    // App에있는 Scanner를 사용한다.
     LessonHandler.scanner = scanner;
     MemberHandler.scanner = scanner;
     BoardHandler.scanner = scanner;

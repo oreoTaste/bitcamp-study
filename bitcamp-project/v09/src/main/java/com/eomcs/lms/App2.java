@@ -13,7 +13,7 @@ public class App2 {
     int count = 0;
     final int SIZE = 100;
     
-    class Lesson {
+    class Member {
       int no;
       String name;
       String email;
@@ -22,7 +22,7 @@ public class App2 {
       String tel;
       Date registeredDate;
     }
-    Lesson[] lessons = new Lesson[SIZE];
+    Member[] member = new Member[SIZE];
 
 
     java.io.InputStream inputStream = System.in;
@@ -30,23 +30,23 @@ public class App2 {
 
 
     for(count = 0 ; count<SIZE ; count++) {
-      Lesson les = new Lesson();
-      lessons[count] = les;
+      Member mem = new Member();
+      member[count] = mem;
 
       System.out.print("번호?");
-      les.no = scanner.nextInt();
+      mem.no = scanner.nextInt();
       scanner.nextLine(); // 빈칸제거
       System.out.print("이름? ");
-      les.name = scanner.nextLine();
+      mem.name = scanner.nextLine();
       System.out.print("이메일? ");
-      les.email = scanner.nextLine();
+      mem.email = scanner.nextLine();
       System.out.print("비밀번호? ");
-      les.password = scanner.nextLine();
+      mem.password = scanner.nextLine();
       System.out.print("사진? ");
-      les.photo = scanner.nextLine();
+      mem.photo = scanner.nextLine();
       System.out.print("전화? ");
-      les.tel = scanner.nextLine();
-      les.registeredDate = new Date(System.currentTimeMillis());
+      mem.tel = scanner.nextLine();
+      mem.registeredDate = new Date(System.currentTimeMillis());
       System.out.println();
       System.out.print("계속 입력하시겠습니까?(y/n)");
       String repeat = scanner.nextLine();
@@ -57,9 +57,9 @@ public class App2 {
     System.out.println();
 
       for(int i=0 ; i<count+1 ; i++) {
-        Lesson les = lessons[i];
+        Member m = member[i];
         System.out.printf("%1$d, %2$s , %3$s       , %4$s      , %5$tH:%5$tM:%5$tS\n",
-            les.no, les.name,  les.email,  les.tel , les.registeredDate );
+            m.no, m.name,  m.email,  m.tel , m.registeredDate );
     }
   }
 }

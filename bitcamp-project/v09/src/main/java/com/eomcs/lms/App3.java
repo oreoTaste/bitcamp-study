@@ -20,18 +20,18 @@ public class App3 {
     int count = 0;
 
     for(int i=0 ; i<100 ; i++) {
-      Board lec = new Board();
+      Board board = new Board();
       System.out.print("번호? ");
-      lec.no = keyboard.nextInt();
+      board.no = keyboard.nextInt();
       keyboard.nextLine(); // 줄바꿈 기호 제거용
 
       System.out.print("내용? ");
-      lec.title = keyboard.nextLine();
+      board.title = keyboard.nextLine();
 
-      lec.date = new Date(System.currentTimeMillis());
-      lec.viewCount    = 0;
+      board.date = new Date(System.currentTimeMillis());
+      board.viewCount    = 0;
 
-      boards[i] = lec;
+      boards[i] = board;
       count++;
 
       System.out.println();
