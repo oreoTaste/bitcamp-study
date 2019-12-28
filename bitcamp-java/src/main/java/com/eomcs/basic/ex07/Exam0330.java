@@ -15,9 +15,17 @@ public class Exam0330 {
 
   static void swap(MyObject ref) {
     System.out.printf("swap(): a=%d, b=%d\n", ref.a, ref.b);
+    /*
+    MyObject myObj = new MyObject();
+    myObj.a = 1;
+    myObj.b = 2;
+    ref = myObj;
+    */
+    
     int temp = ref.a;
     ref.a = ref.b;
     ref.b = temp;
+    
     System.out.printf("swap(): a=%d, b=%d\n", ref.a, ref.b);
   }
 

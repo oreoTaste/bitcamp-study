@@ -17,7 +17,7 @@ public class Exam0520 {
     // 
     for (String value : args) {
       System.out.printf("[%s]\n", value);
-    }
+    } System.out.println("종료");
   }
 }
 

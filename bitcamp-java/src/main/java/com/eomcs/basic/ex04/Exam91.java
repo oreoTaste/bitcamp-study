@@ -29,11 +29,6 @@ public class Exam91 {
     d = l;
     System.out.println(d);
     
-    float f = 3.14f;
-    double d = 3.14;
-    
-    int i;
-    long l;
     
     i = (int)f;
     System.out.println(i);
