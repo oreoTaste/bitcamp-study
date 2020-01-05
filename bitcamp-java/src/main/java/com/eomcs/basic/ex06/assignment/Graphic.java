@@ -1,20 +1,33 @@
 package com.eomcs.basic.ex06.assignment;
 
-import java.util.Scanner;
-
 public class Graphic {
-  static void draw(int line, String str) {
-    int count = 0;
-    while (count++ < line) {
-      System.out.print(str);
-    }
-  }
-
-  static void draw(int line) {
-    int count = 0;
-    while (count++ < line) {
+  
+  static void drawLine(int length) {
+    int x = 0;
+    while (x++ < length) {
       System.out.print("*");
     }
   }
-
+  
+  static void drawLine(int length, char ch) {
+    int x = 0;
+    while (x++ < length) {
+      System.out.print(ch);
+    }
+  }
+  
+  static void drawRectangle(int width, int height, char ch) {
+    for (int i = 0; i < height; i++) {
+      for (int j = 0; j < width; j++) {
+        System.out.print(ch);
+      }
+      System.out.println();
+    }
+  }
 }
+
+
+
+
+
+

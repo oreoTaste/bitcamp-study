@@ -9,10 +9,8 @@ public class Exam0510 {
   // public static void main(String[] 변수명)
   // 
   public static void main(String[] 변수명은상관없다) {
-    
     System.out.println("Hello!");
   }
- 
 }
 
 

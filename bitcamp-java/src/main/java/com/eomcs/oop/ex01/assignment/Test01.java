@@ -1,33 +1,47 @@
 package com.eomcs.oop.ex01.assignment;
 
+import java.util.Scanner;
+
 public class Test01 {
-    public static void main(String[] args) {
-        java.util.Scanner keyScan = new java.util.Scanner(System.in);
-/*
-        // Score 메모리(인스턴스)의 주소를 저장할 변수: 레퍼런스 준비
-        step03.Score[] scores = new step03.Score[3];
+  public static void main(String[] args) {
 
-        // 입력 값을 저장할 Score 메모리를 준비한다.
-        for (int i = 0; i < scores.length; i++) {
-            scores[i] = new step03.Score();
-
-            System.out.print("입력: ");
-            scores[i].name = keyScan.next();
-            scores[i].kor = keyScan.nextInt();
-            scores[i].eng = keyScan.nextInt();
-            scores[i].math = keyScan.nextInt();
-            scores[i].sum = scores[i].kor + scores[i].eng + scores[i].math;
-            scores[i].aver = scores[i].sum / 3;
-        }
-        
-        System.out.println("--------------------------------");
-
-        for (int i = 0; i < scores.length; i++) {
-            System.out.printf("%s %3d %3d %3d %3d %5.1f\n", 
-                scores[i].name, 
-                scores[i].kor, scores[i].eng, scores[i].math,
-                scores[i].sum, scores[i].aver);
-        }
-*/
+    class Score {
+      String name;
+      int kor;
+      int eng;
+      int math;
     }
+
+    Scanner keyScan = new Scanner(System.in);
+
+    Score[] arr = new Score[3];
+
+    for (int i = 0; i < arr.length; i++) {
+      System.out.print("입력: ");
+      Score s = new Score();
+
+      s.name = keyScan.next();
+      s.kor = keyScan.nextInt();
+      s.eng = keyScan.nextInt();
+      s.math = keyScan.nextInt();
+
+      arr[i] = s;
+    }
+
+    keyScan.close();
+
+    System.out.println("-------------------");
+    
+    for (int i = 0; i < arr.length; i++) {
+      Score s = arr[i];
+      int sum = s.kor + s.eng + s.math;
+      float aver = sum / 3f;
+      System.out.printf("%s %d %d %d %d %.1f\n", 
+          s.name, s.kor, s.eng, s.math, sum, aver);
+    }
+  }
 }
+
+
+
+

@@ -6,47 +6,43 @@ import com.eomcs.lms.domain.Board;
 import com.eomcs.lms.domain.Member;
 
 public class MemberHandler {
+  ArrayList memberList;
 
-  //개별 관리
-  int memberCount = 0;
-  Member[] member;
-
-  //공유 관리
-  static final int SIZE = 100;
   public Scanner input; // 다른 패키지에서 사용할 수 있도록 public으로 공개처리!
 
   public MemberHandler(Scanner input) {
     this.input = input;
-    this.member = new Member[SIZE];
+    memberList = new ArrayList();
   }
 
   public void listMember() {
-    for(int i=0 ; i < this.memberCount ; i++) {
-      Member m = this.member[i];
-      System.out.printf("%1$d, %2$s , %3$s       , %4$s      , %5$tH:%5$tM:%5$tS\n",
-          m.no, m.name,  m.email,  m.tel , m.registeredDate );
+    Object[] object = memberList.toArray();
+    for(Object obj : object) {
+      Member m = (Member)obj;
+        System.out.printf("%1$d, %2$s , %3$s       , %4$s      , %5$tH:%5$tM:%5$tS\n",
+            m.getNo(), m.getName(),  m.getEmail(),  m.getTel() , m.getRegisteredDate());
     }
   }
 
-
   public void addMember() {
-    Member mem = new Member();
+    Object object = new Member();
+    Member mem = (Member)object;
     System.out.print("번호?");
-    mem.no = input.nextInt();
+    mem.setNo(input.nextInt());
     input.nextLine(); // 빈칸제거
     System.out.print("이름? ");
-    mem.name = input.nextLine();
+    mem.setName(input.nextLine());
     System.out.print("이메일? ");
-    mem.email = input.nextLine();
+    mem.setEmail(input.nextLine());
     System.out.print("비밀번호? ");
-    mem.password = input.nextLine();
+    mem.setPassword(input.nextLine());
     System.out.print("사진? ");
-    mem.photo = input.nextLine();
+    mem.setPhoto(input.nextLine());
     System.out.print("전화? ");
-    mem.tel = input.nextLine();
-    mem.registeredDate = new Date(System.currentTimeMillis());
-
-    this.member[this.memberCount++] = mem;
+    mem.setTel(input.nextLine());
+    mem.setRegisteredDate(new Date(System.currentTimeMillis()));
+    
+    memberList.add(mem);
     System.out.println("저장하였습니다.");
   }
 

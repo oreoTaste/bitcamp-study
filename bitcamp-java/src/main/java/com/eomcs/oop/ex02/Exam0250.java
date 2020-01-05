@@ -23,7 +23,7 @@ public class Exam0250 {
     c2.plus(3);        // + 3
 
     c1.plus(3);        // + 2 + 3
-    c2.multiple(2);    // + 3 * 2 
+    c2.multiple(2);    // + 3 * 2
 
     c1.minus(1);       // + 2 + 3 - 1
     c2.plus(7);        // + 3 * 2 + 7

@@ -1,0 +1,27 @@
+
+plugins {
+    id 'java'
+    id 'application'
+    // 이클립스 IDE 관련 작업을 수행할 수 있는 명령이 들어있다.
+    id 'eclipse'
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    sourceCompatibility = '1.6'
+    targetCompatibility = '1.6'
+}
+
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    implementation 'com.google.guava:guava:28.0-jre'
+    testImplementation 'junit:junit:4.12'
+}
+
+application {
+    mainClassName = 'com.eomcs.lms.App'
+}

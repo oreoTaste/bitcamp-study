@@ -1,8 +1,7 @@
 package com.eomcs.basic.ex07;
 
 //# 메서드 : 개념 및 기본 문법 II
-
-
+//
 public class Exam0220 {
 
   // 2) 메서드 : 리턴값(X), 파라미터(O)
@@ -58,3 +57,13 @@ public class Exam0220 {
 //    name과 age 변수가 파라미터이다.
 //
 // 현장에서는 "아규먼트"와 "파라미터"를 구분하지 않고 사용한다. 
+
+
+
+
+
+
+
+
+
+

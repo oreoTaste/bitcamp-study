@@ -1,6 +1,6 @@
 package com.eomcs.oop.ex02;
 
-//# 사용자 정의 데이터 타입 - 메서드 = 연산자
+//# 사용자 정의 데이터 타입 - 연산자를 static method 문법으로 정의
 //
 public class Score2 {
   String name;
@@ -22,7 +22,7 @@ public class Score2 {
     score.average = score.sum / 3f;
   }
 
-  // 클래스 메서드 == 스태틱메서드
+  // 클래스 메서드 
   // => static이 붙은 메서드이다.
   // => 특정 인스턴스에 대해 사용하는 것이 아니라, 
   //    모든 인스턴스에 대해 사용할 수 있다.
