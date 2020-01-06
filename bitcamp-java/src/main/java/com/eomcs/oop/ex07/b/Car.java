@@ -1,5 +1,8 @@
 package com.eomcs.oop.ex07.b;
 
+import java.util.Calendar;
+import java.util.Locale;
+
 public class Car {
   String model;
   String maker;
@@ -30,6 +33,8 @@ public class Car {
   // 
   public static Car create(String name) {
 
+    Calendar cal = Calendar.getInstance(Locale.KOREA);
+    System.out.println(cal);
     Car c = new Car(); // private은 클래스 안에서 사용할 수 있다.
 
     switch (name) {
@@ -52,6 +57,7 @@ public class Car {
         c.valve = 0;
     }
     return c;
+    
   }
 }
 

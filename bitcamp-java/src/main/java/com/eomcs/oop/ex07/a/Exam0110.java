@@ -1,74 +1,41 @@
-//#캡슐화 문법 사용 전 : 개발자가 클래스를 작성한 사람의 의도대로 정상적으로 사용할때
-
+//# 캡슐화 문법 사용 전 - 개발자가 클래스를 작성한 사람의 의도대로 정상적으로 사용할 때
 package com.eomcs.oop.ex07.a;
 
 class Score {
   String name;
-  private int kor;
-  private int eng;
-  private int math;
-  private int sum;
-  private float aver;
-
+  int kor;
+  int eng;
+  int math;
+  int sum;
+  float aver;
+  
   void compute() {
-    this.sum = this.kor + this.math + this.eng;
+    this.sum = this.kor + this.eng + this.math;
     this.aver = this.sum / 3f;
   }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public void setKor(int kor) {
-    this.kor = kor;
-    this.compute();
-  }
-
-  public void setEng(int eng) {
-    this.eng = eng;
-    this.compute();
-  }
-
-  public void setMath(int math) {
-    this.math = math;
-    this.compute();
-  }
-
-  public String getName() {
-    return this.name;
-  }
-
-  public int getKor() {
-    return this.kor;
-  }
-
-  public int getEng() {
-    return this.eng;
-  }
-
-  public int getMath() {
-    return this.math;
-  }
-
-  public int getSum() {
-    return sum;
-  }
-
-  public float getAver() {
-    return aver;
-  }
-
 }
 
 public class Exam0110 {
   public static void main(String[] args) {
-    Score2 s1 = new Score2();
-    s1.setName("홍길동");
-    s1.setKor(100);
-    s1.setEng(90);
-    s1.setMath(85);
-
+    Score s1 = new Score();
+    s1.name = "홍길동";
+    s1.kor = 100;
+    s1.eng = 90;
+    s1.math = 80;
+    s1.compute();
+    
     System.out.printf("%s, %d, %d, %d, %d, %.1f\n",
-        s1.getName(), s1.getKor(), s1.getEng(), s1.getMath(), s1.getSum(), s1.getAver());
+        s1.name, s1.kor, s1.eng, s1.math, s1.sum, s1.aver);
   }
 }
+
+
+
+
+
+
+
+
+
+
+
