@@ -34,14 +34,6 @@ public class App {
           lessonHandler.listLesson();
           break;
 
-        case "/lesson/update" :
-          lessonHandler.updateLesson();
-          break;
-          
-        case "/lesson/delete" :
-          lessonHandler.deleteLesson();
-          break;
-          
         case "/member/add" :
           memberHandler.addMember();
           break;
@@ -60,14 +52,6 @@ public class App {
           
         case "/board/detail" :
           boardHandler.detailBoard();
-          break;
-          
-        case "/board/update" :
-          boardHandler.updateBoard();
-          break;
-          
-        case "/board/delete" :
-          boardHandler.deleteBoard();
           break;
           
         default : 
