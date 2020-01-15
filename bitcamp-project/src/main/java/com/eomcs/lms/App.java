@@ -1,32 +1,53 @@
 package com.eomcs.lms;
 
+import com.eomcs.lms.domain.Board;
+import com.eomcs.lms.domain.Lesson;
+import com.eomcs.lms.domain.Member;
 import com.eomcs.lms.handler.BoardHandler;
 import com.eomcs.lms.handler.LessonHandler;
 import com.eomcs.lms.handler.MemberHandler;
+import com.eomcs.util.ArrayList;
+import com.eomcs.util.Iterator;
+import com.eomcs.util.LinkedList;
+import com.eomcs.util.AbstractList;
+import com.eomcs.util.Prompt;
+import com.eomcs.util.Queue;
+import com.eomcs.util.Stack;
 
-public class App {
+public class App { 
   static java.io.InputStream inputStream = System.in;
   static java.util.Scanner keyboard = new java.util.Scanner(inputStream);
+  static Stack<String> commandStack = new Stack<>();
+  static Queue<String> commandQueue = new Queue<>();
 
   public static void main(String[] args) {
-    // LessonHandler, MemberHandler, BoardHandler에 있는 Scanner는 
-    // App에있는 Scanner를 사용한다.(이때, public인 것을 받아온다)
+    Prompt prompt = new Prompt(keyboard);
 
-   //BrandHenlder 의 메서드가 사용될 메모리만 게시판마다 따로 생성한다.
-    BoardHandler boardHandler = new BoardHandler(keyboard);
-    LessonHandler lessonHandler = new LessonHandler(keyboard);
-    MemberHandler memberHandler = new MemberHandler(keyboard);
-    
+
+    // List<Board> boardList = new List();
+    // AbstractList<Board> boardList = new AbstractList<>();
+    LinkedList<Board> boardList = new LinkedList<>();
+    BoardHandler boardHandler = new BoardHandler(prompt, boardList);
+
+    ArrayList<Lesson> lessonList = new ArrayList<>();
+    LessonHandler lessonHandler = new LessonHandler(prompt, lessonList);
+
+    ArrayList<Member> memberList = new ArrayList<>();
+    MemberHandler memberHandler = new MemberHandler(prompt, memberList);
+
     String command;
 
     do {
       System.out.println();
       System.out.print("명령> ");
       command = keyboard.nextLine();
+      if(command.length() == 0)
+        continue;
+      commandStack.push(command);
+      commandQueue.offer(command);
 
       switch (command) {
         case "/lesson/add" :
-          //다른 클래스로 분리함. (이때 클래스 이름 지정해야함)
           lessonHandler.addLesson();
           break;
 
@@ -37,17 +58,34 @@ public class App {
         case "/lesson/update" :
           lessonHandler.updateLesson();
           break;
-          
+
         case "/lesson/delete" :
           lessonHandler.deleteLesson();
           break;
-          
+
+        case "/lesson/detail" :
+          lessonHandler.detailLesson();
+          break;
+
         case "/member/add" :
           memberHandler.addMember();
           break;
 
         case "/member/list" :
           memberHandler.listMember();
+          break;
+
+          // 새로운 구문 추가 (detail) : 추가연습
+        case "/member/detail" :
+          memberHandler.detailMember();
+          break;
+
+        case "/member/update" :
+          memberHandler.updateMember();
+          break;
+
+        case "/member/delete" :
+          memberHandler.deleteMember();
           break;
 
         case "/board/add" :
@@ -57,19 +95,28 @@ public class App {
         case "/board/list" :
           boardHandler.listBoard();
           break;
-          
+
+          // 새로운 구문 추가 (detail) : 추가연습
         case "/board/detail" :
           boardHandler.detailBoard();
           break;
-          
+
         case "/board/update" :
           boardHandler.updateBoard();
           break;
-          
+
         case "/board/delete" :
           boardHandler.deleteBoard();
           break;
-          
+
+        case "history" :
+          printCommandHistory(commandStack.iterator());
+          break;
+
+        case "history2" :
+          printCommandHistory(commandQueue.iterator());
+          break;
+
         default : 
           if(!command.equalsIgnoreCase("quit"))
             System.out.println("실행할 수 없는 명령입니다.");
@@ -79,6 +126,22 @@ public class App {
     } while (!command.equalsIgnoreCase("quit"));
     keyboard.close();
     System.out.println("...안녕!");
+  }
+
+
+  private static void printCommandHistory(Iterator<String> iterator) {
+    int count = 0;
+    while(iterator.hasNext()) {
+      System.out.println(iterator.next());
+      
+      if((++count % 5) == 0) {
+        System.out.print(": (중지하고 싶으면 q)");
+        String str = keyboard.nextLine();
+        if(str.equalsIgnoreCase("q")) {
+          break;
+        }
+      }
+    }
   }
 }
 /*

@@ -2,112 +2,120 @@ package com.eomcs.util;
 
 import java.util.Arrays;
 
-public class ArrayList<E> {
-
-  static final int DEFAULT_CAPACITY = 100;
+public class ArrayList<E> extends AbstractList<E>{
+  static final int DEFAULT_CAPACITY = 2;  
   int size = 0;
-  Object[] list;
+  Object[] elementData;
 
   public ArrayList() {
-    this.list = new Object[DEFAULT_CAPACITY];
+    elementData = new Object[DEFAULT_CAPACITY];
   }
 
-  public ArrayList (int capacity) {
-    if(capacity < DEFAULT_CAPACITY || capacity > 100_000)
-      this.list = new Object[DEFAULT_CAPACITY];
+  public ArrayList(int capacity) {
+    if(capacity < 0 || capacity > 100_000)
+      elementData = new Object[DEFAULT_CAPACITY];
     else
-      this.list = new Object[capacity];
+      elementData = new Object[capacity];
   }
 
-  //////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////
 
-  public Object[] toArray() {
-    return Arrays.copyOf(this.list, this.size);
-  }
-
-  @SuppressWarnings({"unchecked"})
-  public E[] toArray(E[] arr) {
-    if(arr.length < this.size) {
-      return (E[])Arrays.copyOf(this.list, this.size, arr.getClass());
+  public void add(E arr) {
+    if(this.size == this.elementData.length) {
+      grow();
     }
-    System.arraycopy(this.list, 0, arr, 0, this.size);
-    /*
-    for(int i = 0 ; i < arr.length ; i++) {
-      arr[i] = (E)this.list[i];
-    } 
-    */
-    return arr;
+    this.elementData[this.size++] = arr;
+    System.out.println("저장하였습니다.");
+  }
+
+  
+  private void grow() {
+    elementData = Arrays.copyOf(elementData, newCapacity());
+  }
+
+  
+  private int newCapacity() {
+    int oldCapacity = this.elementData.length;
+    return oldCapacity + (oldCapacity >> 1);
+  }
+
+  ////////////////////////////////////////////////////////////////
+
+  @Override
+  public void add(int index, E value) {
+    
+    if(index < 0 || index > this.size)
+      return;
+    
+    if(this.size == this.elementData.length) {
+      grow();
+    }
+    for(int i = size ; i > index ; i--) {
+      this.elementData[i] = this.elementData[i-1];
+    }
+    this.elementData[index] = value;
+    size++;
+  }
+
+  ////////////////////////////////////////////////////////////////
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public E[] toArray() {
+    return (E[]) Arrays.copyOf(this.elementData, this.size);
   }
   
-  //////////////////////////////////////////////////////////////
-
-  public void add(E board) {
-    if(this.list.length == this.size) {
-      int oldCapacity = this.list.length;
-      int newCapacity = oldCapacity + (oldCapacity >> 1);
-      this.list = Arrays.copyOf(this.list, newCapacity);
+  @SuppressWarnings("unchecked")
+  public E[] toArray(E[] arr) {
+    if(this.elementData.length < this.size) {
+      return (E[])Arrays.copyOf(this.elementData, this.size, arr.getClass());
     }
-    this.list[this.size++] = board;
+    System.arraycopy(this.elementData, 0, arr, 0, this.size);
+    return arr;
   }
 
-  //////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////
 
   @SuppressWarnings("unchecked")
   public E get(int idx) {
-    if(0 <= idx && idx < size)
-      return (E)this.list[idx];
-    else return null;
+    if(idx >= 0 && idx < this.size) {
+      return (E) this.elementData[idx];
+    } else return null;
   }
-
-  
-  @SuppressWarnings("unchecked")
-  public E set(int index, E obj) {
-    if(index < 0 || index > this.size) return null;
-    
-    E old = (E)this.list[index];
-    this.list[index] = obj;
-    return old;
-  }
-
-  
-  @SuppressWarnings("unchecked")
-  public E remove(int index, E obj) {
-    if(index < 0 || index > this.size) return null;
-    E old = (E) this.list[index];
-    this.list[index] = null;
-
-    for(int i = index ; i < this.size ; i ++){
-      this.list[index] = this.list[index+1];
-    }
-    this.list[size-1] = null;
-    this.size--;
-    return old;
-  }
-  
 
   public int size() {
     return this.size;
   }
 
-  public static void main(String[] args) {
-    ArrayList<String> list = new ArrayList<>();
-    list.add("aaaa");
-    list.add("bbbb");
-    list.add("cccc");
-    list.add("dddd");
-    list.add("eeee");
-    list.add("ffff");
-    
-    list.set(0, "changed");
-    list.set(1, "changed");
-    list.set(-1, "changed");
-    list.set(6, "changed");
-    
-    String[] arr = list.toArray(new String[] {});
-    for(String s : arr) {
-      System.out.println(s);
+
+  @SuppressWarnings("unchecked")
+  public E set(int idx, E arr) {
+    E oldValue = (E)this.elementData[idx];
+    if(idx < 0 && idx >= this.size) {
+      return (E) this.elementData[idx];
     }
+    this.elementData[idx] = arr;
+    return oldValue;
   }
-  
-  
+
+  @SuppressWarnings("unchecked")
+  public E remove(int idx) {
+    E oldValue = (E)this.elementData[idx];
+    if(idx < 0 && idx >= this.size) {
+      return (E) this.elementData[idx];
+    }
+
+    System.arraycopy(this.elementData, idx + 1, this.elementData, idx, this.size - idx - 1);
+    this.size--;
+    return oldValue;
+  }
+
+
+
+
 }
+
+
+
+
+

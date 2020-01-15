@@ -6,4 +6,10 @@ package com.eomcs.oop.ex09.f;
 // => Exam01의 모든 메서드를 상속 받았으니까
 //    당연히 A 규칙을 모두 구현한 게 되는 것이다.
 public class Exam02 extends Exam01 {
+  
+  public static void main(String[] args) {
+    Exam02 e2 = new Exam02();
+    e2.m1();
+
+  }
 }
