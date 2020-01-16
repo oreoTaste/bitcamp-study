@@ -21,8 +21,9 @@ public class ArrayList<E> {
 
   //////////////////////////////////////////////////////////////
 
-  public Object[] toArray() {
-    return Arrays.copyOf(this.list, this.size);
+  @SuppressWarnings("unchecked")
+  public E[] toArray() {
+    return (E[]) Arrays.copyOf(this.list, this.size);
   }
 
   @SuppressWarnings({"unchecked"})
@@ -43,13 +44,37 @@ public class ArrayList<E> {
 
   public void add(E board) {
     if(this.list.length == this.size) {
-      int oldCapacity = this.list.length;
-      int newCapacity = oldCapacity + (oldCapacity >> 1);
-      this.list = Arrays.copyOf(this.list, newCapacity);
+      grow();
     }
     this.list[this.size++] = board;
   }
 
+  private void grow() {
+    this.list = Arrays.copyOf(this.list, newCapacity());
+  }
+
+  private int newCapacity() {
+    int oldCapacity = this.list.length;
+    return oldCapacity + (oldCapacity >> 1);
+  }
+
+  public void add(int index, E board) {
+    if(index < 0 || index > this.size) {
+      return;
+    }
+    
+    if(this.list.length == this.size) {
+      grow();
+    }
+    
+    
+    for(int i = size-1 ; i > index ; i--) {
+      this.list[i] = this.list[i-1];
+    }
+    this.list[index] = board;
+    this.size++;
+  }
+  
   //////////////////////////////////////////////////////////////
 
   @SuppressWarnings("unchecked")
@@ -89,25 +114,4 @@ public class ArrayList<E> {
     return this.size;
   }
 
-  public static void main(String[] args) {
-    ArrayList<String> list = new ArrayList<>();
-    list.add("aaaa");
-    list.add("bbbb");
-    list.add("cccc");
-    list.add("dddd");
-    list.add("eeee");
-    list.add("ffff");
-    
-    list.set(0, "changed");
-    list.set(1, "changed");
-    list.set(-1, "changed");
-    list.set(6, "changed");
-    
-    String[] arr = list.toArray(new String[] {});
-    for(String s : arr) {
-      System.out.println(s);
-    }
-  }
-  
-  
 }

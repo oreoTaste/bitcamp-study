@@ -1,119 +1,119 @@
 package com.eomcs.util;
-
+//23
 import java.util.Arrays;
 
 public class ArrayList<E> extends AbstractList<E>{
-  static final int DEFAULT_CAPACITY = 2;  
-  int size = 0;
+  private static final int DEFAULT_CAPACITY = 2;
   Object[] elementData;
+  int size;
 
   public ArrayList() {
-    elementData = new Object[DEFAULT_CAPACITY];
+    this.elementData = new Object[DEFAULT_CAPACITY];
   }
 
-  public ArrayList(int capacity) {
-    if(capacity < 0 || capacity > 100_000)
-      elementData = new Object[DEFAULT_CAPACITY];
-    else
-      elementData = new Object[capacity];
+  public ArrayList(int initialCapacity) {
+    if(initialCapacity < DEFAULT_CAPACITY) {
+      this.elementData = new Object[DEFAULT_CAPACITY];
+    } else {
+      this.elementData = new Object[initialCapacity];
+    }
   }
 
-  ////////////////////////////////////////////////////////////////
-
-  public void add(E arr) {
-    if(this.size == this.elementData.length) {
+  public void add(E e) {
+    if(this.elementData.length == this.size()) {
       grow();
     }
-    this.elementData[this.size++] = arr;
-    System.out.println("저장하였습니다.");
+    this.elementData[this.size++] = e;
   }
 
-  
   private void grow() {
-    elementData = Arrays.copyOf(elementData, newCapacity());
+    this.elementData = Arrays.copyOf(this.elementData, newCapacity());
+
   }
 
-  
   private int newCapacity() {
     int oldCapacity = this.elementData.length;
     return oldCapacity + (oldCapacity >> 1);
   }
 
-  ////////////////////////////////////////////////////////////////
-
-  @Override
-  public void add(int index, E value) {
-    
-    if(index < 0 || index > this.size)
+  public void add(int index, E e) {
+    if (index < 0 || index > this.size) {
       return;
+    }
     
-    if(this.size == this.elementData.length) {
+    if(this.elementData.length == this.size()) {
       grow();
     }
-    for(int i = size ; i > index ; i--) {
+    
+    for(int i = size-1 ; i > index ; i--) {
       this.elementData[i] = this.elementData[i-1];
     }
-    this.elementData[index] = value;
-    size++;
+    
+    this.elementData[index] = e;
+    this.size++;
   }
 
-  ////////////////////////////////////////////////////////////////
+  @SuppressWarnings("unchecked")
+  public E get(int index) {
+    if(index < 0 || index >= this.size()) {
+      System.out.println("유효하지 않은 값입니다");
+      return null;
+    }
+    return (E)this.elementData[index];
+  }
 
   @SuppressWarnings("unchecked")
-  @Override
-  public E[] toArray() {
-    return (E[]) Arrays.copyOf(this.elementData, this.size);
+  public E set(int index, E e) {
+    if(index < 0 || index >= this.size()) {
+      System.out.println("유효하지 않은 값입니다");
+      return null;
+    }
+    E oldValue = (E)this.elementData[index];
+    this.elementData[index] = e;
+    return oldValue;
+  }
+
+  @SuppressWarnings("unchecked")
+  public E remove(int index) {
+    if(index < 0 || index >= this.size()) {
+      System.out.println("유효하지 않은 값입니다");
+      return null;
+    }
+    E oldValue = (E)this.elementData[index];
+    System.arraycopy(this.elementData, index+1, this.elementData, index, this.size() - index - 1);
+    /*
+    for(int i = index ; i < this.size-1 ; i++) {
+      this.elementData[i] = this.elementData[i+1];
+    }*/
+    this.elementData[--size] = null;
+    return oldValue;
   }
   
   @SuppressWarnings("unchecked")
-  public E[] toArray(E[] arr) {
-    if(this.elementData.length < this.size) {
-      return (E[])Arrays.copyOf(this.elementData, this.size, arr.getClass());
-    }
-    System.arraycopy(this.elementData, 0, arr, 0, this.size);
-    return arr;
-  }
-
-  ////////////////////////////////////////////////////////////////
-
-  @SuppressWarnings("unchecked")
-  public E get(int idx) {
-    if(idx >= 0 && idx < this.size) {
-      return (E) this.elementData[idx];
-    } else return null;
+  public E[] toArray() {
+    return (E[])Arrays.copyOf(this.elementData, this.size());
   }
 
   public int size() {
     return this.size;
   }
-
-
-  @SuppressWarnings("unchecked")
-  public E set(int idx, E arr) {
-    E oldValue = (E)this.elementData[idx];
-    if(idx < 0 && idx >= this.size) {
-      return (E) this.elementData[idx];
-    }
-    this.elementData[idx] = arr;
-    return oldValue;
+  
+  public E[] toArray(E[] arr) {
+    //if(arr.length < this.size) {
+    //  return (E[])Arrays.copyOf(this.elementData, this.size(), arr.getClass());
+    //}
+    System.arraycopy(this.elementData, 0, arr, 0, this.size);
+    return arr;
   }
-
-  @SuppressWarnings("unchecked")
-  public E remove(int idx) {
-    E oldValue = (E)this.elementData[idx];
-    if(idx < 0 && idx >= this.size) {
-      return (E) this.elementData[idx];
-    }
-
-    System.arraycopy(this.elementData, idx + 1, this.elementData, idx, this.size - idx - 1);
-    this.size--;
-    return oldValue;
+  
+  public Iterator<E> iterator() {
+    return new ListIterator<>(this);
   }
-
-
-
-
+  
 }
+
+
+
 
 
 

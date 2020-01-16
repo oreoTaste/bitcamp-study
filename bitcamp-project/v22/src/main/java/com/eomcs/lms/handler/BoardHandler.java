@@ -90,7 +90,6 @@ public class BoardHandler {
   
   
   public void deleteBoard() {
-    
     int index = indexOfBoard(prompt.inputInt("번호? "));
     if(index == -1) {
       System.out.println("해당 게시글을 찾을 수 없습니다.");

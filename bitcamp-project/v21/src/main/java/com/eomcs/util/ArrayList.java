@@ -1,5 +1,6 @@
 package com.eomcs.util;
 
+//21
 import java.util.Arrays;
 
 public class ArrayList<E> {
@@ -24,15 +25,39 @@ public class ArrayList<E> {
   }
 
   public void add(E e) {
-    int oldCapacity = this.elementData.length;
-    int newCapacity = oldCapacity + (oldCapacity >> 1);
-
-    if(oldCapacity == this.size()) {
-      //System.arraycopy(this.elementData, 0, newElement, 0, newCapacity);
-      this.elementData = Arrays.copyOf(this.elementData, newCapacity);
+    if(this.elementData.length == this.size()) {
+      grow();
     }
     this.elementData[this.size++] = e;
   }
+
+  private void grow() {
+    this.elementData = Arrays.copyOf(this.elementData, newCapacity());
+
+  }
+
+  private int newCapacity() {
+    int oldCapacity = this.elementData.length;
+    return oldCapacity + (oldCapacity >> 1);
+  }
+
+  public void add(int index, E e) {
+    if (index < 0 || index > this.size) {
+      return;
+    }
+    
+    if(this.elementData.length == this.size()) {
+      grow();
+    }
+    
+    for(int i = size-1 ; i > index ; i--) {
+      this.elementData[i] = this.elementData[i-1];
+    }
+    
+    this.elementData[index] = e;
+    this.size++;
+  }
+
 
   
   @SuppressWarnings("unchecked")

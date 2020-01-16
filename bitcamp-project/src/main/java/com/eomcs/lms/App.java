@@ -9,7 +9,7 @@ import com.eomcs.lms.handler.MemberHandler;
 import com.eomcs.util.ArrayList;
 import com.eomcs.util.Iterator;
 import com.eomcs.util.LinkedList;
-import com.eomcs.util.AbstractList;
+import com.eomcs.util.List;
 import com.eomcs.util.Prompt;
 import com.eomcs.util.Queue;
 import com.eomcs.util.Stack;
@@ -23,16 +23,13 @@ public class App {
   public static void main(String[] args) {
     Prompt prompt = new Prompt(keyboard);
 
-
-    // List<Board> boardList = new List();
-    // AbstractList<Board> boardList = new AbstractList<>();
-    LinkedList<Board> boardList = new LinkedList<>();
+    List<Board> boardList = new ArrayList<>();
     BoardHandler boardHandler = new BoardHandler(prompt, boardList);
 
-    ArrayList<Lesson> lessonList = new ArrayList<>();
+    List<Lesson> lessonList = new LinkedList<>();
     LessonHandler lessonHandler = new LessonHandler(prompt, lessonList);
 
-    ArrayList<Member> memberList = new ArrayList<>();
+    List<Member> memberList = new LinkedList<>();
     MemberHandler memberHandler = new MemberHandler(prompt, memberList);
 
     String command;
@@ -129,17 +126,24 @@ public class App {
   }
 
 
+  // Object.clone()의 shallow copy를 이용하여 스택 객체 복사하기
+  // 문제점 :
+  // 데이터가 실제 저장된 배열은 복제하지 않는다.
+  // 따라서, 배열의 값을 바꾸면 원본스택에도 영향을 받는다.
+
+
+
   private static void printCommandHistory(Iterator<String> iterator) {
+
     int count = 0;
     while(iterator.hasNext()) {
       System.out.println(iterator.next());
-      
-      if((++count % 5) == 0) {
+
+      if ((++count % 5) == 0) {
         System.out.print(": (중지하고 싶으면 q)");
         String str = keyboard.nextLine();
-        if(str.equalsIgnoreCase("q")) {
+        if(str.equalsIgnoreCase("q"))
           break;
-        }
       }
     }
   }

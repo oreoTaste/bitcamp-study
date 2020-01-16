@@ -1,30 +1,31 @@
-// 클래스의 종류 : 패키지 멤버 클래스 사용
+// non-static nested class == inner class
 package com.eomcs.oop.ex11.a;
 
-import java.io.File;
-
-// 물론 Exam01_1 또한 패키지 멤버 클래스이다.
 public class Exam0110 {
 
-  public static void main(String[] args) throws Exception {
-    File dir = new File(".");
+  // 스태틱 멤버
+  static int svalue;
+  static void sm() {}
 
-    // 패키지 멤버 클래스의 인스턴스를 생성한다.
-    JavaFilter javaFilter = new JavaFilter();
+  // 인스턴스 멤버
+  int ivalue;
+  void im() {}
 
-    // 패키지 멤버 클래스의 인스턴스를 필터로 사용하여 디렉토리 안의 목록을 추출한다.
-    String[] names = dir.list(javaFilter);
-    for (String name : names) {
-      System.out.println(name);
+  // 결론 :
+  // 인스턴스 멤버를 사용하지 않는다면
+  // 스태틱 클래스로 정의하라
+  static class A {
+    void m1() {
+      svalue = 100;
+      //ivalue = 200;
+      sm();
+      //im();
     }
-
   }
-
+  
+  
+  public static void main(String[] args) {
+    
+    
+  }
 }
-
-
-
-
-
-
-

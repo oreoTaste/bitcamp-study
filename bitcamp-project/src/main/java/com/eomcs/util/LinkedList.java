@@ -1,22 +1,15 @@
 package com.eomcs.util;
 
 import java.lang.reflect.Array;
-import java.util.Arrays;
 
 public class LinkedList<E> extends AbstractList<E>{
-
   Node<E> first;
   Node<E> last;
-  int size;
-
-  public LinkedList() {
-    
-  }
   
-  public void add(E e) {
+  public void add(E value) {
     Node<E> newNode = new Node<>();
-    newNode.value = e;
-
+    newNode.value = value;
+    
     if(first == null) {
       last = first = newNode;
     } else {
@@ -25,7 +18,7 @@ public class LinkedList<E> extends AbstractList<E>{
     }
     size++;
   }
-
+  
   public E get(int index) {
     if(index < 0 || index >= size) {
       return null;
@@ -35,19 +28,19 @@ public class LinkedList<E> extends AbstractList<E>{
       cursor = cursor.next;
     } return cursor.value;
   }
-
-  public void add(int index, E obj) {
+  
+  public void add(int index, E value) {
     if(index < 0 || index >= size) {
       return;
     }
     Node<E> newNode = new Node<>();
-    newNode.value = obj;
+    newNode.value = value;
 
     Node<E> cursor = first;
     for(int i = 0 ; i < index-1 ; i++) {
       cursor = cursor.next;
-    }
-
+    } 
+    
     if(index == 0) {
       newNode.next = first;
       first = newNode;
@@ -60,74 +53,77 @@ public class LinkedList<E> extends AbstractList<E>{
   }
 
   public E remove(int index) {
+    
     if(index < 0 || index >= size) {
       return null;
     }
-
     Node<E> cursor = first;
     for(int i = 0 ; i < index-1 ; i++) {
       cursor = cursor.next;
-    }
-
-    Node<E> deleted = null;
+    } 
+    
+    Node<E> deletedNode = null;
+    
     if(index == 0) {
-      deleted = first;
-      first = deleted.next;
+      deletedNode = first;
+      first = first.next;
     }
     else {
-      deleted = cursor.next;
-      cursor.next = deleted.next;
+      deletedNode = cursor.next;
+      cursor.next = deletedNode.next;
     }
-    deleted.next = null;
+    
+    deletedNode.next = null;
     size--;
-    return deleted.value;
+    return deletedNode.value;
   }
 
-  public E set(int index, E obj) {
+  public E set(int index, E value) {
     if(index < 0 || index >= size) {
       return null;
     }
-
     Node<E> cursor = first;
     for(int i = 0 ; i < index ; i++) {
       cursor = cursor.next;
-    }
+    } 
     E oldValue = cursor.value;
-    cursor.value = obj;
+    cursor.value = value;
     return oldValue;
   }
 
   @SuppressWarnings("unchecked")
-  @Override
   public E[] toArray() {
-    Object[] arr = new Object[this.size];
+    E[] arr = (E[]) new Object[size];
+    
     Node<E> cursor = first;
-    for(int i = 0 ; i <this.size ; i++) {
+    for(int i = 0 ; i < this.size ; i++) {
       arr[i] = cursor.value;
       cursor = cursor.next;
-    }
-    return (E[]) arr;
+    } return arr;
   }
   
   @SuppressWarnings("unchecked")
   public E[] toArray(E[] e) {
-    if(e.length < this.size) {
-      e = (E[])Array.newInstance(e.getClass().getComponentType(), this.size);
+    if(e.length < size) {
+      e = (E[])Array.newInstance(e.getClass().getComponentType(), size);
     }
     Node<E> cursor = first;
-    for(int i = 0 ; i < size ; i++) {
+    
+    for(int i = 0 ; i < this.size ; i++) {
       e[i] = cursor.value;
       cursor = cursor.next;
-    } return e;
+    }
+    return e;
   }
   
-  public int size() {
-    return this.size;
-  }
-
-  class Node<T> {
+  static class Node<T> {
     T value;
     Node<T> next;
   }
-
+  
+  public Iterator<E> iterator() {
+    return new ListIterator<>(this);
+  }
+  
 }
+

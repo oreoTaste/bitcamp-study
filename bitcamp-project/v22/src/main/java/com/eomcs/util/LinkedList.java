@@ -5,6 +5,7 @@ import java.lang.reflect.Array;
 public class LinkedList<E> {
   Node<E> first;
   Node<E> last;
+  int size;
   
   public void add(E value) {
     Node<E> newNode = new Node<>();
@@ -15,8 +16,8 @@ public class LinkedList<E> {
     } else {
       last.next = newNode;
       last = newNode;
-      size++;
     }
+    size++;
   }
   
   public E get(int index) {
@@ -111,6 +112,12 @@ public class LinkedList<E> {
     return e;
   }
   
+  
+  
+  
+  public int size() {
+    return this.size;
+  }
   
   static class Node<T> {
     T value;

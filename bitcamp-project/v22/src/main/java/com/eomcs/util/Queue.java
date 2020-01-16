@@ -10,6 +10,9 @@ public class Queue <E> extends LinkedList<Object> implements Cloneable{
     return (E) this.remove(0);
   }
 
+  public int size() {
+    return this.size();
+  }
 
   /*
  @Override
@@ -33,5 +36,6 @@ public class Queue <E> extends LinkedList<Object> implements Cloneable{
     }
     return temp;
   }
+
 
 }
