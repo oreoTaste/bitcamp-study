@@ -6,13 +6,12 @@ public abstract class AbstractList<E> implements List<E> {
 
   @Override
   public Iterator<E> iterator() {
-
-    return new Iterator<>() {
+    class ListIterator<E> implements Iterator<E> {
       List<E> list;
       int cursor;
 
-      {
-        this.list = AbstractList.this;
+      public ListIterator(final List<E> list) {
+        this.list = list;
       }
 
       @Override
@@ -24,7 +23,8 @@ public abstract class AbstractList<E> implements List<E> {
       public E next() {
         return list.get(cursor++);
       }
-    };
+    }
+    return new ListIterator<>(this);
   }
 
   @Override

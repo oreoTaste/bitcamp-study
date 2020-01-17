@@ -49,7 +49,7 @@ public class Stack<E> implements Cloneable {
 
   public Iterator<E> iterator() {
 
-    return new Iterator<>() {
+    final Iterator<E> obj = new Iterator<>() {
       Stack<E> stack;
 
       {
@@ -66,6 +66,7 @@ public class Stack<E> implements Cloneable {
         return stack.pop();
       }
     };
+    return obj;
   }
 
 

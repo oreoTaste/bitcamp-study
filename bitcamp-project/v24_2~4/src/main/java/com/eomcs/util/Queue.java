@@ -16,11 +16,11 @@ public class Queue<E> extends LinkedList<E> implements Cloneable {
   @Override
   public Iterator<E> iterator() {
 
-    return new Iterator<>() {
+    class QueueIterator<E> implements Iterator<E> {
       Queue<E> queue;
 
-      {
-        this.queue = Queue.this.clone();
+      public QueueIterator(final Queue<E> queue) {
+        this.queue = queue.clone();
       }
 
       @Override
@@ -32,7 +32,9 @@ public class Queue<E> extends LinkedList<E> implements Cloneable {
       public E next() {
         return queue.poll();
       }
-    };
+    }
+
+    return new QueueIterator<>(this);
   }
 
   /*

@@ -7,7 +7,7 @@ public abstract class AbstractList<E> implements List<E> {
   @Override
   public Iterator<E> iterator() {
 
-    return new Iterator<>() {
+    final Iterator<E> obj = new Iterator<>() {
       List<E> list;
       int cursor;
 
@@ -25,6 +25,8 @@ public abstract class AbstractList<E> implements List<E> {
         return list.get(cursor++);
       }
     };
+
+    return obj;
   }
 
   @Override
