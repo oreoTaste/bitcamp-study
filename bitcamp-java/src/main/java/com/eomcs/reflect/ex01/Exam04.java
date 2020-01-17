@@ -26,7 +26,7 @@ public class Exam04 {
         
         // 그러나 다음과 같이 "class" 변수를 사용하게 되면 
         // 코드로 이름을 고정하기 때문에 임의의 클래스를 로딩할 수 없다.
-        Class clazz = A.class;
+        Class clazz = Exam0110.class;
     }
 
 }
