@@ -2,9 +2,10 @@
 package com.eomcs.corelib.ex08;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Set;
 
-public class Exam0320 {
+public class Exam0321 {
   public static void main(String[] args) {
     Member v1 = new Member("홍길동", 20);
     Member v2 = new Member("임꺽정", 30);
@@ -20,15 +21,18 @@ public class Exam0320 {
     map.put("s05", v5);
 
     Set keys = map.keySet();
-
-    for (Object key : keys)
-      System.out.println(key);
-
-    System.out.println("====================");
+    Iterator iterator = keys.iterator();
+    // iterator를 생성할때 현재 목록을 바탕으로 생성한다.
 
     map.remove("s01");
     map.remove("s02");
     map.remove("s03");
+
+    // 이렇게 수정한 후에 조회를 하면 고장난다!!!!
+    while (iterator.hasNext())
+      System.out.println(iterator.next());
+    System.out.println("====================");
+
 
     // Set 객체를 통해 key 를 꺼낼 때,
     // 그 순간의 HashSet에 있는 key를 꺼낸다.

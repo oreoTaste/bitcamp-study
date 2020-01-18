@@ -17,16 +17,14 @@ public class Exam0310 {
     System.out.println(list.indexOf(s4));
   }
 
+  // indexOf도 equals를 쓴다.
+
+
   static void print(ArrayList list) {
-    for (int i = 0; i < list.size(); i++) {
+    for (int i = 0; i < list.size(); i++)
       System.out.print(list.get(i) + ", ");
-    }
     System.out.println();
   }
-}   
-
-
-
-
+}
 
 

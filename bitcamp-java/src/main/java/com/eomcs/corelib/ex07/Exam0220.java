@@ -20,9 +20,8 @@ public class Exam0220 {
     list.add(s5);
 
     Iterator 컬렉션에서값을꺼내주는객체 = list.iterator();
-    while (컬렉션에서값을꺼내주는객체.hasNext()) {
+    while (컬렉션에서값을꺼내주는객체.hasNext())
       System.out.print(컬렉션에서값을꺼내주는객체.next() + ", ");
-    }
     System.out.println();
 
   }

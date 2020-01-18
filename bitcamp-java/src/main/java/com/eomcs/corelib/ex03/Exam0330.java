@@ -19,6 +19,7 @@ public class Exam0330 {
       return String.format("[%s,%d]", this.name, this.age);
     }
   }
+
   public static void main(String[] args) {
     Member s1 = new Member("홍길동", 20);
     Member s2 = new Member("임꺽정", 30);
@@ -37,15 +38,10 @@ public class Exam0330 {
   }
 
   static void print(ArrayList list) {
-    for (int i = 0; i < list.size(); i++) {
+    for (int i = 0; i < list.size(); i++)
       System.out.print(list.get(i) + ", ");
-    }
     System.out.println();
   }
-}   
-
-
-
-
+}
 
 

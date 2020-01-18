@@ -2,7 +2,6 @@
 package com.eomcs.corelib.ex07;
 
 import java.util.Iterator;
-import java.util.Stack;
 import java.util.concurrent.ArrayBlockingQueue;
 
 public class Exam0240 {
@@ -21,9 +20,8 @@ public class Exam0240 {
     queue.add(s5);
 
     Iterator 컬렉션에서값을꺼내주는객체 = queue.iterator();
-    while (컬렉션에서값을꺼내주는객체.hasNext()) {
+    while (컬렉션에서값을꺼내주는객체.hasNext())
       System.out.print(컬렉션에서값을꺼내주는객체.next() + ", ");
-    }
     System.out.println();
 
   }

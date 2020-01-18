@@ -1,9 +1,13 @@
-// java.util.HashMap - key/value 한쌍으로 묶어 꺼내기 
+// java.util.HashMap - key/value 한쌍으로 묶어 꺼내기
 package com.eomcs.corelib.ex08;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
+/*
+ * 1. map.keySet(); 2. map.entrySet(); 3. map.values(); 잘 익혀두기
+ */
+
 
 public class Exam0220 {
   public static void main(String[] args) {
@@ -24,20 +28,14 @@ public class Exam0220 {
 
     for (Object obj : entrySet) {
       // Set 컬렉션에 들어있는 개체는 원래 Entry 객체이다.
-      // Entry 객체에서 key와 값을 꺼내려면 
-      // 원래의 타입으로 형변환 해야 한다. 
+      // Entry 객체에서 key와 값을 꺼내려면
+      // 원래의 타입으로 형변환 해야 한다.
       Entry entry = (Entry) obj;
-      System.out.printf("%s ===> %s\n", 
-          entry.getKey(), entry.getValue());
+      System.out.printf("%s ===> %s\n", entry.getKey(), entry.getValue());
     }
 
   }
 
 }
-
-
-
-
-
 
 

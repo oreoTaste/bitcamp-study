@@ -3,7 +3,7 @@ package com.eomcs.corelib.ex07;
 
 import java.util.HashSet;
 
-public class Exam0320 {
+public class Exam0330 {
 
   // 사용자 정의 데이터 타입
   static class Member {
@@ -20,7 +20,15 @@ public class Exam0320 {
       return "Member [name=" + name + ", age=" + age + "]";
     }
 
-    // equals 만 오버라이딩 (hashCode는 오버라이딩안함)
+    @Override
+    public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + age;
+      result = prime * result + ((name == null) ? 0 : name.hashCode());
+      return result;
+    }
+
     @Override
     public boolean equals(Object obj) {
       if (this == obj)
@@ -40,7 +48,7 @@ public class Exam0320 {
       return true;
     }
 
-    // hashCode는 오버라이딩 안함
+
   }
 
   public static void main(String[] args) {
@@ -49,6 +57,7 @@ public class Exam0320 {
     Member v3 = new Member("유관순", 16);
     Member v4 = new Member("안중근", 20);
     Member v5 = new Member("유관순", 16);
+
     System.out.println(v3.hashCode() + " " + v5.hashCode());
     System.out.println(v3.equals(v5));
     System.out.println("----------------------------");
