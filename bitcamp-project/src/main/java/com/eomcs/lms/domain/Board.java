@@ -3,49 +3,11 @@ package com.eomcs.lms.domain;
 import java.sql.Date;
 
 public class Board {
-  
   private int no;
   private String title;
   private Date date;
   private int viewCount;
-  private String writer;
   
-
-  @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + no;
-    result = prime * result + ((title == null) ? 0 : title.hashCode());
-    result = prime * result + viewCount;
-    result = prime * result + ((writer == null) ? 0 : writer.hashCode());
-    return result;
-  }
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
-    Board other = (Board) obj;
-    if (no != other.no)
-      return false;
-    if (title == null) {
-      if (other.title != null)
-        return false;
-    } else if (!title.equals(other.title))
-      return false;
-    if (viewCount != other.viewCount)
-      return false;
-    if (writer == null) {
-      if (other.writer != null)
-        return false;
-    } else if (!writer.equals(other.writer))
-      return false;
-    return true;
-  }
   public int getNo() {
     return no;
   }
@@ -70,12 +32,20 @@ public class Board {
   public void setViewCount(int viewCount) {
     this.viewCount = viewCount;
   }
-  public String getWriter() {
-    return writer;
-  }
-  public void setWriter(String writer) {
-    this.writer = writer;
-  }
   
-  
+  public boolean equals(Object obj) {
+    if(obj.getClass() != this.getClass()) {
+      return false;
+    }
+    Board other = (Board)obj;
+    
+    if(this.no != other.no) {
+      return false;
+    }
+    
+    if(this.title != other.title) {
+      return false;
+    }
+    return true;
+  }
 }

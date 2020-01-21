@@ -1,26 +1,25 @@
-// /board/list 명령 수행
 package com.eomcs.lms.handler;
 
-import java.util.Iterator;
 import java.util.List;
 import com.eomcs.lms.domain.Board;
 
 public class BoardListCommand implements Command {
-
   List<Board> boardList;
 
   public BoardListCommand(List<Board> list) {
-    this.boardList = list;
+    boardList = list;
   }
 
   @Override
   public void execute() {
-    Iterator<Board> iterator = boardList.iterator();
-    while (iterator.hasNext()) {
-      Board b = iterator.next();
-
-      System.out.printf("%d, %s, %s, %d\n",
-          b.getNo(), b.getTitle(), b.getDate(), b.getViewCount());
+    Board[] board = new Board[boardList.size()];
+    boardList.toArray(board);
+    for (Board b : board) {
+      System.out.printf("%1$d, %2$s, %3$tF %3$tH:%3$tM:%3$tS, %4$d\n", b.getNo(), b.getTitle(),
+          b.getDate(), b.getViewCount());
     }
   }
+
+
+
 }

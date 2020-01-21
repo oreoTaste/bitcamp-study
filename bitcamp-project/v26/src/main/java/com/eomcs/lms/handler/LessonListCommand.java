@@ -1,31 +1,24 @@
 package com.eomcs.lms.handler;
 
-import java.util.Iterator;
 import java.util.List;
 import com.eomcs.lms.domain.Lesson;
 
 public class LessonListCommand implements Command {
-  
   List<Lesson> lessonList;
-  
+
   public LessonListCommand(List<Lesson> list) {
-    this.lessonList = list;
+    lessonList = list;
   }
-  
+
   @Override
   public void execute() {
-    Iterator<Lesson> iterator = lessonList.iterator();
-    while (iterator.hasNext()) {
-      Lesson l = iterator.next();
-      System.out.printf("%d, %s, %s ~ %s, %d\n",
-          l.getNo(), l.getTitle(),
-          l.getStartDate(), l.getEndDate(), l.getTotalHours());
+    Lesson[] lesson = new Lesson[lessonList.size()];
+    lessonList.toArray(lesson);
+    for (Lesson ls : lesson) {
+      System.out.printf("%d, %s     , %tF ~ %tF, %d\n", ls.getNo(), ls.getTitle(),
+          ls.getStartDate(), ls.getEndDate(), ls.getTotalHour());
     }
   }
-  
-  
+
+
 }
-
-
-
-

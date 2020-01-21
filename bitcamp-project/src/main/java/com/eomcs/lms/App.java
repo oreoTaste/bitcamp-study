@@ -1,124 +1,188 @@
 package com.eomcs.lms;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Scanner;
 import com.eomcs.lms.domain.Board;
 import com.eomcs.lms.domain.Lesson;
 import com.eomcs.lms.domain.Member;
-import com.eomcs.lms.handler.BoardAddCommand;
-import com.eomcs.lms.handler.BoardDeleteCommand;
-import com.eomcs.lms.handler.BoardDetailCommand;
-import com.eomcs.lms.handler.BoardListCommand;
-import com.eomcs.lms.handler.BoardUpdateCommand;
-import com.eomcs.lms.handler.Command;
-import com.eomcs.lms.handler.ComputePlustCommand;
-import com.eomcs.lms.handler.HelloCommand;
-import com.eomcs.lms.handler.LessonAddCommand;
-import com.eomcs.lms.handler.LessonDeleteCommand;
-import com.eomcs.lms.handler.LessonDetailCommand;
-import com.eomcs.lms.handler.LessonListCommand;
-import com.eomcs.lms.handler.LessonUpdateCommand;
-import com.eomcs.lms.handler.MemberAddCommand;
-import com.eomcs.lms.handler.MemberDeleteCommand;
-import com.eomcs.lms.handler.MemberDetailCommand;
-import com.eomcs.lms.handler.MemberListCommand;
-import com.eomcs.lms.handler.MemberUpdateCommand;
+import com.eomcs.lms.handler.BoardHandler;
+import com.eomcs.lms.handler.LessonHandler;
+import com.eomcs.lms.handler.MemberHandler;
+import com.eomcs.util.ArrayList;
+import com.eomcs.util.LinkedList;
+import com.eomcs.util.List;
 import com.eomcs.util.Prompt;
+import com.eomcs.util.Queue;
+import com.eomcs.util.Stack;
 
-public class App {
-
-  static Scanner keyboard = new Scanner(System.in);
-
-  static Deque<String> commandStack = new ArrayDeque<>();
-  static Queue<String> commandQueue = new LinkedList<>();
+public class App { 
+  static java.io.InputStream inputStream = System.in;
+  static java.util.Scanner keyboard = new java.util.Scanner(inputStream);
+  static Stack<String> commandStack = new Stack<>();
+  static Queue<String> commandQueue = new Queue<>();
 
   public static void main(String[] args) {
-
-    HashMap<String, Command> hashmap = new HashMap<>();
-
     Prompt prompt = new Prompt(keyboard);
-
-    LinkedList<Board> boardList = new LinkedList<>();
-    hashmap.put("/board/add", new BoardAddCommand(prompt, boardList));
-    hashmap.put("/board/list", new BoardListCommand(boardList));
-    hashmap.put("/board/detail", new BoardDetailCommand(prompt, boardList));
-    hashmap.put("/board/update", new BoardUpdateCommand(prompt, boardList));
-    hashmap.put("/board/delete", new BoardDeleteCommand(prompt, boardList));
-
-    ArrayList<Lesson> lessonList = new ArrayList<>();
-    hashmap.put("/lesson/add", new LessonAddCommand(prompt, lessonList));
-    hashmap.put("/lesson/list", new LessonListCommand(lessonList));
-    hashmap.put("/lesson/detail", new LessonDetailCommand(prompt, lessonList));
-    hashmap.put("/lesson/update", new LessonUpdateCommand(prompt, lessonList));
-    hashmap.put("/lesson/delete", new LessonDeleteCommand(prompt, lessonList));
-
-    LinkedList<Member> memberList = new LinkedList<>();
-    hashmap.put("/member/add", new MemberAddCommand(prompt, memberList));
-    hashmap.put("/member/list", new MemberListCommand(memberList));
-    hashmap.put("/member/detail", new MemberDetailCommand(prompt, memberList));
-    hashmap.put("/member/update", new MemberUpdateCommand(prompt, memberList));
-    hashmap.put("/member/delete", new MemberDeleteCommand(prompt, memberList));
-    hashmap.put("/hello", new HelloCommand(prompt));
-    hashmap.put("/compute/plus", new ComputePlustCommand(prompt));
     
+    List<Board> boardList = new ArrayList<>();
+    BoardHandler boardHandler = new BoardHandler(prompt, boardList);
+    
+    List<Lesson> lessonList = new LinkedList<>();
+    LessonHandler lessonHandler = new LessonHandler(prompt, lessonList);
+
+    List<Member> memberList = new LinkedList<>();
+    MemberHandler memberHandler = new MemberHandler(prompt, memberList);
 
     String command;
 
-    while (true) {
-      System.out.print("\n명령> ");
+    do {
+      System.out.println();
+      System.out.print("명령> ");
       command = keyboard.nextLine();
-
-      if (command.length() == 0)
+      if(command.length() == 0)
         continue;
-      
-      if(command.equals("quit")) {
-        System.out.println("...안녕");
-        break;
-      } else if (command.equals("history")) {
-        printCommandHistory(commandStack.iterator());
-        continue;
-      } else if (command.equals("history2")) {
-        printCommandHistory(commandQueue.iterator());
-        continue;
-      }
-
       commandStack.push(command);
       commandQueue.offer(command);
-      Command commandHandler = hashmap.get(command);
 
-      if (commandHandler != null)
-        commandHandler.execute();
-      else
-        System.out.println("실행할 수 없는 명령입니다.");
-    }
-      keyboard.close();
+      switch (command) {
+        case "/lesson/add" :
+          lessonHandler.addLesson();
+          break;
+
+        case "/lesson/list" :
+          lessonHandler.listLesson();
+          break;
+
+        case "/lesson/update" :
+          lessonHandler.updateLesson();
+          break;
+
+        case "/lesson/delete" :
+          lessonHandler.deleteLesson();
+          break;
+
+        case "/lesson/detail" :
+          lessonHandler.detailLesson();
+          break;
+
+        case "/member/add" :
+          memberHandler.addMember();
+          break;
+
+        case "/member/list" :
+          memberHandler.listMember();
+          break;
+
+          // 새로운 구문 추가 (detail) : 추가연습
+        case "/member/detail" :
+          memberHandler.detailMember();
+          break;
+
+        case "/member/update" :
+          memberHandler.updateMember();
+          break;
+
+        case "/member/delete" :
+          memberHandler.deleteMember();
+          break;
+
+        case "/board/add" :
+          boardHandler.addBoard();
+          break;
+
+        case "/board/list" :
+          boardHandler.listBoard();
+          break;
+
+          // 새로운 구문 추가 (detail) : 추가연습
+        case "/board/detail" :
+          boardHandler.detailBoard();
+          break;
+
+        case "/board/update" :
+          boardHandler.updateBoard();
+          break;
+
+        case "/board/delete" :
+          boardHandler.deleteBoard();
+          break;
+
+        case "history" :
+          printCommandHistory();
+          break;
+
+        case "history2" :
+          printCommandHistory2();
+          break;
+
+        default : 
+          if(!command.equalsIgnoreCase("quit"))
+            System.out.println("실행할 수 없는 명령입니다.");
+          break;
+      }
+
+    } while (!command.equalsIgnoreCase("quit"));
+    keyboard.close();
+    System.out.println("...안녕!");
   }
 
-  private static void printCommandHistory(Iterator<String> iterator) {
-    int count = 0;
-    while (iterator.hasNext()) {
-      System.out.println(iterator.next());
-      count++;
 
-      if ((count % 5) == 0) {
-        System.out.print(":");
+  // Object.clone()의 shallow copy를 이용하여 스택 객체 복사하기
+  // 문제점 :
+  // 데이터가 실제 저장된 배열은 복제하지 않는다.
+  // 따라서, 배열의 값을 바꾸면 원본스택에도 영향을 받는다.
+
+  private static void printCommandHistory() {
+    Stack<String> historyStack = commandStack.clone(); // soft-clone
+    int count = 0;
+    while(!historyStack.empty()) {
+      System.out.println(historyStack.pop());
+      if((++count % 5) == 0) {
+        System.out.print(": (중지하고 싶으면 q)");
         String str = keyboard.nextLine();
-        if (str.equalsIgnoreCase("q"))
+        if(str.equalsIgnoreCase("q")) {
+          break;
+        }
+      }
+    }
+  }
+
+
+  private static void printCommandHistory2() {
+    Queue<String> historyQueue = commandQueue.clone();
+    int count = 0;
+
+    while (historyQueue.size() > 0) {
+      System.out.println(historyQueue.poll());
+
+      if ((++count % 5) == 0) {
+        System.out.print(": (중지하고 싶으면 q)");
+        String str = keyboard.nextLine();
+        if(str.equalsIgnoreCase("q"))
           break;
       }
     }
   }
-
 }
+/*
+명령>
 
+명령> /lesson/add
+번호? 1
+수업명? 자바 프로젝트 실습
+수업내용? 자바 프로젝트를 통한 자바 언어 활용법 익히기
+시작일? 2019-01-02
+종료일? 2019-05-28
+총수업시간? 1000
+일수업시간? 8
+저장하였습니다.
 
+명령> /lesson/list
+1, 자바 프로젝트 실습     , 2019-01-02 ~ 2019-05-28, 1000
+2, 자바 프로그래밍 기초    , 2019-02-01 ~ 2019-02-28,  160
+3, 자바 프로그래밍 고급    , 2019-03-02 ~ 2019-03-30,  160
 
+명령> board/view
+실행할 수 없는 명령입니다.
 
-
-
+명령> quit
+안녕!
+ */

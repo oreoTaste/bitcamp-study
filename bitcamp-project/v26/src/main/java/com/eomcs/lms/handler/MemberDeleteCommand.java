@@ -10,26 +10,32 @@ public class MemberDeleteCommand implements Command {
 
   public MemberDeleteCommand(Prompt prompt, List<Member> list) {
     this.prompt = prompt;
-    this.memberList = list;
+    memberList = list;
   }
-  
+
+
   @Override
   public void execute() {
-    int index = indexOfMember(prompt.inputInt("번호? "));
-    
+
+    int no = prompt.inputInt("번호? ");
+    int index = indexOfMember(no);
+
     if (index == -1) {
-      System.out.println("해당 번호의 회원이 없습니다.");
-      return;
+      System.out.println("해당 회원을 찾을 수 없습니다.");
     }
-    this.memberList.remove(index);
-    
+
+    memberList.remove(index);
     System.out.println("회원을 삭제했습니다.");
   }
-  
-  private int indexOfMember(int no) {
-    for (int i = 0; i < this.memberList.size(); i++)
-      if (this.memberList.get(i).getNo() == no)
+
+
+  public int indexOfMember(int no) {
+    for (int i = 0; i < memberList.size(); i++) {
+      if (memberList.get(i).getNo() == no) {
         return i;
+      }
+    }
     return -1;
   }
+
 }

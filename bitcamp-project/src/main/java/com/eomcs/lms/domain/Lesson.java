@@ -3,65 +3,16 @@ package com.eomcs.lms.domain;
 import java.sql.Date;
 
 public class Lesson {
-  
   private int no;
   private String title;
-  private String description;
+  private Date date;
+  private int viewCount;
+  private String context;
   private Date startDate;
   private Date endDate;
-  private int totalHours;
-  private int dayHours;
+  private int totalHour;
+  private int dailyHour;
   
-  @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + dayHours;
-    result = prime * result + ((description == null) ? 0 : description.hashCode());
-    result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
-    result = prime * result + no;
-    result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
-    result = prime * result + ((title == null) ? 0 : title.hashCode());
-    result = prime * result + totalHours;
-    return result;
-  }
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
-    Lesson other = (Lesson) obj;
-    if (dayHours != other.dayHours)
-      return false;
-    if (description == null) {
-      if (other.description != null)
-        return false;
-    } else if (!description.equals(other.description))
-      return false;
-    if (endDate == null) {
-      if (other.endDate != null)
-        return false;
-    } else if (!endDate.equals(other.endDate))
-      return false;
-    if (no != other.no)
-      return false;
-    if (startDate == null) {
-      if (other.startDate != null)
-        return false;
-    } else if (!startDate.equals(other.startDate))
-      return false;
-    if (title == null) {
-      if (other.title != null)
-        return false;
-    } else if (!title.equals(other.title))
-      return false;
-    if (totalHours != other.totalHours)
-      return false;
-    return true;
-  }
   public int getNo() {
     return no;
   }
@@ -74,11 +25,23 @@ public class Lesson {
   public void setTitle(String title) {
     this.title = title;
   }
-  public String getDescription() {
-    return description;
+  public Date getDate() {
+    return date;
   }
-  public void setDescription(String description) {
-    this.description = description;
+  public void setDate(Date date) {
+    this.date = date;
+  }
+  public int getViewCount() {
+    return viewCount;
+  }
+  public void setViewCount(int viewCount) {
+    this.viewCount = viewCount;
+  }
+  public String getContext() {
+    return context;
+  }
+  public void setContext(String context) {
+    this.context = context;
   }
   public Date getStartDate() {
     return startDate;
@@ -92,25 +55,53 @@ public class Lesson {
   public void setEndDate(Date endDate) {
     this.endDate = endDate;
   }
-  public int getTotalHours() {
-    return totalHours;
+  public int getTotalHour() {
+    return totalHour;
   }
-  public void setTotalHours(int totalHours) {
-    this.totalHours = totalHours;
+  public void setTotalHour(int totalHour) {
+    this.totalHour = totalHour;
   }
-  public int getDayHours() {
-    return dayHours;
+  public int getDailyHour() {
+    return dailyHour;
   }
-  public void setDayHours(int dayHours) {
-    this.dayHours = dayHours;
+  public void setDailyHour(int dailyHour) {
+    this.dailyHour = dailyHour;
+  }
+  
+  @Override
+  public boolean equals(Object obj) {
+    if(obj.getClass() != Lesson.class) 
+      return false;
+    
+    Lesson other = (Lesson) obj;
+    
+    if(this.no != other.no)
+      return false;
+    
+    if(this.title.equals(other.title))
+      return false;
+
+    if(this.date != other.date)
+      return false;
+    
+    if(this.viewCount != other.viewCount)
+      return false;
+    
+    if(this.context.equals(other.context))
+      return false;
+    
+    if(this.startDate != other.startDate)
+      return false;
+    
+    if(this.endDate != other.endDate)
+      return false;
+    
+    if(this.totalHour != other.totalHour)
+      return false;
+    
+    if(this.dailyHour != other.dailyHour)
+      return false;
+    
+    return true;
   }
 }
-
-
-
-
-
-
-
-
-

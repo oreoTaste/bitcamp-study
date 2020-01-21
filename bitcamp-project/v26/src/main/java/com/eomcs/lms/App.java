@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Scanner;
 import com.eomcs.lms.domain.Board;
 import com.eomcs.lms.domain.Lesson;
 import com.eomcs.lms.domain.Member;
@@ -17,7 +16,7 @@ import com.eomcs.lms.handler.BoardDetailCommand;
 import com.eomcs.lms.handler.BoardListCommand;
 import com.eomcs.lms.handler.BoardUpdateCommand;
 import com.eomcs.lms.handler.Command;
-import com.eomcs.lms.handler.ComputePlustCommand;
+import com.eomcs.lms.handler.ComputePlusCommand;
 import com.eomcs.lms.handler.HelloCommand;
 import com.eomcs.lms.handler.LessonAddCommand;
 import com.eomcs.lms.handler.LessonDeleteCommand;
@@ -32,93 +31,100 @@ import com.eomcs.lms.handler.MemberUpdateCommand;
 import com.eomcs.util.Prompt;
 
 public class App {
-
-  static Scanner keyboard = new Scanner(System.in);
-
+  static java.io.InputStream inputStream = System.in;
+  static java.util.Scanner keyboard = new java.util.Scanner(inputStream);
   static Deque<String> commandStack = new ArrayDeque<>();
   static Queue<String> commandQueue = new LinkedList<>();
 
   public static void main(String[] args) {
-
-    HashMap<String, Command> hashmap = new HashMap<>();
-
     Prompt prompt = new Prompt(keyboard);
+    HashMap<String, Command> hashmap = new HashMap<>();
 
     LinkedList<Board> boardList = new LinkedList<>();
     hashmap.put("/board/add", new BoardAddCommand(prompt, boardList));
-    hashmap.put("/board/list", new BoardListCommand(boardList));
-    hashmap.put("/board/detail", new BoardDetailCommand(prompt, boardList));
-    hashmap.put("/board/update", new BoardUpdateCommand(prompt, boardList));
     hashmap.put("/board/delete", new BoardDeleteCommand(prompt, boardList));
+    hashmap.put("/board/detail", new BoardDetailCommand(prompt, boardList));
+    hashmap.put("/board/list", new BoardListCommand(boardList));
+    hashmap.put("/board/update", new BoardUpdateCommand(prompt, boardList));
 
     ArrayList<Lesson> lessonList = new ArrayList<>();
     hashmap.put("/lesson/add", new LessonAddCommand(prompt, lessonList));
-    hashmap.put("/lesson/list", new LessonListCommand(lessonList));
-    hashmap.put("/lesson/detail", new LessonDetailCommand(prompt, lessonList));
-    hashmap.put("/lesson/update", new LessonUpdateCommand(prompt, lessonList));
     hashmap.put("/lesson/delete", new LessonDeleteCommand(prompt, lessonList));
+    hashmap.put("/lesson/detail", new LessonDetailCommand(prompt, lessonList));
+    hashmap.put("/lesson/list", new LessonListCommand(lessonList));
+    hashmap.put("/lesson/update", new LessonUpdateCommand(prompt, lessonList));
 
     LinkedList<Member> memberList = new LinkedList<>();
     hashmap.put("/member/add", new MemberAddCommand(prompt, memberList));
-    hashmap.put("/member/list", new MemberListCommand(memberList));
-    hashmap.put("/member/detail", new MemberDetailCommand(prompt, memberList));
-    hashmap.put("/member/update", new MemberUpdateCommand(prompt, memberList));
     hashmap.put("/member/delete", new MemberDeleteCommand(prompt, memberList));
+    hashmap.put("/member/detail", new MemberDetailCommand(prompt, memberList));
+    hashmap.put("/member/list", new MemberListCommand(memberList));
+    hashmap.put("/member/update", new MemberUpdateCommand(prompt, memberList));
+
     hashmap.put("/hello", new HelloCommand(prompt));
-    hashmap.put("/compute/plus", new ComputePlustCommand(prompt));
-    
+    hashmap.put("/compute/plus", new ComputePlusCommand(prompt));
 
     String command;
 
     while (true) {
-      System.out.print("\n명령> ");
+      System.out.println();
+      System.out.print("명령> ");
       command = keyboard.nextLine();
+      commandStack.push(command);
+      commandQueue.offer(command);
 
-      if (command.length() == 0)
+      if (command.length() == 0) {
         continue;
-      
-      if(command.equals("quit")) {
-        System.out.println("...안녕");
+      }
+      if (command.equalsIgnoreCase("quit")) {
+        System.out.println("...안녕!");
         break;
       } else if (command.equals("history")) {
-        printCommandHistory(commandStack.iterator());
+        printCommandHistory(commandQueue.iterator());
         continue;
       } else if (command.equals("history2")) {
-        printCommandHistory(commandQueue.iterator());
+        printCommandHistory(commandStack.iterator());
         continue;
       }
 
-      commandStack.push(command);
-      commandQueue.offer(command);
       Command commandHandler = hashmap.get(command);
-
-      if (commandHandler != null)
+      if (commandHandler != null) {
         commandHandler.execute();
-      else
+      } else {
         System.out.println("실행할 수 없는 명령입니다.");
+      }
     }
-      keyboard.close();
+    keyboard.close();
   }
+
 
   private static void printCommandHistory(Iterator<String> iterator) {
     int count = 0;
+
     while (iterator.hasNext()) {
       System.out.println(iterator.next());
-      count++;
 
-      if ((count % 5) == 0) {
-        System.out.print(":");
+      if (++count % 5 == 0) {
+        System.out.print(": (중지하고 싶으면 q)");
         String str = keyboard.nextLine();
-        if (str.equalsIgnoreCase("q"))
+        if (str.equalsIgnoreCase("q")) {
           break;
+        }
       }
     }
   }
-
 }
 
-
-
-
-
-
+/*
+ * 명령>
+ *
+ * 명령> /lesson/add 번호? 1 수업명? 자바 프로젝트 실습 수업내용? 자바 프로젝트를 통한 자바 언어 활용법 익히기 시작일? 2019-01-02 종료일?
+ * 2019-05-28 총수업시간? 1000 일수업시간? 8 저장하였습니다.
+ *
+ * 명령> /lesson/list 1, 자바 프로젝트 실습 , 2019-01-02 ~ 2019-05-28, 1000 2, 자바 프로그래밍 기초 , 2019-02-01 ~
+ * 2019-02-28, 160 3, 자바 프로그래밍 고급 , 2019-03-02 ~ 2019-03-30, 160
+ *
+ * 명령> board/view 실행할 수 없는 명령입니다.
+ *
+ * 명령> quit 안녕!
+ */
