@@ -1,12 +1,20 @@
 package com.eomcs.lms;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.sql.Date;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 import java.util.Queue;
+import java.util.Scanner;
 import com.eomcs.lms.domain.Board;
 import com.eomcs.lms.domain.Lesson;
 import com.eomcs.lms.domain.Member;
@@ -35,8 +43,12 @@ public class App {
   static java.util.Scanner keyboard = new java.util.Scanner(inputStream);
   static Deque<String> commandStack = new ArrayDeque<>();
   static Queue<String> commandQueue = new LinkedList<>();
+  static ArrayList<Lesson> lessonList = new ArrayList<>();
 
   public static void main(String[] args) {
+    // 파일에서 데이터 로딩하기
+    loadLessonData();
+
     Prompt prompt = new Prompt(keyboard);
     HashMap<String, Command> hashmap = new HashMap<>();
 
@@ -47,7 +59,6 @@ public class App {
     hashmap.put("/board/list", new BoardListCommand(boardList));
     hashmap.put("/board/update", new BoardUpdateCommand(prompt, boardList));
 
-    ArrayList<Lesson> lessonList = new ArrayList<>();
     hashmap.put("/lesson/add", new LessonAddCommand(prompt, lessonList));
     hashmap.put("/lesson/delete", new LessonDeleteCommand(prompt, lessonList));
     hashmap.put("/lesson/detail", new LessonDetailCommand(prompt, lessonList));
@@ -69,7 +80,7 @@ public class App {
     while (true) {
       System.out.println();
       System.out.print("명령> ");
-      
+
       command = keyboard.nextLine();
       commandStack.push(command);
       commandQueue.offer(command);
@@ -90,14 +101,19 @@ public class App {
       Command commandHandler = hashmap.get(command);
       if (commandHandler != null)
         try {
-        commandHandler.execute();
+          commandHandler.execute();
         } catch(Exception e) {
           System.out.printf("명령어 실행 중 오류발생 : %s\n", e.getMessage());
+        } finally {
+
         }
       else
         System.out.println("실행할 수 없는 명령입니다.");
     }
     keyboard.close();
+
+    // 데이터를 파일에 저장
+    saveLessonData();
   }
 
 
@@ -115,18 +131,95 @@ public class App {
       }
     }
   }
-}
 
-/*
- * 명령>
- *
- * 명령> /lesson/add 번호? 1 수업명? 자바 프로젝트 실습 수업내용? 자바 프로젝트를 통한 자바 언어 활용법 익히기 시작일? 2019-01-02 종료일?
- * 2019-05-28 총수업시간? 1000 일수업시간? 8 저장하였습니다.
- *
- * 명령> /lesson/list 1, 자바 프로젝트 실습 , 2019-01-02 ~ 2019-05-28, 1000 2, 자바 프로그래밍 기초 , 2019-02-01 ~
- * 2019-02-28, 160 3, 자바 프로그래밍 고급 , 2019-03-02 ~ 2019-03-30, 160
- *
- * 명령> board/view 실행할 수 없는 명령입니다.
- *
- * 명령> quit 안녕!
- */
+  private static void loadLessonData() {
+    // 데이터가 보관된 파일정보를 준비
+    File file = new File("./lesson.csv");
+
+    // 파일을 읽을 때 사용할 도구 준비
+    FileReader in = null;
+    Scanner dataScan = null;
+    try {
+      in = new FileReader(file);
+
+      // csv 파일에서 한줄 단위로 문자열을 읽는 기능이 필요하다.
+      // FileReader에는 그런 기능이 없다 -> Scanner 쓰자!
+      dataScan = new Scanner(in);
+      int count = 0;
+      while(true)
+        try {
+          // 파일에서 줄별로 읽는다.
+          String line = dataScan.nextLine();
+          // 한줄을 콤마로 나눈다.
+          String[] data = line.split(",");
+          Lesson lesson = new Lesson();
+          lesson.setNo(Integer.parseInt(data[0]));
+          lesson.setTitle(data[1]);
+          lesson.setContext(data[2]);
+          lesson.setStartDate(Date.valueOf(data[3]));
+          lesson.setEndDate(Date.valueOf(data[4]));
+          lesson.setTotalHour(Integer.parseInt(data[5]));
+          lesson.setDailyHour(Integer.parseInt(data[6]));
+
+          lessonList.add(lesson);
+          count++;
+        } catch (NoSuchElementException e) {
+          break;
+        }
+      System.out.printf("총 %d개의 수업데이터를 로딩했습니다.\n", count);
+
+    } catch (FileNotFoundException e) {
+      System.out.println("파일 읽기 중 오류 발생 - " + e.getMessage());
+
+    } finally {
+      try {
+      dataScan.close();
+      } catch (Exception e) {
+        // Scanner 닫다가 오류나도 무시한다.
+      }
+      try {
+        in.close();} catch (Exception e) {
+        /*in.close()를 실행하다가 오류발생한 경우 무시.*/}
+    }
+  }
+
+  private static void saveLessonData() {
+    // 데이터가 보관된 파일정보를 준비
+    File file = new File("./lesson.csv");
+
+    FileWriter out = null;
+    try {
+      // 파일을 쓸 때 사용할 도구 준비
+      out = new FileWriter(file);
+      int count = 0;
+
+      // 수업목록에서 수업데이터를 꺼내 csv 형식의 문자열로 만든다.
+      for(Lesson lesson : lessonList) {
+        String line = String.format("%d,%s,%s,%s,%s,%d,%d\n",
+            lesson.getNo(),
+            lesson.getTitle(),
+            lesson.getContext(),
+            lesson.getStartDate(),
+            lesson.getEndDate(),
+            lesson.getTotalHour(),
+            lesson.getDailyHour());
+
+        out.write(line);
+        count++;
+      }
+      System.out.printf("총 %d개의 수업데이터를 저장했습니다.\n", count);
+
+    } catch (IOException e) {
+      System.out.println("파일 쓰기 중 오류 발생 - " + e.getMessage());
+
+    } finally {
+      try {
+        out.close();
+      } catch (IOException e) {
+        // FileWriter를 닫을때 발생하는 예외는 무시한다.
+        e.printStackTrace();
+      }
+    }
+
+  }
+}
