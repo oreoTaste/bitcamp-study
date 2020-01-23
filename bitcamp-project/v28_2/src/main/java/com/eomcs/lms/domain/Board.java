@@ -11,7 +11,7 @@ public class Board {
   
   public String toCsvString() {
     
-    return String.format("%1$d,%2$s,%3$tF %3$th:%3$tm:%3$ts,%4$d",
+    return String.format("%d,%s,%s,%d",
         this.getNo(),
         this.getTitle(),
         this.getDate(),
