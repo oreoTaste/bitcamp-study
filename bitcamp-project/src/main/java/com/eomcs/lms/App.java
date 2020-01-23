@@ -3,6 +3,8 @@ package com.eomcs.lms;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -41,12 +43,13 @@ public class App {
   static Deque<String> commandStack = new ArrayDeque<>();
   static Queue<String> commandQueue = new LinkedList<>();
   static ArrayList<Lesson> lessonList = new ArrayList<>();
+  static LinkedList<Member> memberList = new LinkedList<>();
+  static LinkedList<Board> boardList = new LinkedList<>();
 
   public static void main(String[] args) {
     Prompt prompt = new Prompt(keyboard);
     HashMap<String, Command> hashmap = new HashMap<>();
 
-    LinkedList<Board> boardList = new LinkedList<>();
     hashmap.put("/board/add", new BoardAddCommand(prompt, boardList));
     hashmap.put("/board/delete", new BoardDeleteCommand(prompt, boardList));
     hashmap.put("/board/detail", new BoardDetailCommand(prompt, boardList));
@@ -59,7 +62,6 @@ public class App {
     hashmap.put("/lesson/list", new LessonListCommand(lessonList));
     hashmap.put("/lesson/update", new LessonUpdateCommand(prompt, lessonList));
 
-    LinkedList<Member> memberList = new LinkedList<>();
     hashmap.put("/member/add", new MemberAddCommand(prompt, memberList));
     hashmap.put("/member/delete", new MemberDeleteCommand(prompt, memberList));
     hashmap.put("/member/detail", new MemberDetailCommand(prompt, memberList));
@@ -71,6 +73,8 @@ public class App {
 
     String command;
     loadLessonData();
+    loadBoardData();
+    loadMemberData();
 
     while (true) {
       System.out.println();
@@ -105,6 +109,8 @@ public class App {
     }
     keyboard.close();
     saveLessonData();
+    saveBoardData();
+    saveMemberData();
   }
 
 
@@ -154,13 +160,159 @@ public class App {
         }
       System.out.printf("총 %d개 수업정보를 로딩했습니다.\n", count);
     } catch (FileNotFoundException e) {
-      e.printStackTrace();
     }
   }
 
   public static void saveLessonData() {
+    File file = new File("./lesson.csv");
+    FileWriter out = null;
 
+    try {
+      out = new FileWriter(file);
+      int count = 0;
 
+      for(Lesson lesson : lessonList) {
+        String line = String.format("%d,%s,%s,%s,%s,%d,%d\n",
+            lesson.getNo(),
+            lesson.getTitle(),
+            lesson.getContext(),
+            lesson.getStartDate(),
+            lesson.getEndDate(),
+            lesson.getTotalHour(),
+            lesson.getDailyHour()
+            );
+
+        out.write(line);
+        count++;
+      }
+      System.out.printf("총 %d개 수업정보를 저장하였습니다.\n", count);
+
+    } catch (IOException e) {
+    }
   }
+
+
+  public static void loadMemberData() {
+    File file = new File("./member.csv");
+    FileReader in = null;
+    Scanner scanner = null;
+    try {
+      in = new FileReader(file);
+      scanner = new Scanner(in);
+      int count = 0;
+
+      while(true)
+        try {
+          String line = scanner.nextLine();
+          String[] data = line.split(",");
+
+          Member member = new Member();
+          member.setNo(Integer.parseInt(data[0]));
+          member.setName(data[1]);
+          member.setEmail(data[2]);
+          member.setPassword(data[3]);
+          member.setPhoto(data[4]);
+          member.setTel(data[5]);
+          member.setRegisteredDate(Date.valueOf(data[6]));
+
+          memberList.add(member);
+          count++;
+        } catch(Exception e) {
+          break;
+        }
+      System.out.printf("총 %d개 멤버정보를 로딩했습니다.\n", count);
+    } catch (FileNotFoundException e) {
+    }
+  }
+
+  public static void saveMemberData() {
+    File file = new File("./member.csv");
+    FileWriter out = null;
+
+    try {
+      out = new FileWriter(file);
+      int count = 0;
+
+      for(Member member : memberList) {
+        String line = String.format("%d,%s,%s,%s,%s,%s,%s\n",
+            member.getNo(),
+            member.getName(),
+            member.getEmail(),
+            member.getPassword(),
+            member.getPhoto(),
+            member.getTel(),
+            member.getRegisteredDate()
+            );
+
+        out.write(line);
+        count++;
+      }
+      System.out.printf("총 %d개 멤버정보를 저장하였습니다.\n", count);
+
+    } catch (IOException e) {
+    }
+  }
+
+
+  public static void loadBoardData() {
+    File file = new File("./board.csv");
+    FileReader in = null;
+    Scanner scanner = null;
+    try {
+      in = new FileReader(file);
+      scanner = new Scanner(in);
+      int count = 0;
+
+      while(true)
+        try {
+          String line = scanner.nextLine();
+          String[] data = line.split(",");
+
+          Board board = new Board();
+          board.setNo(Integer.parseInt(data[0]));
+          board.setTitle(data[1]);
+          board.setDate(Date.valueOf(data[2]));
+          board.setViewCount(Integer.parseInt(data[3]));
+
+          boardList.add(board);
+          count++;
+        } catch(Exception e) {
+          break;
+        }
+      System.out.printf("총 %d개 게시판 정보를 로딩했습니다.\n", count);
+    } catch (FileNotFoundException e) {
+    }
+  }
+
+  public static void saveBoardData() {
+    File file = new File("./board.csv");
+    FileWriter out = null;
+
+    try {
+      out = new FileWriter(file);
+      int count = 0;
+
+      for(Board board : boardList) {
+        String line = String.format("%d,%s,%s,%s,%s,%s,%s\n",
+            board.getNo(),
+            board.getTitle(),
+            board.getDate(),
+            board.getViewCount()
+            );
+
+        out.write(line);
+        count++;
+      }
+      System.out.printf("총 %d개 게시판 정보를 저장하였습니다.\n", count);
+
+    } catch (IOException e) {
+    }
+  }
+
+
+
+
+
+
 }
 
