@@ -4,9 +4,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Date;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -35,7 +35,6 @@ import com.eomcs.lms.handler.MemberDetailCommand;
 import com.eomcs.lms.handler.MemberListCommand;
 import com.eomcs.lms.handler.MemberUpdateCommand;
 import com.eomcs.util.Prompt;
-import com.google.gson.Gson;
 
 public class App {
   static java.io.InputStream inputStream = System.in;
@@ -47,6 +46,9 @@ public class App {
   static LinkedList<Member> memberList = new LinkedList<>();
 
   public static void main(String[] args) {
+    loadLessonData();
+    loadMemberData();
+    loadBoardData();
     Prompt prompt = new Prompt(keyboard);
     HashMap<String, Command> hashmap = new HashMap<>();
 
@@ -72,9 +74,6 @@ public class App {
     hashmap.put("/compute/plus", new ComputePlusCommand(prompt));
 
     String command;
-    loadLessonData();
-    loadMemberData();
-    loadBoardData();
 
     while (true) {
       System.out.println();
@@ -84,8 +83,9 @@ public class App {
       commandStack.push(command);
       commandQueue.offer(command);
 
-      if (command.length() == 0)
+      if (command.length() == 0) {
         continue;
+      }
       if (command.equalsIgnoreCase("quit")) {
         System.out.println("...안녕!");
         break;
@@ -98,19 +98,20 @@ public class App {
       }
 
       Command commandHandler = hashmap.get(command);
-      if (commandHandler != null)
+      if (commandHandler != null) {
         try {
           commandHandler.execute();
-        } catch(Exception e) {
+        } catch (Exception e) {
           System.out.printf("명령어 실행 중 오류발생 : %s\n", e.getMessage());
         }
-      else
+      } else {
         System.out.println("실행할 수 없는 명령입니다.");
+      }
     }
-    keyboard.close();
     saveLessonData();
     saveMemberData();
     saveBoardData();
+    keyboard.close();
   }
 
 
@@ -123,88 +124,182 @@ public class App {
       if (++count % 5 == 0) {
         System.out.print(": (중지하고 싶으면 q)");
         String str = keyboard.nextLine();
-        if (str.equalsIgnoreCase("q"))
+        if (str.equalsIgnoreCase("q")) {
           break;
+        }
       }
     }
   }
 
+  // 파일입출력
   private static void loadLessonData() {
     File file = new File("./lesson.csv");
-    Scanner scanner = null;
-    try (FileReader in = new FileReader(file)) {
-      lessonList.addAll(Arrays.asList(new Gson().fromJson(in, Lesson[].class)));
-      
-      System.out.printf("총 %d개 레슨 로딩완료\n", lessonList.size());
-    } catch(IOException e) {
-      System.out.println("로딩 실패 : " + e.getMessage());
+
+    try (FileReader in = new FileReader(file); Scanner scanner = new Scanner(in)) {
+      int count = 0;
+
+      while (true) {
+        try {
+          String line = scanner.nextLine();
+          String[] data = line.split(",");
+
+          Lesson lesson = new Lesson();
+          lesson.setNo(Integer.parseInt(data[0]));
+          lesson.setTitle(data[1]);
+          lesson.setContext(data[2]);
+          lesson.setStartDate(Date.valueOf(data[3]));
+          lesson.setEndDate(Date.valueOf(data[4]));
+          lesson.setTotalHour(Integer.parseInt(data[5]));
+          lesson.setDailyHour(Integer.parseInt(data[6]));
+
+          lessonList.add(lesson);
+          count++;
+        } catch (Exception e) {
+          break;
+        }
+      }
+      System.out.printf("총 %d개 수업정보를 로딩했습니다.\n", count);
+
+    } catch (IOException e) {
+      System.out.println(e.getMessage());
     }
   }
 
   private static void saveLessonData() {
-    File file = new File("./lesson.json");
-
+    File file = new File("./lesson.csv");
     try (FileWriter out = new FileWriter(file)) {
-      out.write(new Gson().toJson(lessonList));
-      
-      System.out.printf("총 %d개 레슨 저장완료\n", lessonList.size());
-    } catch(IOException e) {
-      System.out.println("저장 실패 : " + e.getMessage());
-    }
+      int count = 0;
 
+      for(Lesson lesson : lessonList) {
+
+        String line = String.format("%d,%s,%s,%s,%s,%d,%d\n",
+            lesson.getNo(),
+            lesson.getTitle(),
+            lesson.getContext(),
+            lesson.getStartDate(),
+            lesson.getEndDate(),
+            lesson.getTotalHour(),
+            lesson.getDailyHour());
+
+        out.write(line);
+        count++;
+      }
+      System.out.printf("총 %d개 수업정보를 저장했습니다.\n",count);
+
+    } catch (IOException e) {
+      System.out.println(e.getMessage());
+    }
+  }
+
+  private static void loadBoardData() {
+    File file = new File("./board.csv");
+
+    try (FileReader in = new FileReader(file); Scanner scanner = new Scanner(in)) {
+      int count = 0;
+
+      while (true) {
+        try {
+          String line = scanner.nextLine();
+          String[] data = line.split(",");
+
+          Board board = new Board();
+          board.setNo(Integer.parseInt(data[0]));
+          board.setTitle(data[1]);
+          board.setDate(Date.valueOf(data[2]));
+          board.setViewCount(Integer.parseInt(data[3]));
+
+          boardList.add(board);
+          count++;
+        } catch (Exception e) {
+          break;
+        }
+      }
+      System.out.printf("총 %d개 게시판 정보를 로딩했습니다.\n", count);
+
+    } catch (IOException e) {
+      System.out.println(e.getMessage());
+    }
+  }
+
+  private static void saveBoardData() {
+    File file = new File("./board.csv");
+    try (FileWriter out = new FileWriter(file)) {
+      int count = 0;
+
+      for(Board board : boardList) {
+
+        String line = String.format("%d,%s,%s,%s\n",
+            board.getNo(),
+            board.getTitle(),
+            board.getDate(),
+            board.getViewCount());
+
+        out.write(line);
+        count++;
+      }
+      System.out.printf("총 %d개 게시판 정보를 저장했습니다.\n",count);
+
+    } catch (IOException e) {
+      System.out.println(e.getMessage());
+    }
   }
 
   private static void loadMemberData() {
     File file = new File("./member.csv");
 
-    try (FileReader in = new FileReader(file)) {
-      
-      memberList.addAll(Arrays.asList(new Gson().fromJson(in, Member[].class)));
-      
-      System.out.printf("총 %d개 멤버 로딩완료\n", memberList.size());
+    try (FileReader in = new FileReader(file); Scanner scanner = new Scanner(in)) {
+      int count = 0;
 
-    } catch(Exception e) {
-      System.out.println("로딩 실패 : " + e.getMessage());
+      while (true) {
+        try {
+          String line = scanner.nextLine();
+          String[] data = line.split(",");
+
+          Member member = new Member();
+          member.setNo(Integer.parseInt(data[0]));
+          member.setName(data[1]);
+          member.setEmail(data[2]);
+          member.setPassword(data[3]);
+          member.setPhoto(data[4]);
+          member.setTel(data[5]);
+          member.setRegisteredDate(Date.valueOf(data[6]));
+
+          memberList.add(member);
+          count++;
+        } catch (Exception e) {
+          break;
+        }
+      }
+      System.out.printf("총 %d개 멤버정보를 로딩했습니다.\n", count);
+
+    } catch (IOException e) {
+      System.out.println(e.getMessage());
     }
   }
 
   private static void saveMemberData() {
-
-    File file = new File("./member.json");
-
+    File file = new File("./member.csv");
     try (FileWriter out = new FileWriter(file)) {
-      
-      out.write(new Gson().toJson(memberList));
-      
-      System.out.printf("총 %d개 멤버 저장완료\n", memberList.size());
+      int count = 0;
 
-    }catch (IOException e) {
-      System.out.println("저장 실패 : " + e.getMessage());
-    }
-  }
+      for(Member member : memberList) {
 
-  private static void loadBoardData() {
-    File file = new File("./board.json");
+        String line = String.format("%d,%s,%s,%s,%s,%s,%s\n",
+            member.getNo(),
+            member.getName(),
+            member.getEmail(),
+            member.getPassword(),
+            member.getPhoto(),
+            member.getTel(),
+            member.getRegisteredDate());
 
-    try (FileReader in = new FileReader(file)) {
-      boardList.addAll(Arrays.asList(new Gson().fromJson(in, Board[].class)));
-      
-      System.out.printf("총 %d개 게시글 로딩완료\n", boardList.size());
+        out.write(line);
+        count++;
+      }
+      System.out.printf("총 %d개 수업정보를 저장했습니다.\n",count);
 
-    } catch (Exception e) {
-      System.out.println("로딩 실패 : " + e.getMessage());
-    }
-  }
-
-  private static void saveBoardData() {
-    File file = new File("./board.json");
-
-    try (FileWriter out = new FileWriter(file)) {
-      out.write(new Gson().toJson(boardList));
-      
-      System.out.printf("총 %d개 게시글 저장완료\n", boardList.size());
     } catch (IOException e) {
-      System.out.println("저장 실패 : " + e.getMessage());
+      System.out.println(e.getMessage());
     }
   }
 

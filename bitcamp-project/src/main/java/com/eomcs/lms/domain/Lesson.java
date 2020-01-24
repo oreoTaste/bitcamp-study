@@ -13,35 +13,6 @@ public class Lesson {
   private int totalHour;
   private int dailyHour;
   
-  
-  public static Lesson valueOf(String[] data) {
-    Lesson lesson = new Lesson();
-
-    lesson.setNo(Integer.parseInt(data[0]));
-    lesson.setTitle(data[1]);
-    lesson.setContext(data[2]);
-    lesson.setStartDate(Date.valueOf(data[3]));
-    lesson.setEndDate(Date.valueOf(data[4]));
-    lesson.setTotalHour(Integer.parseInt(data[5]));
-    lesson.setDailyHour(Integer.parseInt(data[6]));
-    
-    return lesson;
-  }
-  
-  
-  public String toCsvString() {
-    return String.format("%d,%s,%s,%s,%s,%d,%d\n",
-        this.getNo(),
-        this.getTitle(),
-        this.getContext(),
-        this.getStartDate(),
-        this.getEndDate(),
-        this.getTotalHour(),
-        this.getDailyHour());
-  }
-  
-  
-  
   public int getNo() {
     return no;
   }
@@ -99,7 +70,7 @@ public class Lesson {
   
   @Override
   public boolean equals(Object obj) {
-    if(obj.getClass() != Lesson.class)
+    if(obj.getClass() != Lesson.class) 
       return false;
     
     Lesson other = (Lesson) obj;
