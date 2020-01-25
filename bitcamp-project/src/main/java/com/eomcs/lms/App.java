@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Date;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -140,19 +139,7 @@ public class App {
 
       while (true) {
         try {
-          String line = scanner.nextLine();
-          String[] data = line.split(",");
-
-          Lesson lesson = new Lesson();
-          lesson.setNo(Integer.parseInt(data[0]));
-          lesson.setTitle(data[1]);
-          lesson.setContext(data[2]);
-          lesson.setStartDate(Date.valueOf(data[3]));
-          lesson.setEndDate(Date.valueOf(data[4]));
-          lesson.setTotalHour(Integer.parseInt(data[5]));
-          lesson.setDailyHour(Integer.parseInt(data[6]));
-
-          lessonList.add(lesson);
+          lessonList.add(Lesson.valueOf(scanner.nextLine()));
           count++;
         } catch (Exception e) {
           break;
@@ -171,17 +158,7 @@ public class App {
       int count = 0;
 
       for(Lesson lesson : lessonList) {
-
-        String line = String.format("%d,%s,%s,%s,%s,%d,%d\n",
-            lesson.getNo(),
-            lesson.getTitle(),
-            lesson.getContext(),
-            lesson.getStartDate(),
-            lesson.getEndDate(),
-            lesson.getTotalHour(),
-            lesson.getDailyHour());
-
-        out.write(line);
+        out.write(lesson.toCsvString() + "\n");
         count++;
       }
       System.out.printf("총 %d개 수업정보를 저장했습니다.\n",count);
@@ -199,16 +176,7 @@ public class App {
 
       while (true) {
         try {
-          String line = scanner.nextLine();
-          String[] data = line.split(",");
-
-          Board board = new Board();
-          board.setNo(Integer.parseInt(data[0]));
-          board.setTitle(data[1]);
-          board.setDate(Date.valueOf(data[2]));
-          board.setViewCount(Integer.parseInt(data[3]));
-
-          boardList.add(board);
+          boardList.add(Board.valueOf(scanner.nextLine()));
           count++;
         } catch (Exception e) {
           break;
@@ -227,14 +195,7 @@ public class App {
       int count = 0;
 
       for(Board board : boardList) {
-
-        String line = String.format("%d,%s,%s,%s\n",
-            board.getNo(),
-            board.getTitle(),
-            board.getDate(),
-            board.getViewCount());
-
-        out.write(line);
+        out.write(board.toCsvString() + "\n");
         count++;
       }
       System.out.printf("총 %d개 게시판 정보를 저장했습니다.\n",count);
@@ -252,19 +213,7 @@ public class App {
 
       while (true) {
         try {
-          String line = scanner.nextLine();
-          String[] data = line.split(",");
-
-          Member member = new Member();
-          member.setNo(Integer.parseInt(data[0]));
-          member.setName(data[1]);
-          member.setEmail(data[2]);
-          member.setPassword(data[3]);
-          member.setPhoto(data[4]);
-          member.setTel(data[5]);
-          member.setRegisteredDate(Date.valueOf(data[6]));
-
-          memberList.add(member);
+          memberList.add(Member.valueOf(scanner.nextLine()));
           count++;
         } catch (Exception e) {
           break;
@@ -283,17 +232,7 @@ public class App {
       int count = 0;
 
       for(Member member : memberList) {
-
-        String line = String.format("%d,%s,%s,%s,%s,%s,%s\n",
-            member.getNo(),
-            member.getName(),
-            member.getEmail(),
-            member.getPassword(),
-            member.getPhoto(),
-            member.getTel(),
-            member.getRegisteredDate());
-
-        out.write(line);
+        out.write(member.toCsvString());
         count++;
       }
       System.out.printf("총 %d개 수업정보를 저장했습니다.\n",count);

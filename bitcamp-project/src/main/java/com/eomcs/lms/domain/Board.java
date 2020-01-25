@@ -7,7 +7,26 @@ public class Board {
   private String title;
   private Date date;
   private int viewCount;
-  
+
+  public static Board valueOf(String line) {
+    String[] data = line.split(",");
+    Board board = new Board();
+    board.setNo(Integer.parseInt(data[0]));
+    board.setTitle(data[1]);
+    board.setDate(Date.valueOf(data[2]));
+    board.setViewCount(Integer.parseInt(data[3]));
+    return board;
+  }
+
+  public String toCsvString() {
+    return String.format("%d,%s,%s,%s",
+        getNo(),
+        getTitle(),
+        getDate(),
+        getViewCount());
+  }
+
+
   public int getNo() {
     return no;
   }
@@ -32,18 +51,19 @@ public class Board {
   public void setViewCount(int viewCount) {
     this.viewCount = viewCount;
   }
-  
+
+  @Override
   public boolean equals(Object obj) {
     if(obj.getClass() != this.getClass()) {
       return false;
     }
     Board other = (Board)obj;
-    
-    if(this.no != other.no) {
+
+    if(no != other.no) {
       return false;
     }
-    
-    if(this.title != other.title) {
+
+    if(title != other.title) {
       return false;
     }
     return true;

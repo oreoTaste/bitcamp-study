@@ -10,7 +10,34 @@ public class Member {
   private String photo;
   private String tel;
   private Date registeredDate;
-  
+
+  public static Member valueOf(String line) {
+    String[] data = line.split(",");
+
+    Member member = new Member();
+    member.setNo(Integer.parseInt(data[0]));
+    member.setName(data[1]);
+    member.setEmail(data[2]);
+    member.setPassword(data[3]);
+    member.setPhoto(data[4]);
+    member.setTel(data[5]);
+    member.setRegisteredDate(Date.valueOf(data[6]));
+    return member;
+  }
+
+
+  public String toCsvString() {
+    return String.format("%d,%s,%s,%s,%s,%s,%s\n",
+        getNo(),
+        getName(),
+        getEmail(),
+        getPassword(),
+        getPhoto(),
+        getTel(),
+        getRegisteredDate());
+  }
+
+
   public int getNo() {
     return no;
   }
@@ -53,39 +80,40 @@ public class Member {
   public void setRegisteredDate(Date registeredDate) {
     this.registeredDate = registeredDate;
   }
-  
+
+  @Override
   public boolean equals(Object obj) {
     if(obj.getClass() != Member.class) {
       return false;
     }
-    
+
     Member other = (Member)obj;
-    
-    if(this.no != other.no) {
+
+    if(no != other.no) {
       return false;
     }
 
-    if(this.name.equals(other.name)) {
+    if(name.equals(other.name)) {
       return false;
     }
 
-    if(this.email.equals(other.email)) {
+    if(email.equals(other.email)) {
       return false;
     }
 
-    if(this.password.equals(other.password)) {
+    if(password.equals(other.password)) {
       return false;
     }
 
-    if(this.photo.equals(other.photo)) {
+    if(photo.equals(other.photo)) {
       return false;
     }
 
-    if(this.tel.equals(other.tel)) {
+    if(tel.equals(other.tel)) {
       return false;
     }
 
-    if(this.registeredDate != other.registeredDate) {
+    if(registeredDate != other.registeredDate) {
       return false;
     }
     return true;
