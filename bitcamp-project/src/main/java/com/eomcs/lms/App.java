@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -34,6 +35,9 @@ import com.eomcs.lms.handler.MemberDetailCommand;
 import com.eomcs.lms.handler.MemberListCommand;
 import com.eomcs.lms.handler.MemberUpdateCommand;
 import com.eomcs.util.Prompt;
+import com.google.gson.Gson;
+
+
 
 public class App {
   static java.io.InputStream inputStream = System.in;
@@ -131,37 +135,26 @@ public class App {
   }
 
   // 파일입출력
+
   private static void loadLessonData() {
-    File file = new File("./lesson.csv");
+    File file = new File("./lesson.json");
 
-    try (FileReader in = new FileReader(file); Scanner scanner = new Scanner(in)) {
-      int count = 0;
+    try (FileReader in = new FileReader(file)) {
 
-      while (true) {
-        try {
-          lessonList.add(Lesson.valueOf(scanner.nextLine()));
-          count++;
-        } catch (Exception e) {
-          break;
-        }
-      }
-      System.out.printf("총 %d개 수업정보를 로딩했습니다.\n", count);
+      lessonList.addAll(Arrays.asList(new Gson().fromJson(in, Lesson[].class)));
+      System.out.printf("총 %d개 수업정보를 로딩했습니다.\n", lessonList.size());
 
-    } catch (IOException e) {
+    } catch (Exception e) {
       System.out.println(e.getMessage());
     }
   }
 
   private static void saveLessonData() {
-    File file = new File("./lesson.csv");
+    File file = new File("./lesson.json");
     try (FileWriter out = new FileWriter(file)) {
-      int count = 0;
 
-      for(Lesson lesson : lessonList) {
-        out.write(lesson.toCsvString() + "\n");
-        count++;
-      }
-      System.out.printf("총 %d개 수업정보를 저장했습니다.\n",count);
+      out.write(new Gson().toJson(lessonList));
+      System.out.printf("총 %d개 수업정보를 저장했습니다.\n",lessonList.size());
 
     } catch (IOException e) {
       System.out.println(e.getMessage());
@@ -169,7 +162,7 @@ public class App {
   }
 
   private static void loadBoardData() {
-    File file = new File("./board.csv");
+    File file = new File("./board.json");
 
     try (FileReader in = new FileReader(file); Scanner scanner = new Scanner(in)) {
       int count = 0;
@@ -190,7 +183,7 @@ public class App {
   }
 
   private static void saveBoardData() {
-    File file = new File("./board.csv");
+    File file = new File("./board.json");
     try (FileWriter out = new FileWriter(file)) {
       int count = 0;
 
@@ -206,7 +199,7 @@ public class App {
   }
 
   private static void loadMemberData() {
-    File file = new File("./member.csv");
+    File file = new File("./member.json");
 
     try (FileReader in = new FileReader(file); Scanner scanner = new Scanner(in)) {
       int count = 0;
@@ -227,7 +220,7 @@ public class App {
   }
 
   private static void saveMemberData() {
-    File file = new File("./member.csv");
+    File file = new File("./member.json");
     try (FileWriter out = new FileWriter(file)) {
       int count = 0;
 
