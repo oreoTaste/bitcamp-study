@@ -11,16 +11,20 @@ public class Exam0430 {
 
     // 디렉토리가 존재하지 않으면 파일을 생성할 수 없다.
     // 파일 생성하기
-    if (file.mkdirs())
+    
+    if (file.mkdirs()) {
       System.out.println("temp/a 디렉토리를 생성하였습니다.");
-    else
+    } else {
       System.out.println("temp/a 디렉토리를 생성할 수 없습니다.");
+    }
+      
     
     // 파일 생성
-    if (file.createNewFile())
+    if (file.createNewFile()) {
       System.out.println("test.txt 파일을 생성하였습니다.");
-    else
+    } else {
       System.out.println("test.txt 파일을 생성할 수 없습니다.");
+    }
 
 
   }
