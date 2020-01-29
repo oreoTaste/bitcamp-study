@@ -37,10 +37,11 @@ public class DataOutputStream extends FileOutputStream {
 
   public void writeBoolean(boolean value) throws Exception {
     // 상속 받은 write() 메서드를 사용하여 boolean 값 출력
-    if (value) 
+    if (value) {
       this.write(1);
-    else 
+    } else {
       this.write(0);
+    }
   }
 }
 

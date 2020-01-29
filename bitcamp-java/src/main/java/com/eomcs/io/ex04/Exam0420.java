@@ -1,4 +1,4 @@
-// 데이터 읽기 - String 값 읽기 
+// 데이터 읽기 - String 값 읽기
 package com.eomcs.io.ex04;
 
 import java.io.FileInputStream;

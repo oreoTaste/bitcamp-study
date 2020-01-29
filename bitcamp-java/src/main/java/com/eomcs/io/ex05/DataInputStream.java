@@ -10,8 +10,8 @@ public class DataInputStream extends FileInputStream {
 
   public String readUTF() throws Exception {
     // 상속 받은 read() 메서드를 사용하여 문자열 출력
-    byte[] bytes = new byte[100];
-    int size = this.read(); 
+    int size = this.read();
+    byte[] bytes = new byte[size];
     this.read(bytes, 0, size); // 이름 배열 개수 만큼 바이트를 읽어 배열에 저장한다.
     return new String(bytes, 0, size, "UTF-8");
   }
@@ -37,15 +37,15 @@ public class DataInputStream extends FileInputStream {
     value += (long)this.read() << 24;
     value += (long)this.read() << 16;
     value += (long)this.read() << 8;
-    value += (long)this.read();
+    value += this.read();
     return value;
   }
 
   public boolean readBoolean() throws Exception {
     // 상속 받은 read() 메서드를 사용하여 boolean 값 출력
-    if (this.read()==1) 
+    if (this.read()==1)
       return true;
-    else 
+    else
       return false;
   }
 }

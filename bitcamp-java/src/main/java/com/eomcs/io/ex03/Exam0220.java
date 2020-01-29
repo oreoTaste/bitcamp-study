@@ -6,6 +6,7 @@ import java.io.FileReader;
 public class Exam0220 {
 
   public static void main(String[] args) throws Exception {
+    
     FileReader in = new FileReader("temp/test2.txt");
 
     // UTF-16 문자 코드 값을 저장할 배열을 준비한다.
@@ -42,7 +43,6 @@ public class Exam0220 {
     }
 
     System.out.println();
-
   }
 
 }

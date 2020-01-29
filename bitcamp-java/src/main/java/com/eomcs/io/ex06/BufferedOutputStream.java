@@ -4,7 +4,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class BufferedOutputStream extends FileOutputStream {
-  byte[] buf = new byte[8196];
+  byte[] buf = new byte[8192];
   int cursor;
 
   public BufferedOutputStream(String filename) throws Exception {
@@ -22,11 +22,13 @@ public class BufferedOutputStream extends FileOutputStream {
     buf[cursor++] = (byte)b;
   }
 
+  
   @Override
   public void close() throws IOException {
     this.flush();
     super.close();
   }
+  
 
   @Override
   public void flush() throws IOException {

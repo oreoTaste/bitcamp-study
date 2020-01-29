@@ -21,7 +21,7 @@ public class Exam0110 {
     // => 따라서 다음 4바이트 값을 출력하면
     //    앞의 2바이트는 버리고, 뒤의 2바이트(UTF-16)를 UTF-8 코드표에 따라
     //    1 ~ 4 바이트 값으로 변환하여 출력한다.
-    out.write(0x7a6bac00);
+    out.write(0xaaabac00);
 
     
     //UCS2에서 영어 A 는 0041이다
@@ -31,6 +31,5 @@ public class Exam0110 {
     out.close();
 
     System.out.println("출력 완료!");
-
   }
 }
