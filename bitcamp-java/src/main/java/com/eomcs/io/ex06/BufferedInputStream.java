@@ -15,11 +15,24 @@ public class BufferedInputStream extends FileInputStream {
   @Override
   public int read() throws IOException {
     if (cursor == size) {    // 버퍼에 저장되어 있는 데이터를 모두 읽었다는 의미
-      if ((size = this.read(buf)) == -1)
+      if ((size = super.read(buf)) == -1)
         return -1;
       cursor = 0;
     }
     return buf[cursor++] & 0x000000ff;
+  }
+  
+  @Override
+  public int read(byte[] buf) throws IOException {
+    int i = 0;
+    for(; i< buf.length; i++) {
+      int b = this.read();
+      if(b == -1) {
+        break;
+      }
+      buf[i] = (byte) b;
+    }
+    return i;
   }
 }
 

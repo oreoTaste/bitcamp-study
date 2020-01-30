@@ -19,8 +19,8 @@ public class Exam0110 {
 
     long endTime = System.currentTimeMillis();
 
-    System.out.println(endTime - startTime);
-    System.out.println(callCount);
+    System.out.println("소요시간: " + (endTime - startTime));
+    System.out.println("횟수 : " + callCount);
 
     in.close();
   }

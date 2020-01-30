@@ -1,17 +1,14 @@
-// DataOutputStream을 이용하여 객체 출력 - 인스턴스의 값을 출력
+// 부품 연결 예
+// FileOutputStrea -> DataOutputStream
 package com.eomcs.io.ex08;
 
 import java.io.FileOutputStream;
 
-public class Exam0110 {
+public class Exam0410 {
 
   public static void main(String[] args) throws Exception {
-    // 상속을 통한 기능확장의 문제점
-    // - 자바는 다중상속이 불가능하다.
-    //   따라서, 여러 기능을 조합하려면 기존 코드를 복사해야한다.
-    // =>코드중복
-    
-    FileOutputStream fileOut = new FileOutputStream("temp/test6.data");
+    // 첫번째 부품
+    FileOutputStream fileOut = new FileOutputStream("temp/test7.data");
 
     // 부품추가
     // - 기존의 FileOutputStream 객체에 String,int,boolean 값을 출력하는
@@ -22,16 +19,18 @@ public class Exam0110 {
     member.name = "AB가각간";
     member.age = 27;
     member.gender = true;
-
-    // 장신구/보조장치/플러그인(decorator)를 사용하여 String,int,boolean 값을 출력한다.
-    out.writeUTF(member.name);
-    out.writeInt(member.age);
-    out.writeBoolean(member.gender);
-
+    
+    long start = System.currentTimeMillis();
+    for(int i = 0; i < 100000; i++) {
+      out.writeUTF(member.name);
+      out.writeInt(member.age);
+      out.writeBoolean(member.gender);
+    }
     out.close();
+    long end = System.currentTimeMillis();
 
     System.out.println("데이터 출력 완료!");
-    
+    System.out.println(end - start);
     // 문제?
     // => DataBufferedOutputStream과 DataOutputStream 클래스는
     //    생성자를 빼고 나머지 코드가 모두 같다.

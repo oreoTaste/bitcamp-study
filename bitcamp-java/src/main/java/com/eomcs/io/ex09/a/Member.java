@@ -1,6 +1,6 @@
-package com.eomcs.io.ex10;
+package com.eomcs.io.ex09.a;
 
-public class Member {
+public class Member implements java.io.Serializable {
   String name;
   int age;
   boolean gender; // true(여자), false(남자)

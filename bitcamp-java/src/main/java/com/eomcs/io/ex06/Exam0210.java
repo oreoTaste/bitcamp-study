@@ -1,12 +1,15 @@
 // 버퍼 사용 전 - 파일 복사 및 시간 측정
 package com.eomcs.io.ex06;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
 public class Exam0210 {
 
   public static void main(String[] args) throws Exception {
+    File file = new File("temp/jls11.pdf");
+
     FileInputStream in = new FileInputStream("temp/jls11.pdf");
     FileOutputStream out = new FileOutputStream("temp/jls11_2.pdf");
  

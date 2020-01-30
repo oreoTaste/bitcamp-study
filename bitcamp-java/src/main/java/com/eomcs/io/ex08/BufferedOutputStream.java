@@ -1,23 +1,22 @@
-//버퍼 기능을 입출력 플러그인/장신구(decorator)로 전환한다.  
+//버퍼 기능을 입출력 플러그인/장신구(decorator)로 전환한다.
 package com.eomcs.io.ex08;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class BufferedOutputStream {
-
-  OutputStream out;
+public class BufferedOutputStream extends DecoratorOutputStream{
 
   byte[] buf = new byte[8196];
   int cursor;
 
   public BufferedOutputStream(OutputStream out) {
-    this.out = out;
+    super(out);
   }
 
+  @Override
   public void write(int b) throws IOException {
     if (cursor == buf.length) { // 버퍼가 다차면
-      out.write(buf); // 버퍼에 들어있는 데이터를 한 번에 출력한다.
+      부품.write(buf); // 버퍼에 들어있는 데이터를 한 번에 출력한다.
       cursor = 0; // 다시 커서를 초기화시킨다.
     }
 
@@ -25,14 +24,16 @@ public class BufferedOutputStream {
     buf[cursor++] = (byte)b;
   }
 
+  @Override
   public void close() throws IOException {
     this.flush();
-    out.close();
+    부품.close();
   }
 
+  @Override
   public void flush() throws IOException {
     if (cursor > 0) {
-      out.write(buf, 0, cursor);
+      부품.write(buf, 0, cursor);
       cursor = 0;
     }
   }
