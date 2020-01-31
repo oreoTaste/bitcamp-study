@@ -130,7 +130,7 @@ public class App {
   }
 
   private static void loadLessonData() {
-    File file = new File("./lesson.csv");
+    File file = new File("./lesson.json");
     Scanner scanner = null;
     try (FileReader in = new FileReader(file)) {
       lessonList.addAll(Arrays.asList(new Gson().fromJson(in, Lesson[].class)));
@@ -155,7 +155,7 @@ public class App {
   }
 
   private static void loadMemberData() {
-    File file = new File("./member.csv");
+    File file = new File("./member.json");
 
     try (FileReader in = new FileReader(file)) {
       
