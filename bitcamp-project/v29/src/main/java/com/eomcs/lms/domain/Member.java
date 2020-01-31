@@ -2,8 +2,7 @@ package com.eomcs.lms.domain;
 
 import java.sql.Date;
 
-public class Member implements java.io.Serializable{
-  private static final long serialVersionUID = 20200131L;
+public class Member {
   private int no;
   private String name;
   private String email;
