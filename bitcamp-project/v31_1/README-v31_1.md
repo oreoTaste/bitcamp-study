@@ -1,8 +1,5 @@
-# eomcs-java-project-4.0
+# 31 - `Observer` 디자인 패턴 적용
 
-`Observer` 디자인 패턴의 활용
-
-- 특정 상태에서 수행되는 코드를 캡슐화하여 분리하는 방법
 - `Observer` 디자인 패턴의 용도와 이점을 이해하기
 
   

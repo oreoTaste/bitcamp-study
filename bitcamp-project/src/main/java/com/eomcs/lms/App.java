@@ -1,21 +1,16 @@
 package com.eomcs.lms;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
+import com.eomcs.lms.context.ApplicationContextListener;
 import com.eomcs.lms.domain.Board;
 import com.eomcs.lms.domain.Lesson;
 import com.eomcs.lms.domain.Member;
@@ -40,15 +35,52 @@ import com.eomcs.lms.handler.MemberUpdateCommand;
 import com.eomcs.util.Prompt;
 
 public class App {
-  static java.io.InputStream inputStream = System.in;
-  static java.util.Scanner keyboard = new java.util.Scanner(inputStream);
-  static Deque<String> commandStack = new ArrayDeque<>();
-  static Queue<String> commandQueue = new LinkedList<>();
-  static List<Board> boardList = new LinkedList<>();
-  static List<Lesson> lessonList = new ArrayList<>();
-  static List<Member> memberList = new LinkedList<>();
+  java.io.InputStream inputStream = System.in;
+  java.util.Scanner keyboard = new java.util.Scanner(inputStream);
+  Deque<String> commandStack = new ArrayDeque<>();
+  Queue<String> commandQueue = new LinkedList<>();
 
-  public static void main(String[] args) {
+  
+  // 중복삽입이 불가한 객체로 하자!
+  Set<ApplicationContextListener> listeners = new HashSet<>();
+
+  // 옵저버를 등록하는 메서드
+  public void addApplicationContextListener(ApplicationContextListener listener) {
+    listeners.add(listener);
+  }
+
+  // 옵저버를 제거하는 메서드
+  public void removeApplicationContextListener(ApplicationContextListener listener) {
+    listeners.remove(listener);
+    
+  }
+  
+  // 옵저버와 공유할 값을 보관할 객체를 준비한다.
+  Map<String, Object> context = new HashMap<>();
+  
+  // 애플리케이션의 서비스가 시작됨을 옵저버에게 알림.
+  private void notifyApplicationInitialized() {
+    for(ApplicationContextListener listener : listeners) {
+      listener.contextInitialized(context);
+    }
+  }
+
+  // 애플리케이션의 서비스가 시작됨을 옵저버에게 알림.
+  private void notifyApplicationDestroyed() {
+    for(ApplicationContextListener listener : listeners) {
+      listener.contextDestroyed(context);
+    }
+  }
+  
+  @SuppressWarnings("unchecked")
+  public void service() {
+    
+    notifyApplicationInitialized();
+    
+    List<Board> boardList = (List<Board>)context.get("boardList");
+    List<Lesson> lessonList = (List<Lesson>)context.get("lessonList");
+    List<Member> memberList = (List<Member>)context.get("memberList");
+    
     Prompt prompt = new Prompt(keyboard);
     HashMap<String, Command> hashmap = new HashMap<>();
 
@@ -74,9 +106,6 @@ public class App {
     hashmap.put("/compute/plus", new ComputePlusCommand(prompt));
 
     String command;
-    loadLessonData();
-    loadMemberData();
-    loadBoardData();
 
     while (true) {
       System.out.println();
@@ -112,13 +141,11 @@ public class App {
       }
     }
     keyboard.close();
-    saveLessonData();
-    saveMemberData();
-    saveBoardData();
+    notifyApplicationDestroyed();
   }
 
 
-  private static void printCommandHistory(Iterator<String> iterator) {
+  private void printCommandHistory(Iterator<String> iterator) {
     int count = 0;
 
     while (iterator.hasNext()) {
@@ -134,97 +161,13 @@ public class App {
     }
   }
 
-  @SuppressWarnings("unchecked")
-  private static void loadLessonData() {
-    File file = new File("./lesson.ser2");
-    try (ObjectInputStream in = new ObjectInputStream(
-        new BufferedInputStream(new FileInputStream(file)))) {
-      
-      lessonList = (List<Lesson>) in.readObject();
-      
-      System.out.printf("총 %d개 레슨 로딩완료\n", lessonList.size());
-    } catch(Exception e) {
-      System.out.println("로딩 실패 : " + e.getMessage());
-    }
+
+  public static void main(String[] args) {
+    App app = new App();
+    
+    app.addApplicationContextListener(new DataLoaderListener());
+    app.service();
   }
-
-  private static void saveLessonData() {
-    File file = new File("./lesson.ser2");
-
-    try (ObjectOutputStream out = new ObjectOutputStream(
-        new BufferedOutputStream(new FileOutputStream(file)));) {
-      
-      out.writeObject(lessonList);
-      System.out.printf("총 %d개 레슨 저장완료\n", lessonList.size());
-    } catch(IOException e) {
-      System.out.println("저장 실패 : " + e.getMessage());
-    }
-
-  }
-
-
-  @SuppressWarnings("unchecked")
-  private static void loadMemberData() {
-    File file = new File("./member.ser2");
-
-    try (ObjectInputStream in = new ObjectInputStream(
-        new BufferedInputStream(new FileInputStream(file)))) {
-      
-      memberList = (List<Member>) in.readObject();
-      
-      System.out.printf("총 %d개 멤버 로딩완료\n", memberList.size());
-
-    } catch(Exception e) {
-      System.out.println("로딩 실패 : " + e.getMessage());
-    }
-  }
-
-  private static void saveMemberData() {
-
-    File file = new File("./member.ser2");
-
-    try (ObjectOutputStream out = new ObjectOutputStream(
-        new BufferedOutputStream(new FileOutputStream(file)))) {
-      
-      out.writeObject(memberList);
-      
-      System.out.printf("총 %d개 멤버 저장완료\n", memberList.size());
-
-    }catch (IOException e) {
-      System.out.println("저장 실패 : " + e.getMessage());
-    }
-  }
-
-  @SuppressWarnings("unchecked")
-  private static void loadBoardData() {
-    File file = new File("./board.ser2");
-
-    try (ObjectInputStream in = new ObjectInputStream(
-        new BufferedInputStream(new FileInputStream(file)))) {
-      
-      boardList = (List<Board>) in.readObject();
-      
-      System.out.printf("총 %d개 게시글 로딩완료\n", boardList.size());
-
-    } catch (Exception e) {
-      System.out.println("로딩 실패 : " + e.getMessage());
-    }
-  }
-
-  private static void saveBoardData() {
-    File file = new File("./board.ser2");
-
-    try (ObjectOutputStream out = new ObjectOutputStream(
-        new BufferedOutputStream(new FileOutputStream(file)))) {
-      
-      out.writeObject(boardList);
-      
-      System.out.printf("총 %d개 게시글 저장완료\n", boardList.size());
-    } catch (IOException e) {
-      System.out.println("저장 실패 : " + e.getMessage());
-    }
-  }
-
 
 
 

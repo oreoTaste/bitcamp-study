@@ -12,10 +12,13 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Set;
+import com.eomcs.lms.context.ApplicationContextListener;
 import com.eomcs.lms.domain.Board;
 import com.eomcs.lms.domain.Lesson;
 import com.eomcs.lms.domain.Member;
@@ -47,8 +50,37 @@ public class App {
   List<Board> boardList = new LinkedList<>();
   List<Lesson> lessonList = new ArrayList<>();
   List<Member> memberList = new LinkedList<>();
+  
+  // 중복삽입이 불가한 객체로 하자!
+  Set<ApplicationContextListener> listeners = new HashSet<>();
 
+  // 옵저버를 등록하는 메서드
+  public void addApplicationContextListener(ApplicationContextListener listener) {
+    listeners.add(listener);
+  }
+
+  // 옵저버를 제거하는 메서드
+  public void removeApplicationContextListener(ApplicationContextListener listener) {
+    listeners.remove(listener);
+    
+  }
+  
+  // 애플리케이션의 서비스가 시작됨을 옵저버에게 알림.
+  private void notifyApplicationInitialized() {
+    for(ApplicationContextListener listener : listeners) {
+      listener.contextInitialized();
+    }
+  }
+
+  // 애플리케이션의 서비스가 시작됨을 옵저버에게 알림.
+  private void notifyApplicationDestroyed() {
+    for(ApplicationContextListener listener : listeners) {
+      listener.contextDestroyed();
+    }
+  }
+  
   public void service() {
+    notifyApplicationInitialized();
     
     Prompt prompt = new Prompt(keyboard);
     HashMap<String, Command> hashmap = new HashMap<>();
@@ -116,6 +148,7 @@ public class App {
     saveLessonData();
     saveMemberData();
     saveBoardData();
+    notifyApplicationDestroyed();
   }
 
 
@@ -217,7 +250,6 @@ public class App {
 
     try (ObjectOutputStream out = new ObjectOutputStream(
         new BufferedOutputStream(new FileOutputStream(file)))) {
-      
       out.writeObject(boardList);
       
       System.out.printf("총 %d개 게시글 저장완료\n", boardList.size());
