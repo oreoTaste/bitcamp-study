@@ -42,9 +42,9 @@ public class App {
   static java.util.Scanner keyboard = new java.util.Scanner(inputStream);
   static Deque<String> commandStack = new ArrayDeque<>();
   static Queue<String> commandQueue = new LinkedList<>();
-  static LinkedList<Board> boardList = new LinkedList<>();
-  static ArrayList<Lesson> lessonList = new ArrayList<>();
-  static LinkedList<Member> memberList = new LinkedList<>();
+  static List<Board> boardList = new LinkedList<>();
+  static List<Lesson> lessonList = new ArrayList<>();
+  static List<Member> memberList = new LinkedList<>();
 
   public static void main(String[] args) {
     Prompt prompt = new Prompt(keyboard);
