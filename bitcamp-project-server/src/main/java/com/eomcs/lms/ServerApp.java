@@ -1,6 +1,7 @@
 package com.eomcs.lms;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -8,11 +9,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.Set;
 import com.eomcs.lms.context.ApplicationContextListener;
-import com.eomcs.lms.domain.Lesson;
-import com.eomcs.lms.domain.Member;
+import com.eomcs.lms.domain.Board;
 
 public class ServerApp {
 
@@ -40,16 +39,11 @@ public class ServerApp {
     }
   }
 
-  @SuppressWarnings("unchecked")
   public void service() {
 
     notifyApplicationInitialized();
 
-    List<Lesson> lessonList = (List<Lesson>)context.get("lessonList");
-    List<Member> memberList = (List<Member>)context.get("memberList");
-
-    try {
-      ServerSocket serverSocket = new ServerSocket(9999);
+    try(ServerSocket serverSocket = new ServerSocket(9999)) {
 
       while(true) {
         System.out.println("...클라이언트 연결 대기중");
@@ -68,26 +62,32 @@ public class ServerApp {
     notifyApplicationDestroyed();
   }
 
+  @SuppressWarnings("unchecked")
   void processRequest(Socket clientSocket) {
     try(
         Socket socket = clientSocket;
 
-        Scanner in = new Scanner(socket.getInputStream());
+        ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
         ObjectOutputStream out = new ObjectOutputStream(
             socket.getOutputStream())
         ) {
       System.out.println("통신을 위한 입출력 스트림을 준비함");
+      List<Board> boardList = (List<Board>) context.get("boardList");
+      
+      String request = in.readUTF();
+      System.out.println("클라이언트가 보낸 메시지를 수신함 : " + request);
 
-      String message = in.nextLine();
-      System.out.println("클라이언트가 보낸 메시지를 수신함 : " + message);
-
-      if(message.equals("/board/list")) {
+      if(request.equals("/board/list")) {
         out.writeUTF("OK");
-        out.writeObject(context.get("boardList"));
+        out.writeObject(boardList);
+      } else if(request.equals("/board/add")) {
+        Board board = (Board) in.readObject();
+        boardList.add(board);
       } else {
         out.writeUTF("FAIL");
         out.writeUTF("요청한 명령을 처리할 수 없습니다.");
       }
+      out.flush(); // 서버에 데이터를 즉시 전송하도록 임시 버퍼의 내용을 방출한다.
       System.out.println("클라이언트로 메시지를 전송함.");
 
     } catch (Exception e) {
