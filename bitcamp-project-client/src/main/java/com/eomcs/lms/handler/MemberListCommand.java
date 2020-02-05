@@ -27,14 +27,14 @@ public class MemberListCommand implements Command {
         System.out.println(in.readUTF());
         return;
       }
-
-      List<Member> members = (List<Member>) in.readObject();
+      List<Member> members = (List<Member>) in.readObject(); // 오류발생
       for (Member m : members) {
         System.out.printf("%d, %s, %s, %s, %s\n", m.getNo(), m.getName(), m.getEmail(), m.getTel(),
             m.getRegisteredDate());
       }
     } catch (Exception e) {
       System.out.println("통신 오류 발생!");
+      e.printStackTrace();
     }
   }
 }
