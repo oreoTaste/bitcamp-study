@@ -10,8 +10,22 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
+import com.eomcs.lms.handler.BoardAddCommand;
+import com.eomcs.lms.handler.BoardDeleteCommand;
+import com.eomcs.lms.handler.BoardDetailCommand;
 import com.eomcs.lms.handler.BoardListCommand;
+import com.eomcs.lms.handler.BoardUpdateCommand;
 import com.eomcs.lms.handler.Command;
+import com.eomcs.lms.handler.LessonAddCommand;
+import com.eomcs.lms.handler.LessonDeleteCommand;
+import com.eomcs.lms.handler.LessonDetailCommand;
+import com.eomcs.lms.handler.LessonListCommand;
+import com.eomcs.lms.handler.LessonUpdateCommand;
+import com.eomcs.lms.handler.MemberAddCommand;
+import com.eomcs.lms.handler.MemberDeleteCommand;
+import com.eomcs.lms.handler.MemberDetailCommand;
+import com.eomcs.lms.handler.MemberListCommand;
+import com.eomcs.lms.handler.MemberUpdateCommand;
 import com.eomcs.lms.prompt.Prompt;
 
 public class ClientApp {
@@ -34,7 +48,6 @@ public class ClientApp {
     }
     try(
         Socket socket = new Socket(serverAddr, port);
-
         ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
         ObjectInputStream in = new ObjectInputStream(socket.getInputStream())
         ) {
@@ -56,6 +69,22 @@ public class ClientApp {
     String command;
     HashMap<String, Command> hashmap = new HashMap<>();
     hashmap.put("/board/list", new BoardListCommand(out, in));
+    hashmap.put("/board/add", new BoardAddCommand(out, in, prompt));
+    hashmap.put("/board/detail", new BoardDetailCommand(out, in, prompt));
+    hashmap.put("/board/update", new BoardUpdateCommand(out, in, prompt));
+    hashmap.put("/board/delete", new BoardDeleteCommand(out, in, prompt));
+     
+    hashmap.put("/member/list", new MemberListCommand(out, in));
+    hashmap.put("/member/add", new MemberAddCommand(out, in, prompt));
+    hashmap.put("/member/detail", new MemberDetailCommand(out, in, prompt));
+    hashmap.put("/member/update", new MemberUpdateCommand(out, in, prompt));
+    hashmap.put("/member/delete", new MemberDeleteCommand(out, in, prompt));
+
+    hashmap.put("/lesson/list", new LessonListCommand(out, in));
+    hashmap.put("/lesson/add", new LessonAddCommand(out, in, prompt));
+    hashmap.put("/lesson/detail", new LessonDetailCommand(out, in, prompt));
+    hashmap.put("/lesson/update", new LessonUpdateCommand(out, in, prompt));
+    hashmap.put("/lesson/delete", new LessonDeleteCommand(out, in, prompt));
 
     while (true) {
       command = prompt.inputString("\n명령> ");
