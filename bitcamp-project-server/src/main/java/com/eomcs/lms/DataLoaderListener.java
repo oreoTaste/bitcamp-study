@@ -13,36 +13,32 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import com.eomcs.lms.context.ApplicationContextListener;
-import com.eomcs.lms.dao.BoardFileDao;
-import com.eomcs.lms.dao.LessonFileDao;
-import com.eomcs.lms.dao.MemberFileDao;
+import com.eomcs.lms.domain.Board;
 import com.eomcs.lms.domain.Lesson;
 import com.eomcs.lms.domain.Member;
 
 public class DataLoaderListener implements ApplicationContextListener {
   
+  List<Board> boardList = new LinkedList<>();
   List<Lesson> lessonList = new ArrayList<>();
   List<Member> memberList = new LinkedList<>();
 
   @Override
   public void contextInitialized(Map<String, Object> context) {
     System.out.println("데이터를 로딩합니다.");
+    loadBoardData();
     loadLessonData();
     loadMemberData();
-    // 애플리케이션의 데이터를 처리할 객체를 준비한다.
-    BoardFileDao boardDao = new BoardFileDao("./board.ser2");
-    LessonFileDao lessonDao = new LessonFileDao("./lesson.ser2");
-    MemberFileDao memberDao = new MemberFileDao("./member.ser2");
     
-    // 이 메서드를 호출한 쪽(App)에서 Dao객체를 사용할 수 있도록 Map에 담아둔다.
-    context.put("boardDao", boardDao);
-    context.put("lessonDao", lessonDao);
-    context.put("memberDao", memberDao);
+    context.put("boardList", boardList);
+    context.put("lessonList", lessonList);
+    context.put("memberList", memberList);
   }
 
   @Override
   public void contextDestroyed(Map<String, Object> context) {
     System.out.println("데이터를 저장합니다.");
+    saveBoardData();
     saveLessonData();
     saveMemberData();
 
@@ -106,6 +102,35 @@ public class DataLoaderListener implements ApplicationContextListener {
       System.out.printf("총 %d개 멤버 저장완료\n", memberList.size());
 
     }catch (IOException e) {
+      System.out.println("저장 실패 : " + e.getMessage());
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  private void loadBoardData() {
+    File file = new File("./board.ser2");
+
+    try (ObjectInputStream in = new ObjectInputStream(
+        new BufferedInputStream(new FileInputStream(file)))) {
+      
+      boardList = (List<Board>) in.readObject();
+      
+      System.out.printf("총 %d개 게시글 로딩완료\n", boardList.size());
+
+    } catch (Exception e) {
+      System.out.println("로딩 실패 : " + e.getMessage());
+    }
+  }
+
+  private void saveBoardData() {
+    File file = new File("./board.ser2");
+
+    try (ObjectOutputStream out = new ObjectOutputStream(
+        new BufferedOutputStream(new FileOutputStream(file)))) {
+      out.writeObject(boardList);
+      
+      System.out.printf("총 %d개 게시글 저장완료\n", boardList.size());
+    } catch (IOException e) {
       System.out.println("저장 실패 : " + e.getMessage());
     }
   }
