@@ -10,6 +10,12 @@ public class Board implements java.io.Serializable{
   private int viewCount;
   
   
+  @Override
+  public String toString() {
+    return "Board [no=" + no + ", title=" + title + ", date=" + date + ", viewCount=" + viewCount
+        + "]";
+  }
+
   public String toCsvString() {
     
     return String.format("%1$d,%2$s,%3$tF %3$th:%3$tm:%3$ts,%4$d",

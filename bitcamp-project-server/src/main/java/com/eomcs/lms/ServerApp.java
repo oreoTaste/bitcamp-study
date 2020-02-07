@@ -1,7 +1,6 @@
 package com.eomcs.lms;
 
-// v32_3 -> v32_4로 연습중
-
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
@@ -12,15 +11,36 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import com.eomcs.lms.context.ApplicationContextListener;
-import com.eomcs.lms.domain.Board;
+import com.eomcs.lms.dao.json.BoardJsonFileDao;
+import com.eomcs.lms.dao.json.LessonJsonFileDao;
+import com.eomcs.lms.dao.json.MemberJsonFileDao;
+import com.eomcs.lms.domain.Lesson;
+import com.eomcs.lms.domain.Member;
+import com.eomcs.lms.servlet.BoardAddServlet;
+import com.eomcs.lms.servlet.BoardDeleteServlet;
+import com.eomcs.lms.servlet.BoardDetailServlet;
+import com.eomcs.lms.servlet.BoardListServlet;
+import com.eomcs.lms.servlet.BoardUpdateServlet;
+import com.eomcs.lms.servlet.LessonAddServlet;
+import com.eomcs.lms.servlet.LessonDeleteServlet;
+import com.eomcs.lms.servlet.LessonDetailServlet;
+import com.eomcs.lms.servlet.LessonListServlet;
+import com.eomcs.lms.servlet.LessonUpdateServlet;
+import com.eomcs.lms.servlet.MemberAddServlet;
+import com.eomcs.lms.servlet.MemberDeleteServlet;
+import com.eomcs.lms.servlet.MemberDetailServlet;
+import com.eomcs.lms.servlet.MemberListServlet;
+import com.eomcs.lms.servlet.MemberUpdateServlet;
+import com.eomcs.lms.servlet.Servlet;
 
 public class ServerApp {
+  List<Member> members;
+  List<Lesson> lessons;
 
-  // listner(Observer) 관리하는 list
+  // 커맨드 디자인 패턴과 관련된 객체 준비
+  Map<String, Servlet> servletMap = new HashMap<>();
+
   Set<ApplicationContextListener> listeners = new HashSet<>();
-
-  // Object에 배열을 담아서 보내줌.
-  Map<String, Object> context = new HashMap<>();
 
   public void addApplicationContextListener(ApplicationContextListener listener) {
     listeners.add(listener);
@@ -30,6 +50,7 @@ public class ServerApp {
     listeners.remove(listener);
 
   }
+  Map<String, Object> context = new HashMap<>();
 
   private void notifyApplicationInitialized() {
     for(ApplicationContextListener listener : listeners) {
@@ -43,32 +64,119 @@ public class ServerApp {
     }
   }
 
+  
   public void service() {
-
     notifyApplicationInitialized();
 
-    try (// 서버쪽 연결준비
-        ServerSocket serverSocket = new ServerSocket(9999)
-        ) {
+    // DataLoaderListener가 준비한 Dao 객체를 꺼내 변수에 저장한다.
+    //BoardObjectFileDao boardDao = (BoardObjectFileDao) context.get("boardDao");
+    BoardJsonFileDao boardDao = (BoardJsonFileDao) context.get("boardDao");
+    //LessonObjectFileDao lessonDao = (LessonObjectFileDao) context.get("lessonDao");
+    LessonJsonFileDao lessonDao = (LessonJsonFileDao) context.get("lessonDao");
+    //MemberObjectFileDao memberDao = (MemberObjectFileDao) context.get("memberDao");
+    MemberJsonFileDao memberDao = (MemberJsonFileDao) context.get("memberDao");
+
+    // 커맨드 객체 역할을 수행하는 서블릿 객체를 맵에 저장한다.
+    servletMap.put("/board/list", new BoardListServlet(boardDao));
+    servletMap.put("/board/add", new BoardAddServlet(boardDao));
+    servletMap.put("/board/detail", new BoardDetailServlet(boardDao));
+    servletMap.put("/board/update", new BoardUpdateServlet(boardDao));
+    servletMap.put("/board/delete", new BoardDeleteServlet(boardDao));
+
+    servletMap.put("/lesson/list", new LessonListServlet(lessonDao));
+    servletMap.put("/lesson/add", new LessonAddServlet(lessonDao));
+    servletMap.put("/lesson/detail", new LessonDetailServlet(lessonDao));
+    servletMap.put("/lesson/update", new LessonUpdateServlet(lessonDao));
+    servletMap.put("/lesson/delete", new LessonDeleteServlet(lessonDao));
+
+    servletMap.put("/member/list", new MemberListServlet(memberDao));
+    servletMap.put("/member/add", new MemberAddServlet(memberDao));
+    servletMap.put("/member/detail", new MemberDetailServlet(memberDao));
+    servletMap.put("/member/update", new MemberUpdateServlet(memberDao));
+    servletMap.put("/member/delete", new MemberDeleteServlet(memberDao));
+    
+    try(ServerSocket serverSocket = new ServerSocket(9999)) {
+
       while(true) {
         System.out.println("...클라이언트 연결 대기중");
 
-        // 서버에 대기중인 클라이언트와 연결
-        // => 대기하고 있는 클라이언트와 연결될때까지 리턴하지 않는다. (blocking 방식)
         Socket socket = serverSocket.accept();
         System.out.println("클라이언트와 연결됨");
-        if(processRequest(socket) == 9) {
-          break;
-        }
+        processRequest(socket);
 
         System.out.println("=========================");
       }
 
-    } catch (Exception e) {
-      System.out.println("서버 실행중 오류발생" + e.getMessage());
+    } catch (IOException e) {
+      System.out.println("서버준비중 오류발생");
     }
 
     notifyApplicationDestroyed();
+  }
+
+  int processRequest(Socket clientSocket) {
+    try(
+        Socket socket = clientSocket;
+
+        ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+        ObjectOutputStream out = new ObjectOutputStream(
+            socket.getOutputStream())
+        ) {
+      System.out.println("통신을 위한 입출력 스트림을 준비하였음!");
+
+      while (true) {
+        String request = in.readUTF();
+        System.out.println("클라이언트가 보낸 메시지를 수신하였음!");
+
+        switch (request) {
+          case "quit":
+            quit(out);
+            return 0; // 클라이언트와 연결을 끊는다.
+          case "/server/stop":
+            quit(out);
+            return 9; // 서버를 종료한다.
+        }
+
+        // 클라이언트의 요청을 처리할 객체를 찾는다.
+        Servlet servlet = servletMap.get(request);
+
+        if (servlet != null) {
+          // 클라이언트 요청을 처리할 객체를 찾았으면 작업을 실행시킨다.
+          try {
+            servlet.service(in, out);
+
+          } catch (Exception e) {
+            // 요청한 작업을 수행하다가 오류 발생할 경우 그 이유를 간단히 응답한다.
+            out.writeUTF("FAIL");
+            out.writeUTF(e.getMessage());
+
+            // 서버쪽 화면에는 더 자세하게 오류 내용을 출력한다.
+            System.out.println("클라이언트 요청 처리 중 오류 발생:");
+            e.printStackTrace();
+          }
+        } else { // 없다면? 간단한 아내 메시지를 응답한다.
+          notFound(out);
+        }
+
+        out.flush();
+        System.out.println("클라이언트에게 응답하였음!");
+        System.out.println("------------------------------------");
+      }
+    } catch (Exception e) {
+      System.out.println("예외발생 : " + e.getMessage());
+      e.printStackTrace();
+      return -1;
+    }
+  }
+
+  private void notFound(ObjectOutputStream out) throws IOException {
+    out.writeUTF("FAIL");
+    out.writeUTF("요청한 명령을 처리할 수 없습니다.");
+  }
+
+  private void quit(ObjectOutputStream out) throws IOException {
+    out.writeUTF("OK");
+    out.flush();
   }
 
   public static void main(String[] args) {
@@ -78,140 +186,6 @@ public class ServerApp {
     app.addApplicationContextListener(new DataLoaderListener());
     app.service();
 
-
   }
-
-  @SuppressWarnings("unchecked")
-  int processRequest(Socket clientSocket) {
-    try(
-        // 요청처리가 끝난후 클라이언트와 연결된 소켓을 자동으로 닫으려면
-        // 이 괄호 안에 별도의 로컬 변수에 담는다.
-        Socket socket = clientSocket;
-
-        // 클라이언트의 메시지를 수신하고 전송할 입출력 도구를 준비
-        ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-        ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())
-        ) {
-      while(true) {
-        System.out.println("통신을 위한 입출력 스트림을 준비함");
-
-        // 클라이언트가 보낸 메시지를 수신한다.
-        // => 한줄의 메시지를 읽을때까지 리턴하지 않는다. (blocking 방식)
-        String request = in.readUTF();
-
-        if (request.length() == 0) {
-          break;
-        }
-
-        if (request.equalsIgnoreCase("quit")) {
-          out.writeUTF("OK");
-          out.flush();
-          break;
-        }
-
-        if(request.equalsIgnoreCase("/server/stop")) {
-          out.writeUTF("OK");
-          out.flush();
-          return 9;
-        }
-
-        List<Board> boards = (List<Board>)context.get("boardList");
-        //List<Lesson> lessons = (List<Lesson>)context.get("lessonList");
-        //List<Member> members = (List<Member>)context.get("memberList");
-
-        if(request.equals("/board/add")) {
-          try {
-            Board board = (Board) in.readObject();
-            for(Board b : boards) {
-              if(b.getNo() == board.getNo()) {
-                out.writeUTF("OK");
-                break;
-              }
-              out.writeUTF("FAIL");
-              out.writeUTF("해당 번호의 게시물이 없습니다.");
-            }
-          } catch(Exception e) {
-            out.writeUTF("FAIL");
-            out.writeUTF(e.getMessage());
-          }
-        } else if(request.equals("/board/list")) {
-
-          try {
-            out.writeUTF("OK");
-            out.reset();
-            out.writeObject(boards);
-          } catch (Exception e) {
-            out.writeUTF("FAIL");
-            out.writeUTF("게시물 목록을 전송하는중 오류가 발생하였습니다.");
-          }
-
-        } else if(request.equals("/board/detail")) {
-
-          try {
-            int no = in.readInt();
-            for(Board b : boards) {
-              if(b.getNo() == no) {
-                out.writeUTF("OK");
-                out.writeObject(b);
-                break;
-              }
-            } out.writeUTF("FAIL");
-            out.writeUTF("해당 번호의 게시물이 없습니다.");
-          } catch (Exception e) {
-            out.writeUTF("FAIL");
-            out.writeUTF(e.getMessage());
-          }
-        } else if(request.equals("/board/update")) {
-
-          try {
-            Board board = (Board) in.readObject();
-            for(Board b : boards) {
-              if(b.getNo() == board.getNo()) {
-                out.writeUTF("OK");
-                break;
-              }
-            } out.writeUTF("FAIL");
-            out.writeUTF("해당 번호의 게시물이 없습니다.");
-          } catch (Exception e) {
-            out.writeUTF("FAIL");
-            out.writeUTF(e.getMessage());
-          }
-
-        } else if(request.equals("/board/delete")) {
-          
-          try {
-          int no = in.readInt();
-          
-          int index = -1;
-          for(int i = 0 ; i < boards.size(); i++) {
-            if(boards.get(i).getNo() == no) {
-              index = i;
-              break;
-            }
-          }
-          
-          if(index == -1) {
-            out.writeUTF("FAIL");
-            out.writeUTF("게시물 없음");
-            break;
-          } boards.remove(index);
-          out.writeUTF("OK");
-          } catch (Exception e) {
-            out.writeUTF("FAIL");
-            out.writeUTF(e.getMessage());
-          }
-        }
-
-      }
-
-      return 0;
-    } catch (Exception e) {
-      System.out.println("예외발생 : " + e.getMessage());
-      e.printStackTrace();
-      return -1;
-    }
-  }
-
-
 
 }
