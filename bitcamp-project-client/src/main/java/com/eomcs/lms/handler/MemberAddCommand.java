@@ -1,24 +1,19 @@
 package com.eomcs.lms.handler;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.sql.Date;
+import com.eomcs.lms.dao.MemberDao;
 import com.eomcs.lms.domain.Member;
 import com.eomcs.lms.prompt.Prompt;
 
 public class MemberAddCommand implements Command {
-
-  ObjectOutputStream out;
-  ObjectInputStream in;
-
+  MemberDao memberDao;
   Prompt prompt;
 
-  public MemberAddCommand(ObjectOutputStream out, ObjectInputStream in, Prompt prompt) {
-    this.out = out;
-    this.in = in;
+  public MemberAddCommand(MemberDao memberDao, Prompt prompt) {
     this.prompt = prompt;
+    this.memberDao = memberDao;
   }
-
+  
   @Override
   public void execute() {
     Member member = new Member();
@@ -32,20 +27,12 @@ public class MemberAddCommand implements Command {
     member.setRegisteredDate(new Date(System.currentTimeMillis()));
 
     try {
-      out.writeUTF("/member/add");
-      out.writeObject(member);
-      out.flush();
-
-      String response = in.readUTF();
-      if (response.equals("FAIL")) {
-        System.out.println(in.readUTF());
-        return;
-      }
+      memberDao.insert(member);
 
       System.out.println("저장하였습니다.");
 
     } catch (Exception e) {
-      System.out.println("통신 오류 발생!");
+      System.out.println("멤버 추가 저장 중 오류발생");
     }
   }
 }

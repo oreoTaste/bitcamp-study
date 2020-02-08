@@ -1,22 +1,18 @@
 package com.eomcs.lms.handler;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.sql.Date;
+import com.eomcs.lms.dao.BoardDao;
 import com.eomcs.lms.domain.Board;
 import com.eomcs.lms.prompt.Prompt;
 
 // "/board/update" 명령 처리
 public class BoardUpdateCommand implements Command {
 
-  ObjectOutputStream out;
-  ObjectInputStream in;
-
+  BoardDao boardDao;
   Prompt prompt;
 
-  public BoardUpdateCommand(ObjectOutputStream out, ObjectInputStream in, Prompt prompt) {
-    this.out = out;
-    this.in = in;
+  public BoardUpdateCommand(BoardDao boardDao, Prompt prompt) {
+    this.boardDao = boardDao;
     this.prompt = prompt;
   }
 
@@ -25,18 +21,7 @@ public class BoardUpdateCommand implements Command {
     try {
       int no = prompt.inputInt("번호? ");
 
-      // 기존의 게시물을 가져온다.
-      out.writeUTF("/board/detail");
-      out.writeInt(no);
-      out.flush();
-
-      String response = in.readUTF();
-      if (response.equals("FAIL")) {
-        System.out.println(in.readUTF());
-        return;
-      }
-
-      Board oldBoard = (Board) in.readObject();
+      Board oldBoard = boardDao.findByNo(no);
       Board newBoard = new Board();
 
       newBoard.setNo(oldBoard.getNo());
@@ -49,21 +34,13 @@ public class BoardUpdateCommand implements Command {
         System.out.println("게시글 변경을 취소했습니다.");
         return;
       }
-
-      out.writeUTF("/board/update");
-      out.writeObject(newBoard);
-      out.flush();
-
-      response = in.readUTF();
-      if (response.equals("FAIL")) {
-        System.out.println(in.readUTF());
-        return;
-      }
+      
+      boardDao.update(newBoard);
 
       System.out.println("게시글을 변경했습니다.");
 
     } catch (Exception e) {
-      System.out.println("명령 실행 중 오류 발생!");
+      System.out.println("게시글 업데이트 중 오류발생!");
     }
   }
 }

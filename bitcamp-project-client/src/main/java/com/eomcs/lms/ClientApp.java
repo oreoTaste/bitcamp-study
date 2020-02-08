@@ -10,6 +10,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
+import com.eomcs.lms.dao.BoardDao;
+import com.eomcs.lms.dao.LessonDao;
+import com.eomcs.lms.dao.MemberDao;
+import com.eomcs.lms.dao.proxy.BoardDaoProxy;
+import com.eomcs.lms.dao.proxy.LessonDaoProxy;
+import com.eomcs.lms.dao.proxy.MemberDaoProxy;
 import com.eomcs.lms.handler.BoardAddCommand;
 import com.eomcs.lms.handler.BoardDeleteCommand;
 import com.eomcs.lms.handler.BoardDetailCommand;
@@ -68,24 +74,29 @@ public class ClientApp {
     Queue<String> commandQueue = new LinkedList<>();
     String command;
     HashMap<String, Command> hashmap = new HashMap<>();
-    hashmap.put("/board/list", new BoardListCommand(out, in));
-    hashmap.put("/board/add", new BoardAddCommand(out, in, prompt));
-    hashmap.put("/board/detail", new BoardDetailCommand(out, in, prompt));
-    hashmap.put("/board/update", new BoardUpdateCommand(out, in, prompt));
-    hashmap.put("/board/delete", new BoardDeleteCommand(out, in, prompt));
-     
-    hashmap.put("/member/list", new MemberListCommand(out, in));
-    hashmap.put("/member/add", new MemberAddCommand(out, in, prompt));
-    hashmap.put("/member/detail", new MemberDetailCommand(out, in, prompt));
-    hashmap.put("/member/update", new MemberUpdateCommand(out, in, prompt));
-    hashmap.put("/member/delete", new MemberDeleteCommand(out, in, prompt));
-
-    hashmap.put("/lesson/list", new LessonListCommand(out, in));
-    hashmap.put("/lesson/add", new LessonAddCommand(out, in, prompt));
-    hashmap.put("/lesson/detail", new LessonDetailCommand(out, in, prompt));
-    hashmap.put("/lesson/update", new LessonUpdateCommand(out, in, prompt));
-    hashmap.put("/lesson/delete", new LessonDeleteCommand(out, in, prompt));
-
+    
+    BoardDao boardDao = new BoardDaoProxy(in, out);
+    LessonDao lessonDao = new LessonDaoProxy(in, out);
+    MemberDao memberDao = new MemberDaoProxy(in, out);
+    
+    hashmap.put("/board/list", new BoardListCommand(boardDao));
+    hashmap.put("/board/add", new BoardAddCommand(boardDao, prompt));
+    hashmap.put("/board/detail", new BoardDetailCommand(boardDao, prompt));
+    hashmap.put("/board/update", new BoardUpdateCommand(boardDao, prompt));
+    hashmap.put("/board/delete", new BoardDeleteCommand(boardDao, prompt));
+    
+    hashmap.put("/lesson/list", new LessonListCommand(lessonDao));
+    hashmap.put("/lesson/add", new LessonAddCommand(lessonDao, prompt));
+    hashmap.put("/lesson/detail", new LessonDetailCommand(lessonDao, prompt));
+    hashmap.put("/lesson/update", new LessonUpdateCommand(lessonDao, prompt));
+    hashmap.put("/lesson/delete", new LessonDeleteCommand(lessonDao, prompt));
+    
+    hashmap.put("/member/list", new MemberListCommand(memberDao));
+    hashmap.put("/member/add", new MemberAddCommand(memberDao, prompt));
+    hashmap.put("/member/detail", new MemberDetailCommand(memberDao, prompt));
+    hashmap.put("/member/update", new MemberUpdateCommand(memberDao, prompt));
+    hashmap.put("/member/delete", new MemberDeleteCommand(memberDao, prompt));
+    
     while (true) {
       command = prompt.inputString("\n명령> ");
       commandStack.push(command);
