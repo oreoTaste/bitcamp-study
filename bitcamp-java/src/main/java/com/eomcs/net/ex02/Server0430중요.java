@@ -5,7 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class Server0430 {
+public class Server0430중요 {
   public static void main(String[] args) throws Exception {
     Scanner keyboard = new Scanner(System.in);
 

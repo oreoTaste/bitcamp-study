@@ -6,7 +6,7 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.util.Scanner;
 
-public class Client0310 {
+public class Client0310중요 {
   public static void main(String[] args) throws Exception {
     // 실행을 잠시 중단시키기 위해 사용
     Scanner keyScan = new Scanner(System.in);
