@@ -1,5 +1,5 @@
 // HTTP 서버 만들기
-package com.eomcs.net.ex07;
+package com.eomcs.net.ex06;
 
 import java.io.PrintStream;
 import java.net.ServerSocket;
@@ -11,10 +11,11 @@ import java.util.Scanner;
 // HTTP/1.1 200 OK(CRLF)
 // Content-Type: text/html; charset=UTF-8(CRLF)
 // (CRLF)
-// 보낼 데이터 
+// 보낼 데이터
 //--------------------------------
 public class HttpServer {
   public static void main(String[] args) throws Exception {
+    System.out.println("서버 실행");
     ServerSocket ss = new ServerSocket(8888);
 
     while (true) {
@@ -26,15 +27,16 @@ public class HttpServer {
       while (true) {
         String str = in.nextLine();
         System.out.println(str);
-        if (str.equals(""))
+        if (str.equals("")) {
           break;
+        }
       }
 
       // HTTP 응답 프로토콜에 따라 클라이언트에게 데이터를 보낸다.
-      out.println("HTTP/1.1 200 OK");
-      out.println("Content-Type: text/html; charset=UTF-8");
-      out.println();
-      out.println("<html><body><h1>안녕!-엄진영</h1></body></html>");
+      out.print("HTTP/1.1 200 OK\r\n");
+      out.print("Content-Type: text/html; charset=UTF-8\r\n");
+      out.print("\r\n");
+      out.print("<html><body><h1>안녕!-엄복동</h1></body></html>");
 
       out.close();
       in.close();

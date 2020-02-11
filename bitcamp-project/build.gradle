@@ -3,17 +3,16 @@ plugins {
     id 'java'
     id 'application'
     id 'eclipse'
+}
 
+repositories {
+    jcenter()
 }
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8' 
     sourceCompatibility = '1.8'
     targetCompatibility = '1.8'
-}
-
-repositories {
-    jcenter()
 }
 
 dependencies {
