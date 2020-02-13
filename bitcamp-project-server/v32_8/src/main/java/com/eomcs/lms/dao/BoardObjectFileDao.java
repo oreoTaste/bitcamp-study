@@ -6,14 +6,8 @@ import com.eomcs.lms.domain.Board;
 
 public class BoardObjectFileDao extends AbstractObjectFileDao<Board>{
 
-  String fileName;
-  List<Board> list;
-
   public BoardObjectFileDao(String fileName) {
     super(fileName);
-    list = new ArrayList<>();
-    this.fileName = fileName;
-    loadData();
   }
 
   // 서블릭 객체들이 데이터를 다룰 때 사용할 메서드를 정의한다.
@@ -22,7 +16,7 @@ public class BoardObjectFileDao extends AbstractObjectFileDao<Board>{
     if (indexOf(board.getNo()) > -1) // 같은 번호의 게시물이 있다면,
       return 0;
     list.add(board); // 새 게시물을 등록한다.
-    saveData();
+    saveData(); 
     return 1;
   }
 

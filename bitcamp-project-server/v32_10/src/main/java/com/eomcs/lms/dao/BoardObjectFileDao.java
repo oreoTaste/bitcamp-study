@@ -6,14 +6,8 @@ import com.eomcs.lms.domain.Board;
 
 public class BoardObjectFileDao extends AbstractObjectFileDao<Board> implements BoardDao{
 
-  String fileName;
-  List<Board> list;
-
   public BoardObjectFileDao(String fileName) {
     super(fileName);
-    list = new ArrayList<>();
-    this.fileName = fileName;
-    loadData();
   }
 
   // 서블릭 객체들이 데이터를 다룰 때 사용할 메서드를 정의한다.

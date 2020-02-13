@@ -64,7 +64,6 @@ public abstract class AbstractJsonFileDao<T> {
     try (BufferedWriter out = new BufferedWriter(new FileWriter(file))) {
 
       out.write(new Gson().toJson(list));
-      
 
       System.out.printf("총 %d개 객체 저장완료\n", list.size());
     } catch (IOException e) {

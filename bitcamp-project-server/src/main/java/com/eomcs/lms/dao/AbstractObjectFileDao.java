@@ -23,7 +23,7 @@ public abstract class AbstractObjectFileDao<T> {
   }
 
   @SuppressWarnings("unchecked")
-  void loadData() {
+  public void loadData() {
     File file = new File(fileName);
 
     try (ObjectInputStream in = new ObjectInputStream(
@@ -38,7 +38,7 @@ public abstract class AbstractObjectFileDao<T> {
     }
   }
 
-  void saveData() {
+  public void saveData() {
     File file = new File(fileName);
 
     try (ObjectOutputStream out = new ObjectOutputStream(

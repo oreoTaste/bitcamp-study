@@ -1,23 +1,17 @@
 package com.eomcs.lms.dao.json;
 
-import java.util.ArrayList;
 import java.util.List;
 import com.eomcs.lms.dao.LessonDao;
 import com.eomcs.lms.domain.Lesson;
 
 public class LessonJsonFileDao extends AbstractJsonFileDao<Lesson> implements LessonDao {
 
-  String fileName;
-  List<Lesson> list;
-
   public LessonJsonFileDao(String fileName) {
     super(fileName);
-    list = new ArrayList<>();
-    this.fileName = fileName;
-    loadData();
   }
   
   // 서블릭 객체들이 데이터를 다룰 때 사용할 메서드를 정의한다.
+  @Override
   public int insert(Lesson lesson) throws Exception {
 
     Lesson originLesson = findByNo(lesson.getNo());
@@ -30,10 +24,12 @@ public class LessonJsonFileDao extends AbstractJsonFileDao<Lesson> implements Le
   }
 
 
+  @Override
   public List<Lesson> findAll() throws Exception {
     return list;
   }
 
+  @Override
   public Lesson findByNo(int no) throws Exception {
     for(Lesson b : list) {
       if(b.getNo() == no)
@@ -42,6 +38,7 @@ public class LessonJsonFileDao extends AbstractJsonFileDao<Lesson> implements Le
     return null;
   }
 
+  @Override
   public int update(Lesson lesson) throws Exception {
     for(int i = 0; i < list.size(); i++) {
       if(list.get(i).getNo() == lesson.getNo()) {
@@ -52,6 +49,7 @@ public class LessonJsonFileDao extends AbstractJsonFileDao<Lesson> implements Le
     } return 0;
   }
  
+  @Override
   public int delete(int no) throws Exception {
     
     for(int i = 0; i < list.size(); i++) {

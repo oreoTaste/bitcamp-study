@@ -7,14 +7,8 @@ import com.eomcs.lms.domain.Board;
 
 public class BoardJsonFileDao extends AbstractJsonFileDao<Board> implements BoardDao {
 
-  protected String fileName;
-  protected List<Board> list;
- 
   public BoardJsonFileDao(String fileName) {
     super(fileName);
-    this.fileName = fileName;
-    list = new ArrayList<>();
-    loadData();
   }
 
   @Override
