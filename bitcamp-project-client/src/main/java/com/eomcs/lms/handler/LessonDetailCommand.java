@@ -28,6 +28,7 @@ public class LessonDetailCommand implements Command {
       System.out.printf("총수업시간: %d\n", lesson.getTotalHour());
       System.out.printf("일수업시간: %d\n", lesson.getDailyHour());
     } catch (Exception e) {
+      e.printStackTrace();
       System.out.println("수업정보 세부사항 수신 중 오류발생");
     }
   }

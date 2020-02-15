@@ -11,10 +11,13 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
-import com.eomcs.lms.dao.proxy.BoardDaoProxy;
+import com.eomcs.lms.dao.BoardDao;
+import com.eomcs.lms.dao.LessonDao;
+import com.eomcs.lms.dao.MemberDao;
+import com.eomcs.lms.dao.mariadb.BoardDaoImpl;
+import com.eomcs.lms.dao.mariadb.LessonDaoImpl;
+import com.eomcs.lms.dao.mariadb.MemberDaoImpl;
 import com.eomcs.lms.dao.proxy.DaoProxyHelper;
-import com.eomcs.lms.dao.proxy.LessonDaoProxy;
-import com.eomcs.lms.dao.proxy.MemberDaoProxy;
 import com.eomcs.lms.handler.BoardAddCommand;
 import com.eomcs.lms.handler.BoardDeleteCommand;
 import com.eomcs.lms.handler.BoardDetailCommand;
@@ -51,6 +54,7 @@ public class ClientApp {
     commandStack = new ArrayDeque<>();
     commandQueue = new LinkedList<>();
 
+    /*
     try {
       host = prompt.inputString("서버? ");
       port = prompt.inputInt("포트? ");
@@ -60,14 +64,20 @@ public class ClientApp {
       keyboard.close();
       return;
     }
+    */
 
     // Dao 프록시 서버연결을 도와줄 헬퍼
     DaoProxyHelper daoProxyHelper = new DaoProxyHelper(host, port);
     
+    // MariaDB와 연동하여 데이터를 처리하는 Dao객체 준비
+    BoardDao boardDao = new BoardDaoImpl();
+    LessonDao lessonDao = new LessonDaoImpl();
+    MemberDao memberDao = new MemberDaoImpl();
+    
     // DAO 프록시 객체 준비
-    BoardDaoProxy boardDao = new BoardDaoProxy(daoProxyHelper);
-    LessonDaoProxy lessonDao = new LessonDaoProxy(daoProxyHelper);
-    MemberDaoProxy memberDao = new MemberDaoProxy(daoProxyHelper);
+    // BoardDaoProxy boardDao = new BoardDaoProxy(daoProxyHelper);
+    // LessonDaoProxy lessonDao = new LessonDaoProxy(daoProxyHelper);
+    // MemberDaoProxy memberDao = new MemberDaoProxy(daoProxyHelper);
 
 
     // 사용자 명령을 처리할 Command 객체 준비

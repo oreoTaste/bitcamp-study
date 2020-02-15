@@ -83,30 +83,45 @@ public class Member implements java.io.Serializable{
   
   @Override
   public boolean equals(Object obj) {
-    if(obj.getClass() != Member.class)
-      return false;
     
-    Member other = (Member)obj;
-    
-    if(this.no != other.no)
+    if (this == obj)
+      return true;
+    if (obj == null)
       return false;
-
-    if(this.name.equals(other.name))
+    if (getClass() != obj.getClass())
       return false;
-
-    if(this.email.equals(other.email))
+    Member other = (Member) obj;
+    if (email == null) {
+      if (other.email != null)
+        return false;
+    } else if (!email.equals(other.email))
       return false;
-
-    if(this.password.equals(other.password))
+    if (name == null) {
+      if (other.name != null)
+        return false;
+    } else if (!name.equals(other.name))
       return false;
-
-    if(this.photo.equals(other.photo))
+    if (no != other.no)
       return false;
-
-    if(this.tel.equals(other.tel))
+    if (password == null) {
+      if (other.password != null)
+        return false;
+    } else if (!password.equals(other.password))
       return false;
-
-    if(this.registeredDate != other.registeredDate)
+    if (photo == null) {
+      if (other.photo != null)
+        return false;
+    } else if (!photo.equals(other.photo))
+      return false;
+    if (registeredDate == null) {
+      if (other.registeredDate != null)
+        return false;
+    } else if (!registeredDate.equals(other.registeredDate))
+      return false;
+    if (tel == null) {
+      if (other.tel != null)
+        return false;
+    } else if (!tel.equals(other.tel))
       return false;
     return true;
   }
