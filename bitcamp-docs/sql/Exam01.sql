@@ -7,6 +7,7 @@ DB 객체(테이블, 뷰, 함수, 트리거 등)를 생성, 변경, 삭제하는
 - 트리거(trigger)
   - 특정 조건에서 자동으로 호출되는 함수
   - 특정 조건? SQL 실행 전/후 등
+  -> OOP 디자인 패턴에서 옵저버에 해당함
 - 함수(function)
 - 프로시저(procedure)
 - 인덱스(index)
@@ -350,18 +351,30 @@ DBMS 중에는 고정 크기인 컬럼의 값을 비교할 때 빈자리까지 �
    때문에 중복저장될 수 없다.*/
 > insert into test1(no,name,age,kor,eng,math) values(5,'c',20,81,81,81);
 
+> create table test1(
+  no int,
+  name varchar(20),
+  age int,
+  kor int,
+  eng int,
+  math int,
+  constraint test1_pk primary key(no),
+  constraint test1_uk unique (name, age)
+  );
+
 
 ##### index
 - 검색 조건으로 사용되는 컬럼은 정렬되어야만 데이터를 빨리 찾을 수 있다.
 - 특정 컬럼의 값을 A-Z 또는 Z-A로 정렬시키는 문법이 인덱스이다.
 ```
 create table test1(
-  no int primary key,
+  no int,
   name varchar(20),
   age int,
   kor int,
   eng int,
   math int,
+  constraint test1_pk primary key (no),
   constraint test1_uk unique (name, age),
   fulltext index test1_name_idx (name)
 );
@@ -475,7 +488,7 @@ alter table test1
 
 - 입력 테스트
 ```
-insert into test1(name) values('aaa');
+insert into test1(no, name) values(1, 'aaa');
 insert into test1(name) values('bbb');
 insert into test1(name) values('ccc');
 insert into test1(name) values('ddd');
