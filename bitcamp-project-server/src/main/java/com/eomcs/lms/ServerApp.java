@@ -7,38 +7,18 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import com.eomcs.lms.context.ApplicationContextListener;
-import com.eomcs.lms.dao.BoardDao;
-import com.eomcs.lms.dao.LessonDao;
-import com.eomcs.lms.dao.MemberDao;
-import com.eomcs.lms.dao.json.BoardJsonFileDao;
-import com.eomcs.lms.dao.json.LessonJsonFileDao;
-import com.eomcs.lms.dao.json.MemberJsonFileDao;
-import com.eomcs.lms.servlet.BoardAddServlet;
-import com.eomcs.lms.servlet.BoardDeleteServlet;
-import com.eomcs.lms.servlet.BoardDetailServlet;
-import com.eomcs.lms.servlet.BoardListServlet;
-import com.eomcs.lms.servlet.BoardUpdateServlet;
-import com.eomcs.lms.servlet.LessonAddServlet;
-import com.eomcs.lms.servlet.LessonDeleteServlet;
-import com.eomcs.lms.servlet.LessonDetailServlet;
-import com.eomcs.lms.servlet.LessonListServlet;
-import com.eomcs.lms.servlet.LessonUpdateServlet;
-import com.eomcs.lms.servlet.MemberAddServlet;
-import com.eomcs.lms.servlet.MemberDeleteServlet;
-import com.eomcs.lms.servlet.MemberDetailServlet;
-import com.eomcs.lms.servlet.MemberListServlet;
-import com.eomcs.lms.servlet.MemberUpdateServlet;
-import com.eomcs.lms.servlet.Servlet;
-
+import com.eomcs.lms.domain.Board;
+import com.eomcs.lms.domain.Lesson;
+import com.eomcs.lms.domain.Member;
 
 public class ServerApp {
-  // 커맨드 디자인 패턴과 관련된 객체 준비
-  Map<String, Servlet> servletMap = new HashMap<>();
+  List<Board> boards;
+  List<Member> members;
+  List<Lesson> lessons;
 
   Set<ApplicationContextListener> listeners = new HashSet<>();
 
@@ -64,56 +44,26 @@ public class ServerApp {
     }
   }
 
-  // 스레드풀
-  ExecutorService executorService = Executors.newCachedThreadPool();
-
-
-  public void service() throws InterruptedException {
+  @SuppressWarnings("unchecked")
+  public void service() {
 
     notifyApplicationInitialized();
 
-    // DataLoaderListener가 준비한 Dao 객체를 꺼내 변수에 저장한다.
-    //BoardObjectFileDao boardDao = (BoardObjectFileDao) context.get("boardDao");
-    BoardDao boardDao = (BoardJsonFileDao) context.get("boardDao");
-    //LessonObjectFileDao lessonDao = (LessonObjectFileDao) context.get("lessonDao");
-    LessonDao lessonDao = (LessonJsonFileDao) context.get("lessonDao");
-    //MemberObjectFileDao memberDao = (MemberObjectFileDao) context.get("memberDao");
-    MemberDao memberDao = (MemberJsonFileDao) context.get("memberDao");
-
-    // 커맨드 객체 역할을 수행하는 서블릿 객체를 맵에 저장한다.
-    servletMap.put("/board/list", new BoardListServlet(boardDao));
-    servletMap.put("/board/add", new BoardAddServlet(boardDao));
-    servletMap.put("/board/detail", new BoardDetailServlet(boardDao));
-    servletMap.put("/board/update", new BoardUpdateServlet(boardDao));
-    servletMap.put("/board/delete", new BoardDeleteServlet(boardDao));
-
-    servletMap.put("/lesson/list", new LessonListServlet(lessonDao));
-    servletMap.put("/lesson/add", new LessonAddServlet(lessonDao));
-    servletMap.put("/lesson/detail", new LessonDetailServlet(lessonDao));
-    servletMap.put("/lesson/update", new LessonUpdateServlet(lessonDao));
-    servletMap.put("/lesson/delete", new LessonDeleteServlet(lessonDao));
-
-    servletMap.put("/member/list", new MemberListServlet(memberDao));
-    servletMap.put("/member/add", new MemberAddServlet(memberDao));
-    servletMap.put("/member/detail", new MemberDetailServlet(memberDao));
-    servletMap.put("/member/update", new MemberUpdateServlet(memberDao));
-    servletMap.put("/member/delete", new MemberDeleteServlet(memberDao));
+    // DataLoaderListener가 준비한 데이터를 꺼내 인스턴스 필드에 저장한다.
+    boards = (List<Board>) context.get("boardList");
+    members = (List<Member>) context.get("memberList");
+    lessons = (List<Lesson>) context.get("lessonList");
 
     try(ServerSocket serverSocket = new ServerSocket(9999)) {
 
       while(true) {
         System.out.println("...클라이언트 연결 대기중");
+
         Socket socket = serverSocket.accept();
         System.out.println("클라이언트와 연결됨");
+        processRequest(socket);
 
-        // 스레드풀을 사용할 때는 직접 스레드를 만들지 않는다.
-        // 단지 스레드풀에 스레드가 실행할 코드를 제출한다.
-        executorService.submit(() -> {
-          processRequest(socket);
-          System.out.println("=========================");
-        });
-        
-        new Thread().start();
+        System.out.println("=========================");
       }
 
     } catch (IOException e) {
@@ -121,49 +71,50 @@ public class ServerApp {
     }
 
     notifyApplicationDestroyed();
-    // 스레드풀을 완전히 사용한 후, 종료하는법
-    executorService.shutdown();
   }
 
   int processRequest(Socket clientSocket) {
+    try(
+        Socket socket = clientSocket;
 
-    try(Socket socket = clientSocket;
         ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-        ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
+        ObjectOutputStream out = new ObjectOutputStream(
+            socket.getOutputStream())
+        ) {
+
       System.out.println("통신을 위한 입출력 스트림을 준비하였음!");
 
-      String request = in.readUTF();
-      System.out.println("클라이언트가 보낸 메시지를 수신하였음!");
+      while (true) {
+        String request = in.readUTF();
+        System.out.println("클라이언트가 보낸 메시지를 수신하였음!");
 
-      if(request.equalsIgnoreCase("/server/stop")) {
-        quit(out);
-        return 9; // 서버를 종료한다.
-      }
+        switch(request) {
+          case "quit": quit(out); return 0;
+          case "/server/stop" : quit(out); return 9;
+          
+          case "/board/list" : listBoard(out); break;
+          case "/board/add" : addBoard(in, out); break;
+          case "/board/detail" : detailBoard(in, out); break;
+          case "/board/update" : updateBoard(in, out); break;
+          case "/board/delete" : deleteBoard(in, out); break;
 
-      // 클라이언트의 요청을 처리할 객체를 찾는다.
-      Servlet servlet = servletMap.get(request);
+          case "/member/list" : listMember(out); break;
+          case "/member/add" : addMember(in, out); break;
+          case "/member/detail" : detailMember(in, out); break;
+          case "/member/update" : updateMember(in, out); break;
+          case "/member/delete" : deleteMember(in, out); break;
 
-      if (servlet != null) {
-        // 클라이언트 요청을 처리할 객체를 찾았으면 작업을 실행시킨다.
-        try {
-          servlet.service(in, out);
-
-        } catch (Exception e) {
-          // 요청한 작업을 수행하다가 오류 발생할 경우 그 이유를 간단히 응답한다.
-          out.writeUTF("FAIL");
-          out.writeUTF(e.getMessage());
-
-          // 서버쪽 화면에는 더 자세하게 오류 내용을 출력한다.
-          System.out.println("클라이언트 요청 처리 중 오류 발생:");
-          e.printStackTrace();
+          case "/lesson/list" : listLesson(out); break;
+          case "/lesson/add" : addLesson(in, out); break;
+          case "/lesson/detail" : detailLesson(in, out); break;
+          case "/lesson/update" : updateLesson(in, out); break;
+          case "/lesson/delete" : deleteLesson(in, out); break;
+          default : notFound(out);
         }
-      } else { // 없다면? 간단한 아내 메시지를 응답한다.
-        notFound(out);
+        out.flush();
+        System.out.println("클라이언트에게 응답하였음");
       }
 
-      out.flush();
-      System.out.println("클라이언트에게 응답하였음!");
-      return 0;
     } catch (Exception e) {
       System.out.println("예외발생 : " + e.getMessage());
       e.printStackTrace();
@@ -181,7 +132,347 @@ public class ServerApp {
     out.flush();
   }
 
-  public static void main(String[] args) throws InterruptedException {
+  private void deleteLesson(ObjectInputStream in, ObjectOutputStream out) throws IOException {
+    try {
+      int no = in.readInt();
+
+      int index = -1;
+      for (int i = 0; i < lessons.size(); i++) {
+        if (lessons.get(i).getNo() == no) {
+          index = i;
+          break;
+        }
+      }
+
+      if (index != -1) {
+        lessons.remove(index);
+        out.writeUTF("OK");
+
+      } else {
+        out.writeUTF("FAIL");
+        out.writeUTF("해당 번호의 수업이 없습니다.");
+      }
+    } catch (Exception e) {
+      out.writeUTF("FAIL");
+      out.writeUTF(e.getMessage());
+    }
+  }
+
+  private void updateLesson(ObjectInputStream in, ObjectOutputStream out) throws IOException {
+    try {
+      Lesson lesson = (Lesson) in.readObject();
+
+      int index = -1;
+      for (int i = 0; i < lessons.size(); i++) {
+        if (lessons.get(i).getNo() == lesson.getNo()) {
+          index = i;
+          break;
+        }
+      }
+
+      if (index != -1) {
+        lessons.set(index, lesson);
+        out.writeUTF("OK");
+      } else {
+        out.writeUTF("FAIL");
+        out.writeUTF("해당 번호의 수업이 없습니다.");
+      }
+
+    } catch (Exception e) {
+      out.writeUTF("FAIL");
+      out.writeUTF(e.getMessage());
+    }
+  }
+
+  private void detailLesson(ObjectInputStream in, ObjectOutputStream out) throws IOException {
+    try {
+      int no = in.readInt();
+
+      Lesson lesson = null;
+      for (Lesson l : lessons) {
+        if (l.getNo() == no) {
+          lesson = l;
+          break;
+        }
+      }
+
+      if (lesson != null) {
+        out.writeUTF("OK");
+        out.writeObject(lesson);
+
+      } else {
+        out.writeUTF("FAIL");
+        out.writeUTF("해당 번호의 수업이 없습니다.");
+      }
+
+    } catch (Exception e) {
+      out.writeUTF("FAIL");
+      out.writeUTF(e.getMessage());
+    }
+  }
+
+  private void addLesson(ObjectInputStream in, ObjectOutputStream out) throws IOException {
+    try {
+      Lesson lesson = (Lesson) in.readObject();
+
+      int i = 0;
+      for (; i < lessons.size(); i++) {
+        if (lessons.get(i).getNo() == lesson.getNo()) {
+          break;
+        }
+      }
+
+      if (i == lessons.size()) {
+        lessons.add(lesson);
+        out.writeUTF("OK");
+
+      } else {
+        out.writeUTF("FAIL");
+        out.writeUTF("같은 번호의 수업이 있습니다.");
+      }
+
+
+    } catch (Exception e) {
+      out.writeUTF("FAIL");
+      out.writeUTF(e.getMessage());
+    }
+  }
+
+  private void listLesson(ObjectOutputStream out) throws IOException {
+    out.writeUTF("OK");
+    out.reset();
+    out.writeObject(lessons);
+  }
+
+  private void deleteMember(ObjectInputStream in, ObjectOutputStream out) throws IOException {
+    try {
+      int no = in.readInt();
+
+      int index = -1;
+      for (int i = 0; i < members.size(); i++) {
+        if (members.get(i).getNo() == no) {
+          index = i;
+          break;
+        }
+      }
+
+      if (index != -1) {
+        members.remove(index);
+        out.writeUTF("OK");
+
+      } else {
+        out.writeUTF("FAIL");
+        out.writeUTF("해당 번호의 회원이 없습니다.");
+      }
+    } catch (Exception e) {
+      out.writeUTF("FAIL");
+      out.writeUTF(e.getMessage());
+    }
+  }
+
+  private void updateMember(ObjectInputStream in, ObjectOutputStream out) throws IOException {
+    try {
+      Member member = (Member) in.readObject();
+
+      int index = -1;
+      for (int i = 0; i < members.size(); i++) {
+        if (members.get(i).getNo() == member.getNo()) {
+          index = i;
+          break;
+        }
+      }
+
+      if (index != -1) {
+        members.set(index, member);
+        out.writeUTF("OK");
+      } else {
+        out.writeUTF("FAIL");
+        out.writeUTF("해당 번호의 회원이 없습니다.");
+      }
+
+    } catch (Exception e) {
+      out.writeUTF("FAIL");
+      out.writeUTF(e.getMessage());
+    }
+  }
+
+  private void detailMember(ObjectInputStream in, ObjectOutputStream out) throws IOException {
+    try {
+      int no = in.readInt();
+
+      Member member = null;
+      for (Member m : members) {
+        if (m.getNo() == no) {
+          member = m;
+          break;
+        }
+      }
+
+      if (member != null) {
+        out.writeUTF("OK");
+        out.writeObject(member);
+
+      } else {
+        out.writeUTF("FAIL");
+        out.writeUTF("해당 번호의 회원이 없습니다.");
+      }
+
+    } catch (Exception e) {
+      out.writeUTF("FAIL");
+      out.writeUTF(e.getMessage());
+    }
+  }
+
+  private void addMember(ObjectInputStream in, ObjectOutputStream out) throws IOException {
+    try {
+      Member member = (Member) in.readObject();
+
+      int i = 0;
+      for (; i < members.size(); i++) {
+        if (members.get(i).getNo() == member.getNo()) {
+          break;
+        }
+      }
+
+      if (i == members.size()) {
+        members.add(member);
+        out.writeUTF("OK");
+
+      } else {
+        out.writeUTF("FAIL");
+        out.writeUTF("같은 번호의 회원이 있습니다.");
+      }
+
+
+    } catch (Exception e) {
+      out.writeUTF("FAIL");
+      out.writeUTF(e.getMessage());
+    }
+  }
+
+  private void listMember(ObjectOutputStream out) throws IOException {
+    out.writeUTF("OK");
+    out.reset();
+    out.writeObject(members);
+  }
+
+  private void deleteBoard(ObjectInputStream in, ObjectOutputStream out) throws IOException {
+    try {
+      int no = in.readInt();
+
+      int index = -1;
+      for (int i = 0; i < boards.size(); i++) {
+        if (boards.get(i).getNo() == no) {
+          index = i;
+          break;
+        }
+      }
+
+      if (index != -1) { // 삭제하려는 번호의 게시물을 찾았다면
+        boards.remove(index);
+        out.writeUTF("OK");
+
+      } else {
+        out.writeUTF("FAIL");
+        out.writeUTF("해당 번호의 게시물이 없습니다.");
+      }
+    } catch (Exception e) {
+      out.writeUTF("FAIL");
+      out.writeUTF(e.getMessage());
+    }
+  }
+
+  private void updateBoard(ObjectInputStream in, ObjectOutputStream out) throws IOException {
+    try {
+      Board board = (Board) in.readObject();
+
+      int index = -1;
+      for (int i = 0; i < boards.size(); i++) {
+        if (boards.get(i).getNo() == board.getNo()) {
+          index = i;
+          break;
+        }
+      }
+
+      if (index != -1) {
+        boards.set(index, board);
+        out.writeUTF("OK");
+      } else {
+        out.writeUTF("FAIL");
+        out.writeUTF("해당 번호의 게시물이 없습니다.");
+      }
+
+    } catch (Exception e) {
+      out.writeUTF("FAIL");
+      out.writeUTF(e.getMessage());
+    }
+  }
+
+  private void detailBoard(ObjectInputStream in, ObjectOutputStream out) throws IOException {
+    try {
+      int no = in.readInt();
+
+      Board board = null;
+      for (Board b : boards) {
+        if (b.getNo() == no) {
+          board = b;
+          break;
+        }
+      }
+
+      if (board != null) {
+        out.writeUTF("OK");
+        out.writeObject(board);
+
+      } else {
+        out.writeUTF("FAIL");
+        out.writeUTF("해당 번호의 게시물이 없습니다.");
+      }
+
+    } catch (Exception e) {
+      out.writeUTF("FAIL");
+      out.writeUTF(e.getMessage());
+    }
+  }
+
+  private void addBoard(ObjectInputStream in, ObjectOutputStream out) throws IOException {
+    try {
+      Board board = (Board) in.readObject();
+
+      int i = 0;
+      for (; i < boards.size(); i++) {
+        if (boards.get(i).getNo() == board.getNo()) {
+          break;
+        }
+      }
+
+      if (i == boards.size()) { // 같은 번호의 게시물이 없다면,
+        boards.add(board); // 새 게시물을 등록한다.
+        out.writeUTF("OK");
+
+      } else {
+        out.writeUTF("FAIL");
+        out.writeUTF("같은 번호의 게시물이 있습니다.");
+      }
+
+
+    } catch (Exception e) {
+      out.writeUTF("FAIL");
+      out.writeUTF(e.getMessage());
+    }
+  }
+
+  private void listBoard(ObjectOutputStream out) throws IOException {
+    out.writeUTF("OK");
+
+    out.reset();
+    // => 기존에 출력했던 List<Board> 객체의 직렬화 데이터를 무시하고
+    // 새로 직렬화를 수행한다.
+
+    out.writeObject(boards);
+  }
+
+  public static void main(String[] args) {
     System.out.println("서버 애플리케이션 실행");
 
     ServerApp app = new ServerApp();

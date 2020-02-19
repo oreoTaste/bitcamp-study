@@ -1,16 +1,20 @@
 package com.eomcs.lms.handler;
 
-import com.eomcs.lms.dao.BoardDao;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import com.eomcs.lms.prompt.Prompt;
 
 // "/board/delete" 명령 처리
 public class BoardDeleteCommand implements Command {
 
-  BoardDao boardDao;
+  ObjectOutputStream out;
+  ObjectInputStream in;
+
   Prompt prompt;
 
-  public BoardDeleteCommand(BoardDao boardDao , Prompt prompt) {
-    this.boardDao = boardDao;
+  public BoardDeleteCommand(ObjectOutputStream out, ObjectInputStream in, Prompt prompt) {
+    this.out = out;
+    this.in = in;
     this.prompt = prompt;
   }
 
@@ -19,14 +23,20 @@ public class BoardDeleteCommand implements Command {
     try {
       int no = prompt.inputInt("번호? ");
 
-      if(boardDao.delete(no) > 0) {
-        System.out.println("게시글을 삭제했습니다.");
-      } else {
-        System.out.println("해당 번호의 게시글이 없습니다.");
+      out.writeUTF("/board/delete");
+      out.writeInt(no);
+      out.flush();
+
+      String response = in.readUTF();
+
+      if (response.equals("FAIL")) {
+        System.out.println(in.readUTF());
+        return;
       }
+      System.out.println("게시글을 삭제했습니다.");
 
     } catch (Exception e) {
-      System.out.println("게시판 정보 삭제 중 오류발생!");
+      System.out.println("명령 실행 중 오류 발생!");
     }
   }
 }

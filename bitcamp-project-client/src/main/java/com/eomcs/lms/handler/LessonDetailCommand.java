@@ -1,38 +1,51 @@
 package com.eomcs.lms.handler;
 
-import com.eomcs.lms.dao.LessonDao;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import com.eomcs.lms.domain.Lesson;
-import com.eomcs.lms.prompt.Prompt;
+import com.eomcs.util.Prompt;
 
 public class LessonDetailCommand implements Command {
-  LessonDao lessonDao;
+
+  ObjectOutputStream out;
+  ObjectInputStream in;
+
   Prompt prompt;
 
-  public LessonDetailCommand(LessonDao lessonDao, Prompt prompt) {
+  public LessonDetailCommand(ObjectOutputStream out, ObjectInputStream in, Prompt prompt) {
+    this.out = out;
+    this.in = in;
     this.prompt = prompt;
-    this.lessonDao = lessonDao;
   }
-
 
   @Override
   public void execute() {
-    int no = prompt.inputInt("번호? ");
-
     try {
-      Lesson lesson = lessonDao.findByNo(no);
+      int no = prompt.inputInt("번호? ");
 
-      System.out.printf("번호? %d\n", lesson.getNo());
+      out.writeUTF("/lesson/detail");
+      out.writeInt(no);
+      out.flush();
+
+      String response = in.readUTF();
+
+      if (response.equals("FAIL")) {
+        System.out.println(in.readUTF());
+        return;
+      }
+
+      Lesson lesson = (Lesson) in.readObject();
+      System.out.printf("번호: %d\n", lesson.getNo());
       System.out.printf("수업명: %s\n", lesson.getTitle());
-      System.out.printf("수업내용: %s\n", lesson.getContext());
-      System.out.printf("기간 : %tF ~ %tF\n", lesson.getStartDate(), lesson.getEndDate());
-      System.out.printf("총수업시간: %d\n", lesson.getTotalHour());
-      System.out.printf("일수업시간: %d\n", lesson.getDailyHour());
+      System.out.printf("설명: %s\n", lesson.getDescription());
+      System.out.printf("시작일: %s\n", lesson.getStartDate());
+      System.out.printf("종료일: %s\n", lesson.getEndDate());
+      System.out.printf("총수업시간: %d\n", lesson.getTotalHours());
+      System.out.printf("일수업시간: %d\n", lesson.getDayHours());
     } catch (Exception e) {
-      e.printStackTrace();
-      System.out.println("수업정보 세부사항 수신 중 오류발생");
+      System.out.println("명령 실행 중 오류 발생!");
     }
   }
-
-
-
 }
+
+

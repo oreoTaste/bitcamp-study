@@ -32,12 +32,14 @@ DROP TABLE IF EXISTS lect_tcher RESTRICT;
 
 -- 수강생
 CREATE TABLE stnt (
-    mno    INTEGER     NOT NULL COMMENT '수강생번호', -- 수강생번호
+    mno    INTEGER     NOT NULL COMMENT '수강생번호', -- 수강생번호(사라지는 주석)
     work   CHAR(1)     NOT NULL COMMENT '재직여부', -- 재직여부
     acc_no VARCHAR(20) NULL     COMMENT '통장번호', -- 통장번호
     bank   VARCHAR(50) NULL     COMMENT '은행명' -- 은행명
 )
 COMMENT '수강생';
+/*사라지는 주석*/
+
 
 -- 수강생
 ALTER TABLE stnt
@@ -131,6 +133,11 @@ CREATE UNIQUE INDEX UIX_room
         name ASC  -- 강의실명
     );
 
+/* 이거랑 같은거 아닌가..?
+    alter table room
+    add constraint UIX_room unique (loc ASC, name ASC);
+*/
+
 ALTER TABLE room
     MODIFY COLUMN rno INTEGER NOT NULL AUTO_INCREMENT COMMENT '강의실번호';
 
@@ -194,6 +201,8 @@ ALTER TABLE room_phot
 
 ALTER TABLE room_phot
     MODIFY COLUMN rpno INTEGER NOT NULL AUTO_INCREMENT COMMENT '강의실사진번호';
+
+------------------------------------------------------------------------------------------------------------------------------------------
 
 -- 멤버
 CREATE TABLE memb (

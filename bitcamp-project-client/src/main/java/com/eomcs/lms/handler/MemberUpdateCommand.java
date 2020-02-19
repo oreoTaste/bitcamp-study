@@ -1,15 +1,20 @@
 package com.eomcs.lms.handler;
 
-import com.eomcs.lms.dao.MemberDao;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import com.eomcs.lms.domain.Member;
-import com.eomcs.lms.prompt.Prompt;
+import com.eomcs.util.Prompt;
 
 public class MemberUpdateCommand implements Command {
-  MemberDao memberDao;
+
+  ObjectOutputStream out;
+  ObjectInputStream in;
+
   Prompt prompt;
 
-  public MemberUpdateCommand(MemberDao memberDao, Prompt prompt) {
-    this.memberDao = memberDao;
+  public MemberUpdateCommand(ObjectOutputStream out, ObjectInputStream in, Prompt prompt) {
+    this.out = out;
+    this.in = in;
     this.prompt = prompt;
   }
 
@@ -17,8 +22,19 @@ public class MemberUpdateCommand implements Command {
   public void execute() {
     try {
       int no = prompt.inputInt("번호? ");
-      
-      Member oldMember = memberDao.findByNo(no);
+
+      // 기존의 회원 데이터를 가져온다.
+      out.writeUTF("/member/detail");
+      out.writeInt(no);
+      out.flush();
+
+      String response = in.readUTF();
+      if (response.equals("FAIL")) {
+        System.out.println(in.readUTF());
+        return;
+      }
+
+      Member oldMember = (Member) in.readObject();
       Member newMember = new Member();
 
       newMember.setNo(oldMember.getNo());
@@ -43,13 +59,20 @@ public class MemberUpdateCommand implements Command {
         System.out.println("회원 변경을 취소하였습니다.");
         return;
       }
-      
-      memberDao.update(newMember);
+      out.writeUTF("/member/update");
+      out.writeObject(newMember);
+      out.flush();
+
+      response = in.readUTF();
+      if (response.equals("FAIL")) {
+        System.out.println(in.readUTF());
+        return;
+      }
 
       System.out.println("회원을 변경했습니다.");
 
     } catch (Exception e) {
-      System.out.println("멤버 정보 수정중 오류발생");
+      System.out.println("명령 실행 중 오류 발생!");
     }
   }
 }

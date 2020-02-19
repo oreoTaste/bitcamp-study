@@ -4,7 +4,14 @@
 */
 
 /* join이용하여 데이터를 추출한 방법 */
-select la.lano, l.titl, m.name, s.work, la.rdt, r.name, m2.name, mr.posi
+select la.lano, 
+    l.titl, 
+    m.name, 
+    s.work, 
+    la.rdt, 
+    r.name, 
+    m2.name, 
+    mr.posi
 from lect_appl la 
         inner join memb m on la.mno=m.mno
         inner join stnt s on la.mno=s.mno 
