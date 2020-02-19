@@ -137,7 +137,6 @@ CREATE UNIQUE INDEX UIX_room
     alter table room
     add constraint UIX_room unique (loc ASC, name ASC);
 */
-
 ALTER TABLE room
     MODIFY COLUMN rno INTEGER NOT NULL AUTO_INCREMENT COMMENT '강의실번호';
 
