@@ -16,6 +16,7 @@ tasks.withType(JavaCompile) {
 }
 
 dependencies {
+    implementation 'org.mariadb.jdbc:mariadb-java-client:2.5.4'
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.11'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.google.guava:guava:28.0-jre'

@@ -1,19 +1,15 @@
 package com.eomcs.lms.handler;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import com.eomcs.util.Prompt;
+import com.eomcs.lms.dao.LessonDao;
+import com.eomcs.lms.prompt.Prompt;
 
 public class LessonDeleteCommand implements Command {
 
-  ObjectOutputStream out;
-  ObjectInputStream in;
-
+  LessonDao lessonDao;
   Prompt prompt;
 
-  public LessonDeleteCommand(ObjectOutputStream out, ObjectInputStream in, Prompt prompt) {
-    this.out = out;
-    this.in = in;
+  public LessonDeleteCommand(LessonDao lessonDao, Prompt prompt) {
+    this.lessonDao = lessonDao;
     this.prompt = prompt;
   }
 
@@ -22,20 +18,11 @@ public class LessonDeleteCommand implements Command {
     try {
       int no = prompt.inputInt("번호? ");
 
-      out.writeUTF("/lesson/delete");
-      out.writeInt(no);
-      out.flush();
-
-      String response = in.readUTF();
-
-      if (response.equals("FAIL")) {
-        System.out.println(in.readUTF());
-        return;
-      }
+      lessonDao.delete(no);
       System.out.println("수업을 삭제했습니다.");
 
     } catch (Exception e) {
-      System.out.println("명령 실행 중 오류 발생!");
+      System.out.println("수업정보 삭제중 오류발생!");
     }
   }
 }
