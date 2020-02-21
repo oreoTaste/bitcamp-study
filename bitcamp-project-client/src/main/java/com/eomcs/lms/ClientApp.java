@@ -82,7 +82,7 @@ public class ClientApp {
 
       // 명령어부분
       servletPath = url.substring(index);
-      System.out.println(servletPath);
+      // System.out.println(servletPath);
 
     } catch (Exception e) {
       System.out.println(e.getMessage());
