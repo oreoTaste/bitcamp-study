@@ -34,6 +34,17 @@ public class Exam0110 {
     } catch (Exception e) {
       e.printStackTrace();
     }
+    
+    // 도메인객체 (DAO, Data Access Object)
+    // DTO (Data Transfer Object) : 데이터를 실어나른다는 의미로
+    // VO (Value Object)
+    
+    // 도메인 객체(예: Board)
+    // => 두 객체 사이에 데이터를 실어 나르는 역할을 한다고 해서
+    // "DTO(Data Transfer Object)"라고도 부른다.
+    // => 두 객체 사이에 전달되는 값을 표현한다고 해서
+    // "VO(Value Object)"라고도 부른다.
+    
   }
 }
 

@@ -5,7 +5,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-
+ 
 public class Exam0320 {
 
   public static void main(String[] args) throws Exception {
@@ -19,7 +19,7 @@ public class Exam0320 {
 
       System.out.println("번호, 제목, 등록일, 조회수");
       while (rs.next()) {
-        System.out.printf("%d, %s, %s, %s, %d\n", //
+        System.out.printf("%d, %5s, %5s, %s, %d\n", //
             rs.getInt("board_id"), //
             rs.getString("title"), //
             rs.getString("contents"), //

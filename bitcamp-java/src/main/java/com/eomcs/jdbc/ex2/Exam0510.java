@@ -1,4 +1,4 @@
-// 트랜잭션 다루기 - autocommit
+// 트랜잭션 다루기 - autocommit이 true 일경우의 문제점 (mariadb는 default가 true임)
 package com.eomcs.jdbc.ex2;
 
 import java.sql.Connection;

@@ -9,7 +9,7 @@ import java.sql.Statement;
 import java.util.Scanner;
 
 public class Exam0520 {
-
+ 
   public static void main(String[] args) throws Exception {
     String title = null;
     String contents = null;
@@ -42,7 +42,12 @@ public class Exam0520 {
             "insert into x_board(title,contents) values(?,?)", //
             Statement.RETURN_GENERATED_KEYS);) {
 
-      // 1) 트랜잭션 시작 - 커넥션 객체의 오토커밋을 false로 지정한다.
+      // 트랜잭션(transaction)?
+      // 여러개의 데이터 변경작업을 한 단위로 묶은 것.
+      // 한 단위로 묶인 모든 작업이 성공했을때 그 작업결과를 저장한다!
+      
+      // 여러 작업을 트랜젝션으로 묶는 법?
+      // 커넥션 객체의 오토커밋을 false로 지정한다.
       con.setAutoCommit(false);
       // 이후부터 이 커넥션으로 실행하는 모든 SQL은
       // commit을 요청하기 전에는 테이블에 그 결과를 적용하지 않는다.
@@ -69,7 +74,8 @@ public class Exam0520 {
           "insert into x_board_file(file_path,board_id) values(?,?)")) {
         stmt2.setString(1, filename);
         stmt2.setInt(2, no);
-        stmt2.execute();
+        stmt2.executeUpdate();
+        //stmt2.execute();
         System.out.println("첨부파일 등록 완료!");
 
         // 트랜잭션 작업 승인 - 서버의 요청한 작업을 처리할 것을 명령한다.

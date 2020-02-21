@@ -19,7 +19,7 @@ public class Board implements Serializable {
   String content;
   Date registeredDate;
   int viewCount;
-
+ 
   // 개발하는 동안 객체의 값을 확인할 수 있도록 toString()을 오버라이딩 한다.
   @Override
   public String toString() {
