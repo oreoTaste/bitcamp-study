@@ -59,12 +59,12 @@
 - com.eomcs.lms.ServerApp 변경
   - 클라이언트 명령을 처리할 서블릿을 찾아 실행한다.
 
-### 훈련6: 클라이언트의 '/member/list' 요청을 BoardListServlet으로 처리하라.
+### 훈련6: 클라이언트의 '/member/list' 요청을 MemberListServlet으로 처리하라.
 
 - com.eomcs.lms.ServerApp 변경
   - 클라이언트 명령을 처리할 서블릿을 찾아 실행한다.
   
-  ### 훈련5: 클라이언트의 '/board/list' 요청을 BoardListServlet으로 처리하라.
+  ### 훈련5: 클라이언트의 '/board/list' 요청을 MemberListServlet으로 처리하라.
 
 - com.eomcs.lms.ServerApp 변경
   - 클라이언트 명령을 처리할 서블릿을 찾아 실행한다. 
