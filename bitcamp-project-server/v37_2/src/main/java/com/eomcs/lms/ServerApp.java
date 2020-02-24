@@ -10,6 +10,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import com.eomcs.lms.context.ApplicationContextListener;
 import com.eomcs.lms.dao.BoardDao;
 import com.eomcs.lms.dao.LessonDao;
@@ -46,7 +48,8 @@ public class ServerApp {
       listener.contextDestroyed(context);
     }
   }
-
+  
+  ExecutorService executorService = Executors.newCachedThreadPool();
 
   public void service() {
     notifyApplicationInitialized();
@@ -74,15 +77,20 @@ public class ServerApp {
     //    servletMap.put("/member/delete", new MemberDeleteServlet(memberDao));
 
     try(ServerSocket serverSocket = new ServerSocket(9999)) {
-
+      
       while(true) {
         System.out.println("...클라이언트 연결 대기중");
-
         Socket socket = serverSocket.accept();
         System.out.println("클라이언트와 연결됨");
-        processRequest(socket);
 
-        System.out.println("=========================");
+        // 스레드풀을 사용할 때는 직접 스레드를 만들지 않는다.
+        // 단지 스레드풀에 스레드가 실행할 코드를 제출한다.
+        executorService.submit(() -> {
+          processRequest(socket);
+          System.out.println("=========================");
+        });
+        
+        new Thread().start();
       }
 
     } catch (IOException e) {
@@ -90,6 +98,7 @@ public class ServerApp {
     }
 
     notifyApplicationDestroyed();
+    executorService.shutdown();
   }
 
   int processRequest(Socket clientSocket) {
