@@ -14,14 +14,7 @@ public class Lesson implements java.io.Serializable{
   private int totalHour;
   private int dailyHour;
   
-  @Override
-  public String toString() {
-    return "Lesson [no=" + no + ", title=" + title + ", date=" + date + ", context=" + context
-        + ", viewCount=" + viewCount + ", startDate=" + startDate + ", endDate=" + endDate
-        + ", totalHour=" + totalHour + ", dailyHour=" + dailyHour + "]";
-  }
-
-
+  
   public static Lesson valueOf(String[] data) {
     Lesson lesson = new Lesson();
 

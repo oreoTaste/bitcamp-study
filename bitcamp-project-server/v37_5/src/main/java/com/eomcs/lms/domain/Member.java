@@ -13,12 +13,6 @@ public class Member implements java.io.Serializable{
   private Date registeredDate;
   
   
-  @Override
-  public String toString() {
-    return "Member [no=" + no + ", name=" + name + ", email=" + email + ", password=" + password
-        + ", photo=" + photo + ", tel=" + tel + ", registeredDate=" + registeredDate + "]";
-  }
-
   public static Member valueOf(String[] data) {
     Member member = new Member();
     
