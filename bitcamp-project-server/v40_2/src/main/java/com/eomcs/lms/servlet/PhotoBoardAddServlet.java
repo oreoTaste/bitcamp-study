@@ -1,7 +1,6 @@
 package com.eomcs.lms.servlet;
 
 import java.io.PrintStream;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -11,7 +10,6 @@ import com.eomcs.lms.dao.PhotoFileDao;
 import com.eomcs.lms.domain.Lesson;
 import com.eomcs.lms.domain.PhotoBoard;
 import com.eomcs.lms.domain.PhotoFile;
-import com.eomcs.util.ConnectionFactory;
 import com.eomcs.util.Prompt;
 
 public class PhotoBoardAddServlet implements Servlet {
@@ -19,20 +17,18 @@ public class PhotoBoardAddServlet implements Servlet {
   PhotoBoardDao photoBoardDao;
   LessonDao lessonDao;
   PhotoFileDao photoFileDao;
-  ConnectionFactory conFactory;
 
-  public PhotoBoardAddServlet(ConnectionFactory conFactory,
-      PhotoBoardDao photoBoardDao, LessonDao lessonDao, PhotoFileDao photoFileDao) {
+  public PhotoBoardAddServlet(
+      PhotoBoardDao photoBoardDao,
+      LessonDao lessonDao,
+      PhotoFileDao photoFileDao) {
     this.photoBoardDao = photoBoardDao;
     this.lessonDao = lessonDao;
     this.photoFileDao = photoFileDao;
-    this.conFactory = conFactory;
   }
 
   @Override
   public void service(Scanner in, PrintStream out) throws Exception {
-    Connection con= conFactory.getConnection();
-    con.setAutoCommit(false);
 
     PhotoBoard photoBoard = new PhotoBoard();
 
@@ -49,6 +45,7 @@ public class PhotoBoardAddServlet implements Servlet {
 
     photoBoard.setLesson(lesson);
 
+//    DataLoaderListener.con.setAutoCommit(false);
 
     try {
       if (photoBoardDao.insert(photoBoard) == 0)
@@ -62,15 +59,15 @@ public class PhotoBoardAddServlet implements Servlet {
         photoFileDao.insert(photoFile);
       }
 
-      con.commit();
+//      DataLoaderListener.con.commit();
       out.println("새 사진 게시글을 등록했습니다.");
 
     } catch(Exception e) {
       System.out.println(e.getStackTrace());
-      con.rollback();
+//      DataLoaderListener.con.rollback();
       out.println(e.getMessage());
     } finally {
-      con.setAutoCommit(true);
+//      DataLoaderListener.con.setAutoCommit(true);
     }
 
   }

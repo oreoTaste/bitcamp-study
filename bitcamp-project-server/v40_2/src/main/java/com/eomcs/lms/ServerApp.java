@@ -104,16 +104,15 @@ public class ServerApp {
     servletMap.put("/member/delete", new MemberDeleteServlet(memberDao));
     servletMap.put("/member/search", new MemberSearchServlet(memberDao));
 
-    servletMap.put("/photoboard/list",
-        new PhotoBoardListServlet(photoBoardDao, lessonDao));
+    servletMap.put("/photoboard/list", new PhotoBoardListServlet(photoBoardDao, lessonDao));
     servletMap.put("/photoboard/detail",
         new PhotoBoardDetailServlet(photoBoardDao, photoFileDao));
     servletMap.put("/photoboard/add",
-        new PhotoBoardAddServlet(conFactory, photoBoardDao, lessonDao, photoFileDao));
+        new PhotoBoardAddServlet(photoBoardDao, lessonDao, photoFileDao));
     servletMap.put("/photoboard/update",
-        new PhotoBoardUpdateServlet(conFactory, photoBoardDao, photoFileDao));
+        new PhotoBoardUpdateServlet(photoBoardDao, photoFileDao));
     servletMap.put("/photoboard/delete",
-        new PhotoBoardDeleteServlet(conFactory, photoBoardDao, photoFileDao));
+        new PhotoBoardDeleteServlet(photoBoardDao, photoFileDao));
 
     try(ServerSocket serverSocket = new ServerSocket(9999)) {
       System.out.println("...클라이언트 연결 대기중");

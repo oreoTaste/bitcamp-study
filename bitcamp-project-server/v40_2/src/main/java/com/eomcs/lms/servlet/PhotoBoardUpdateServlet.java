@@ -1,7 +1,6 @@
 package com.eomcs.lms.servlet;
 
 import java.io.PrintStream;
-import java.sql.Connection;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,29 +9,23 @@ import com.eomcs.lms.dao.PhotoBoardDao;
 import com.eomcs.lms.dao.PhotoFileDao;
 import com.eomcs.lms.domain.PhotoBoard;
 import com.eomcs.lms.domain.PhotoFile;
-import com.eomcs.util.ConnectionFactory;
 import com.eomcs.util.Prompt;
 
 public class PhotoBoardUpdateServlet implements Servlet {
 
   PhotoBoardDao photoBoardDao;
   PhotoFileDao photoFileDao;
-  ConnectionFactory conFactory;
 
   public PhotoBoardUpdateServlet() {}
 
-  public PhotoBoardUpdateServlet(ConnectionFactory conFactory,
-      PhotoBoardDao photoBoardDao, PhotoFileDao photoFileDao) {
-    this.conFactory = conFactory;
+  public PhotoBoardUpdateServlet(PhotoBoardDao photoBoardDao, PhotoFileDao photoFileDao) {
     this.photoBoardDao = photoBoardDao;
     this.photoFileDao = photoFileDao;
   }
 
   @Override
   public void service(Scanner in, PrintStream out) throws Exception {
-    Connection con = conFactory.getConnection();
-    con.setAutoCommit(false);
-    
+
     try {
       int no = Prompt.getInt(in, out, "번호? ");
 
@@ -51,6 +44,7 @@ public class PhotoBoardUpdateServlet implements Servlet {
       newPhotoBoard.setCreatedDate(new Date(System.currentTimeMillis()));
       newPhotoBoard.setViewCount(0);
 
+//      DataLoaderListener.con.setAutoCommit(false);
 
       if(photoBoardDao.update(newPhotoBoard) == 0)
         throw new Exception("사진 게시글 등록에 실패했습니다.");
@@ -72,17 +66,17 @@ public class PhotoBoardUpdateServlet implements Servlet {
         }
 
       }
-      con.commit();
+//      DataLoaderListener.con.commit();
       out.println("사진 게시글을 변경했습니다.");
       out.flush();
 
     } catch(Exception e) {
-      con.rollback();
+//      DataLoaderListener.con.rollback();
       out.println("사진 게시글 변경을 취소했습니다");
       out.flush();
 
     } finally {
-      con.setAutoCommit(true);
+//      DataLoaderListener.con.setAutoCommit(true);
     }
   }
 
