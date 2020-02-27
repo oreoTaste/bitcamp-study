@@ -11,18 +11,21 @@ import com.eomcs.lms.domain.Lesson;
 import com.eomcs.lms.domain.PhotoBoard;
 import com.eomcs.lms.domain.PhotoFile;
 import com.eomcs.sql.PlatformTransactionManager;
+import com.eomcs.sql.TransactionTemplate;
 import com.eomcs.util.Prompt;
 
 public class PhotoBoardAddServlet implements Servlet {
 
-  PlatformTransactionManager txManager;
+  TransactionTemplate transactionTemplate;
   PhotoBoardDao photoBoardDao;
   LessonDao lessonDao;
   PhotoFileDao photoFileDao;
 
   public PhotoBoardAddServlet(PlatformTransactionManager txManager,
       PhotoBoardDao photoBoardDao, LessonDao lessonDao, PhotoFileDao photoFileDao) {
-    this.txManager = txManager;
+    
+    // PlatformTransactionManager를 알아서 관리해줄 TransactionTemplate을 생성
+    this.transactionTemplate = new TransactionTemplate(txManager);
     this.photoBoardDao = photoBoardDao;
     this.lessonDao = lessonDao;
     this.photoFileDao = photoFileDao;
@@ -30,7 +33,6 @@ public class PhotoBoardAddServlet implements Servlet {
 
   @Override
   public void service(Scanner in, PrintStream out) throws Exception {
-    txManager.beginTransaction();
 
     PhotoBoard photoBoard = new PhotoBoard();
 
@@ -47,27 +49,25 @@ public class PhotoBoardAddServlet implements Servlet {
 
     photoBoard.setLesson(lesson);
 
+    // ArrayList에 들어있는 photoFile데이터를 lms_photo_file데이터에 저장한다
+    List<PhotoFile> photoFiles = inputPhotoFiles(in, out);
 
     try {
-      if (photoBoardDao.insert(photoBoard) == 0)
-        throw new Exception("사진 게시글 등록에 실패했습니다.");
+      transactionTemplate.execute(() -> {
+        
+        if (photoBoardDao.insert(photoBoard) == 0)
+          throw new Exception("사진 게시글 등록에 실패했습니다.");
 
-      // ArrayList에 들어있는 photoFile데이터를 lms_photo_file데이터에 저장한다
-      List<PhotoFile> photoFiles = inputPhotoFiles(in, out);
-
-      for(PhotoFile photoFile : photoFiles) {
-        photoFile.setBoardNo(photoBoard.getNo());
-        photoFileDao.insert(photoFile);
-      }
-
-      txManager.commit();
-      out.println("새 사진 게시글을 등록했습니다.");
-
+        for(PhotoFile photoFile : photoFiles) {
+          photoFile.setBoardNo(photoBoard.getNo());
+          photoFileDao.insert(photoFile);
+        }
+        out.println("새 사진 게시글을 등록했습니다.");
+        return null;
+    });
+      
     } catch(Exception e) {
-      System.out.println(e.getStackTrace());
-      txManager.rollback();
       out.println(e.getMessage());
-    } finally {
     }
 
   }

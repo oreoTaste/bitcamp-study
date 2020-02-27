@@ -1,4 +1,4 @@
-# 41 - Connection Pooling 도입하기
+# 41_1 - Connection Pooling 도입하기
 
 ## 학습목표
 
@@ -21,7 +21,7 @@
 - src/main/java/com/eomcs/lms/DataLoaderListener.java 변경
 - src/main/java/com/eomcs/lms/ServerApp.java 변경
 
-## 실습  
+## 실습
 
 ### 훈련1: DB Connection Pool 객체를 생성하라.
 

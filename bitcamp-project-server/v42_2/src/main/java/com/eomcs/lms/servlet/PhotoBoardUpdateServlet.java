@@ -10,11 +10,12 @@ import com.eomcs.lms.dao.PhotoFileDao;
 import com.eomcs.lms.domain.PhotoBoard;
 import com.eomcs.lms.domain.PhotoFile;
 import com.eomcs.sql.PlatformTransactionManager;
+import com.eomcs.sql.TransactionTemplate;
 import com.eomcs.util.Prompt;
 
 public class PhotoBoardUpdateServlet implements Servlet {
 
-  PlatformTransactionManager txManager;
+  TransactionTemplate transactionTemplate;
   PhotoBoardDao photoBoardDao;
   PhotoFileDao photoFileDao;
 
@@ -22,7 +23,7 @@ public class PhotoBoardUpdateServlet implements Servlet {
 
   public PhotoBoardUpdateServlet(PlatformTransactionManager txManager,
       PhotoBoardDao photoBoardDao, PhotoFileDao photoFileDao) {
-    this.txManager = txManager;
+    transactionTemplate = new TransactionTemplate(txManager);
     this.photoBoardDao = photoBoardDao;
     this.photoFileDao = photoFileDao;
   }
@@ -30,25 +31,23 @@ public class PhotoBoardUpdateServlet implements Servlet {
   @Override
   public void service(Scanner in, PrintStream out) throws Exception {
 
-    txManager.beginTransaction();
-    try {
-      int no = Prompt.getInt(in, out, "번호? ");
+    int no = Prompt.getInt(in, out, "번호? ");
 
-      PhotoBoard photoBoard = photoBoardDao.findByNo(no);
-      if(photoBoard == null) {
-        out.println("해당 번호의 사진 게시글이 없습니다.");
-        out.flush();
-        return;
-      }
+    PhotoBoard photoBoard = photoBoardDao.findByNo(no);
+    if(photoBoard == null) {
+      out.println("해당 번호의 사진 게시글이 없습니다.");
+      out.flush();
+      return;
+    }
 
+    PhotoBoard newPhotoBoard = new PhotoBoard();
+    newPhotoBoard.setTitle(
+        Prompt.getString(in, out, String.format("제목(%s)\n", photoBoard.getTitle())));
+    newPhotoBoard.setNo(photoBoard.getNo());
+    newPhotoBoard.setCreatedDate(new Date(System.currentTimeMillis()));
+    newPhotoBoard.setViewCount(0);
 
-      PhotoBoard newPhotoBoard = new PhotoBoard();
-      newPhotoBoard.setTitle(
-          Prompt.getString(in, out, String.format("제목(%s)\n", photoBoard.getTitle())));
-      newPhotoBoard.setNo(photoBoard.getNo());
-      newPhotoBoard.setCreatedDate(new Date(System.currentTimeMillis()));
-      newPhotoBoard.setViewCount(0);
-
+    transactionTemplate.execute(()->{
 
       if(photoBoardDao.update(newPhotoBoard) == 0)
         throw new Exception("사진 게시글 등록에 실패했습니다.");
@@ -68,17 +67,11 @@ public class PhotoBoardUpdateServlet implements Servlet {
           photoFile.setBoardNo(no);
           photoFileDao.insert(photoFile);
         }
-
       }
-      txManager.commit();
       out.println("사진 게시글을 변경했습니다.");
       out.flush();
-
-    } catch(Exception e) {
-      txManager.rollback();
-      out.println("사진 게시글 변경을 취소했습니다");
-      out.flush();
-    }
+      return null;
+    });
   }
 
   private void printPhotoFiles(Scanner in, PrintStream out, int boardNo) throws Exception {

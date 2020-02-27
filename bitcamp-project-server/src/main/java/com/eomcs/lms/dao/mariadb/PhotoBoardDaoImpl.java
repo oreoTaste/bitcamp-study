@@ -47,6 +47,9 @@ public class PhotoBoardDaoImpl implements PhotoBoardDao {
         PreparedStatement stmt = con.prepareStatement(
             "SELECT photo_id, titl, cdt, vw_cnt, lesson_id FROM lms_photo"
                 + " WHERE lesson_id = ? ORDER BY photo_id DESC")){
+      
+      stmt.setInt(1, lessonNo);
+      
       ResultSet rs = stmt.executeQuery();
 
       ArrayList<PhotoBoard> list = new ArrayList<>();

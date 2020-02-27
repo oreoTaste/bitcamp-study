@@ -46,7 +46,7 @@ user1@test.com
 '홍길동'님 환영합니다.
 
 명령> /auth/login
-이메일?
+이메일? 
 user1@test.com
 암호?
 2222

@@ -23,7 +23,7 @@ public class PhotoFileDaoImpl implements PhotoFileDao {
             "INSERT INTO lms_photo_file(photo_id, file_path) VALUES(?, ?)")) {
 
       stmt.setInt(1, photoFile.getBoardNo());
-      stmt.setString(1, photoFile.getFilePath());
+      stmt.setString(2, photoFile.getFilePath());
       return stmt.executeUpdate();
     }
   }

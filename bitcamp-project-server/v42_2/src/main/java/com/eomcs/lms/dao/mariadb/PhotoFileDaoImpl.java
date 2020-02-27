@@ -20,10 +20,10 @@ public class PhotoFileDaoImpl implements PhotoFileDao {
   public int insert(PhotoFile photoFile) throws Exception {
     try(Connection con = dataSource.getConnection();
         PreparedStatement stmt = con.prepareStatement(
-            "INSERT INTO lms_photo_file(photo_id, file_path) values(?, ?)")) {
+            "INSERT INTO lms_photo_file(photo_id, file_path) VALUES(?, ?)")) {
 
       stmt.setInt(1, photoFile.getBoardNo());
-      stmt.setString(1, photoFile.getFilePath());
+      stmt.setString(2, photoFile.getFilePath());
       return stmt.executeUpdate();
     }
   }
@@ -33,10 +33,10 @@ public class PhotoFileDaoImpl implements PhotoFileDao {
   public List<PhotoFile> findAll(int boardNo) throws Exception {
     try(Connection con = dataSource.getConnection();
         PreparedStatement stmt = con.prepareStatement(
-            "select photo_file_id, photo_id, file_path"
-                + " from lms_photo_file"
-                + " where photo_id = ?"
-                + " order by photo_file_id asc")){
+            "SELECT photo_file_id, photo_id, file_path"
+                + " FROM lms_photo_file"
+                + " WHERE photo_id = ?"
+                + " ORDER BY photo_file_id asc")){
       
       stmt.setInt(1, boardNo);
       ResultSet rs = stmt.executeQuery();

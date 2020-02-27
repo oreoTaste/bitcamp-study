@@ -22,7 +22,7 @@ public class MemberDaoImpl implements MemberDao {
     try(Connection con = dataSource.getConnection();
         PreparedStatement stmt = con.prepareStatement(
             "INSERT INTO lms_member(name, email, pwd, tel, photo)"
-            + " values( ?, ?, password(?), ?, ?)")) {
+            + " VALUES( ?, ?, password(?), ?, ?)")) {
 
       stmt.setString(1, board.getName());
       stmt.setString(2, board.getEmail());
@@ -38,7 +38,7 @@ public class MemberDaoImpl implements MemberDao {
   public List<Member> findAll() throws Exception {
     try(Connection con = dataSource.getConnection();
         PreparedStatement stmt = con.prepareStatement(
-            "SELECT member_id, name, email, pwd, cdt, tel, photo from lms_member")
+            "SELECT member_id, name, email, pwd, cdt, tel, photo FROM lms_member")
         ) {
 
       ResultSet rs = stmt.executeQuery();
@@ -126,8 +126,8 @@ public class MemberDaoImpl implements MemberDao {
   public List<Member> findByKeyword(String keyword) throws Exception {
     try(Connection con = dataSource.getConnection();
         PreparedStatement stmt = con.prepareStatement(
-            "select member_id, name, email, pwd, cdt, tel, photo from lms_member "
-                + "where name like ? or email like ? or tel like ?");
+            "SELECT member_id, name, email, pwd, cdt, tel, photo FROM lms_member "
+                + "WHERE name like ? or email like ? or tel like ?");
         ) {
       String value = "%" + keyword + "%";
       stmt.setString(1, value);
@@ -158,8 +158,8 @@ public class MemberDaoImpl implements MemberDao {
   @Override
   public Member findByEmailAndPassword(String email, String password) throws Exception {
     try(Connection con = dataSource.getConnection();
-        PreparedStatement stmt = con.prepareStatement("select * from lms_member where"
-            + " email = ? and pwd = password( ? )")) {
+        PreparedStatement stmt = con.prepareStatement(
+            "SELECT * from lms_member WHERE email = ? and pwd = password( ? )")) {
 
       stmt.setString(1, email);
       stmt.setString(2, password);

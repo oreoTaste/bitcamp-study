@@ -38,7 +38,7 @@ public class LessonDaoImpl implements LessonDao {
   public List<Lesson> findAll() throws Exception {
     try(Connection con = dataSource.getConnection();
         PreparedStatement stmt = con.prepareStatement(
-            "select lesson_id, sdt, edt, tot_hr, day_hr, titl, conts from lms_lesson")){
+            "SELECT lesson_id, sdt, edt, tot_hr, day_hr, titl, conts FROM lms_lesson")){
 
       ArrayList<Lesson> list = new ArrayList<>();
       ResultSet rs = stmt.executeQuery();
@@ -64,7 +64,7 @@ public class LessonDaoImpl implements LessonDao {
   public Lesson findByNo(int no) throws Exception {
     try(Connection con = dataSource.getConnection();
         PreparedStatement stmt = con.prepareStatement(
-            "SELECT lesson_id, sdt, edt, tot_hr, day_hr, titl, conts from lms_lesson"
+            "SELECT lesson_id, sdt, edt, tot_hr, day_hr, titl, conts FROM lms_lesson"
                 + " where lesson_id = ?")){
       stmt.setInt(1, no);
       ResultSet rs = stmt.executeQuery();

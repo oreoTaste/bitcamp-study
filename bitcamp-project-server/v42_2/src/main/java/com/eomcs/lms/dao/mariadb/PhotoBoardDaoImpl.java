@@ -22,7 +22,7 @@ public class PhotoBoardDaoImpl implements PhotoBoardDao {
   public int insert(PhotoBoard photoBoard) throws Exception {
     try(Connection con = dataSource.getConnection();
         PreparedStatement stmt = con.prepareStatement(
-            "INSERT INTO lms_photo(titl, lesson_id) values(?, ?)",
+            "INSERT INTO lms_photo(titl, lesson_id) VALUES(?, ?)",
             PreparedStatement.RETURN_GENERATED_KEYS)) {
 
       stmt.setString(1, photoBoard.getTitle());
@@ -45,8 +45,11 @@ public class PhotoBoardDaoImpl implements PhotoBoardDao {
   public List<PhotoBoard> findAllByLessonNo(int lessonNo) throws Exception {
     try(Connection con = dataSource.getConnection();
         PreparedStatement stmt = con.prepareStatement(
-            "select photo_id, titl, cdt, vw_cnt, lesson_id from lms_photo"
-                + " where lesson_id = ? order by photo_id desc")){
+            "SELECT photo_id, titl, cdt, vw_cnt, lesson_id FROM lms_photo"
+                + " WHERE lesson_id = ? ORDER BY photo_id DESC")){
+      
+      stmt.setInt(1, lessonNo);
+      
       ResultSet rs = stmt.executeQuery();
 
       ArrayList<PhotoBoard> list = new ArrayList<>();
@@ -107,7 +110,7 @@ public class PhotoBoardDaoImpl implements PhotoBoardDao {
     try(Connection con = dataSource.getConnection();
         PreparedStatement stmt = con.prepareStatement(
             "UPDATE lms_photo SET"
-            + " titl = ?, cdt = ?, vw_cnt = 0 where photo_id = ?")) {
+            + " titl = ?, cdt = ?, vw_cnt = 0 WHERE photo_id = ?")) {
       
       stmt.setString(1, photoBoard.getTitle());
       stmt.setDate(2, new Date(System.currentTimeMillis()));

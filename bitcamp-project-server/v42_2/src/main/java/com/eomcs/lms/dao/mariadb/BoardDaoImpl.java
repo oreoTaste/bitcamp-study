@@ -22,7 +22,7 @@ public class BoardDaoImpl implements BoardDao {
   public int insert(Board board) throws Exception {
     try(Connection con = dataSource.getConnection();
         PreparedStatement stmt = con.prepareStatement(
-            "INSERT INTO lms_board(conts) values(?)")) {
+            "INSERT INTO lms_board(conts) VALUES(?)")) {
 
       stmt.setString(1, board.getTitle());
       return stmt.executeUpdate();
@@ -33,7 +33,7 @@ public class BoardDaoImpl implements BoardDao {
   public List<Board> findAll() throws Exception {
     try(Connection con = dataSource.getConnection();
         PreparedStatement stmt = con.prepareStatement(
-            "select board_id, conts, cdt, vw_cnt from lms_board order by board_id desc")){
+            "SELECT board_id, conts, cdt, vw_cnt FROM lms_board ORDER BY board_id DESC")){
 
       ResultSet rs = stmt.executeQuery();
       ArrayList<Board> list = new ArrayList<>();
