@@ -1,43 +1,45 @@
 package com.eomcs.lms.dao.mariadb;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import com.eomcs.lms.dao.PhotoFileDao;
 import com.eomcs.lms.domain.PhotoFile;
-import com.eomcs.util.ConnectionFactory;
+import com.eomcs.sql.DataSource;
 
 public class PhotoFileDaoImpl implements PhotoFileDao {
-  ConnectionFactory conFactory;
+  DataSource dataSource;
   
-  public PhotoFileDaoImpl(ConnectionFactory conFactory) {
-    this.conFactory = conFactory;
+  public PhotoFileDaoImpl(DataSource dataSource) {
+    this.dataSource = dataSource;
   }
 
   @Override
   public int insert(PhotoFile photoFile) throws Exception {
-    try(Connection con = conFactory.getConnection();
-        Statement stmt = con.createStatement()) {
+    try(Connection con = dataSource.getConnection();
+        PreparedStatement stmt = con.prepareStatement(
+            "INSERT INTO lms_photo_file(photo_id, file_path) VALUES(?, ?)")) {
 
-      return stmt.executeUpdate(
-          "INSERT INTO lms_photo_file(photo_id, file_path) values(" +
-              photoFile.getBoardNo() + ", '"+
-              photoFile.getFilePath()+"')");
+      stmt.setInt(1, photoFile.getBoardNo());
+      stmt.setString(1, photoFile.getFilePath());
+      return stmt.executeUpdate();
     }
   }
 
 // select photo_file_id, photo_id, file_path from lms_photo_file where photo_id = 1 order by photo_file_id asc;
   @Override
   public List<PhotoFile> findAll(int boardNo) throws Exception {
-    try(Connection con = conFactory.getConnection();
-        Statement stmt = con.createStatement();
-        ResultSet rs = stmt.executeQuery(
-            "select photo_file_id, photo_id, file_path"
-                + " from lms_photo_file"
-                + " where photo_id = " + boardNo
-                + " order by photo_file_id asc")) {
+    try(Connection con = dataSource.getConnection();
+        PreparedStatement stmt = con.prepareStatement(
+            "SELECT photo_file_id, photo_id, file_path"
+                + " FROM lms_photo_file"
+                + " WHERE photo_id = ?"
+                + " ORDER BY photo_file_id asc")){
+      
+      stmt.setInt(1, boardNo);
+      ResultSet rs = stmt.executeQuery();
 
       ArrayList<PhotoFile> list = new ArrayList<>();
       while(rs.next()) {
@@ -61,12 +63,13 @@ public class PhotoFileDaoImpl implements PhotoFileDao {
   
   @Override
   public int deleteAll(int boardNo) throws Exception {
-    try(Connection con = conFactory.getConnection();
-        Statement stmt = con.createStatement()) {
+    try(Connection con = dataSource.getConnection();
+        PreparedStatement stmt = con.prepareStatement(
+            "DELETE FROM lms_photo_file WHERE photo_id = ?")) {
+      
+      stmt.setInt(1, boardNo);
 
-      int result = stmt.executeUpdate(
-          "DELETE FROM lms_photo_file WHERE photo_id = " + boardNo);
-      return result;
+      return stmt.executeUpdate();
     }
   }
 

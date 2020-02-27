@@ -2,30 +2,32 @@ package com.eomcs.lms.dao.mariadb;
 
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import com.eomcs.lms.dao.PhotoBoardDao;
 import com.eomcs.lms.domain.Lesson;
 import com.eomcs.lms.domain.PhotoBoard;
-import com.eomcs.util.ConnectionFactory;
+import com.eomcs.sql.DataSource;
 
 public class PhotoBoardDaoImpl implements PhotoBoardDao {
-  ConnectionFactory conFactory;
-  
-  public PhotoBoardDaoImpl(ConnectionFactory conFactory) {
-    this.conFactory = conFactory;
+  DataSource dataSource;
+
+  public PhotoBoardDaoImpl(DataSource dataSource) {
+    this.dataSource = dataSource;
   }
 
   @Override
   public int insert(PhotoBoard photoBoard) throws Exception {
-    try(Connection con = conFactory.getConnection();
-        Statement stmt = con.createStatement()) {
+    try(Connection con = dataSource.getConnection();
+        PreparedStatement stmt = con.prepareStatement(
+            "INSERT INTO lms_photo(titl, lesson_id) VALUES(?, ?)",
+            PreparedStatement.RETURN_GENERATED_KEYS)) {
 
-      int result = stmt.executeUpdate("INSERT INTO lms_photo(titl, lesson_id) values('" +
-          photoBoard.getTitle() + "', +"
-          + photoBoard.getLesson().getNo()+")", Statement.RETURN_GENERATED_KEYS);
+      stmt.setString(1, photoBoard.getTitle());
+      stmt.setInt(2, photoBoard.getLesson().getNo());
+      int result = stmt.executeUpdate();
 
       // Auto-increment PK값을 꺼내는 작업
       try(ResultSet generatedKeySet = stmt.getGeneratedKeys()) {
@@ -41,13 +43,11 @@ public class PhotoBoardDaoImpl implements PhotoBoardDao {
 
   @Override
   public List<PhotoBoard> findAllByLessonNo(int lessonNo) throws Exception {
-    try(Connection con = conFactory.getConnection();
-        Statement stmt = con.createStatement();
-        ResultSet rs = stmt.executeQuery(
-            "select photo_id, titl, cdt, vw_cnt, lesson_id"
-                + " from lms_photo"
-                + " where lesson_id = " + lessonNo
-                + " order by photo_id desc")) {
+    try(Connection con = dataSource.getConnection();
+        PreparedStatement stmt = con.prepareStatement(
+            "SELECT photo_id, titl, cdt, vw_cnt, lesson_id FROM lms_photo"
+                + " WHERE lesson_id = ? ORDER BY photo_id DESC")){
+      ResultSet rs = stmt.executeQuery();
 
       ArrayList<PhotoBoard> list = new ArrayList<>();
       while(rs.next()) {
@@ -66,10 +66,8 @@ public class PhotoBoardDaoImpl implements PhotoBoardDao {
 
   @Override
   public PhotoBoard findByNo(int no) throws Exception {
-    try(Connection con = conFactory.getConnection();
-        Statement stmt = con.createStatement();
-        ResultSet rs = stmt.executeQuery(
-
+    try(Connection con = dataSource.getConnection();
+        PreparedStatement stmt = con.prepareStatement(
             "SELECT" +
                 " p.photo_id," +
                 " p.titl," +
@@ -79,7 +77,10 @@ public class PhotoBoardDaoImpl implements PhotoBoardDao {
                 " l.titl lesson_title" +
                 " FROM lms_photo p inner join lms_lesson l" +
                 " on p.lesson_id = l.lesson_id" +
-                " WHERE photo_id = " + no)) {
+            " WHERE photo_id = ?")){
+
+      stmt.setInt(1, no);
+      ResultSet rs = stmt.executeQuery();
 
       if(rs.next()) {
         PhotoBoard photoBoard = new PhotoBoard();
@@ -103,27 +104,27 @@ public class PhotoBoardDaoImpl implements PhotoBoardDao {
 
   @Override
   public int update(PhotoBoard photoBoard) throws Exception {
-    try(Connection con = conFactory.getConnection();
-        Statement stmt = con.createStatement()) {
+    try(Connection con = dataSource.getConnection();
+        PreparedStatement stmt = con.prepareStatement(
+            "UPDATE lms_photo SET"
+            + " titl = ?, cdt = ?, vw_cnt = 0 WHERE photo_id = ?")) {
+      
+      stmt.setString(1, photoBoard.getTitle());
+      stmt.setDate(2, new Date(System.currentTimeMillis()));
+      stmt.setInt(3, photoBoard.getNo());
 
-      int result = stmt.executeUpdate(
-          "UPDATE lms_photo SET" +
-              " titl = '" + photoBoard.getTitle() +
-              "', cdt = '" + new Date(System.currentTimeMillis()) +
-              "', vw_cnt = 0" +
-              " WHERE photo_id = " + photoBoard.getNo());
-      return result;
+      return stmt.executeUpdate();
     }
   }
 
   @Override
   public int delete(int no) throws Exception {
-    try(Connection con = conFactory.getConnection();
-        Statement stmt = con.createStatement()) {
+    try(Connection con = dataSource.getConnection();
+        PreparedStatement stmt = con.prepareStatement(
+            "DELETE FROM lms_photo WHERE photo_id = ?")) {
 
-      int result = stmt.executeUpdate(
-          "DELETE FROM lms_photo WHERE photo_id = " + no);
-      return result;
+      stmt.setInt(1, no);
+      return stmt.executeUpdate();
     }
   }
 
