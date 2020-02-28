@@ -36,11 +36,12 @@
    -->
   <select id="selectBoard" resultType="Board">
     select 
-        bno, <!-- Board.setBno() 호출 -->
-        titl, <!-- Board.setTitl() 호출 -->
-        cont, <!-- Board.setCont() 호출 -->
-        rdt  <!-- Board.setRdt() 호출 -->
-    from ex_board
+      board_id,     <!-- Board.setBoard_id() 호출 -->
+      title,        <!-- Board.setTitle() 호출 -->
+      contents,     <!-- Board.setContents() 호출 -->
+      created_date, <!-- Board.setCreated_date 호출 -->
+      view_count    <!-- Board.setView_count 호출 -->
+    from x_board
   </select>
   
   <!-- 위의 SQL문을 mybatis 다음과 같은 코드로 실행한다.
@@ -48,10 +49,11 @@
        
        while (rs.next()) {
            Board board = new Board();
-           board.setBno(rs.getNo("bno")); // 이런 셋터가 없다.
-           board.setTitl(rs.getString("titl")); // 이런 셋터가 없다.
-           board.setCont(rs.getString("cont")); // 이런 셋터가 없다.
-           board.setRdt(rs.getDate("rdt")); // 이런 셋터가 없다.
+           board.setBoard_id(rs.getNo("board_id")); // 이런 셋터가 없다.
+           board.setTitle(rs.getString("title")); // 있다!
+           board.setContents(rs.getString("contents")); // 이런 셋터가 없다.
+           board.serCreated_date(rs.getDate("created_date")); // 이런 셋터가 없다.
+           board.serView_count(rs.getDate("view_count")); // 이런 셋터가 없다.
            list.add(board);
        } 
        return list;
@@ -60,7 +62,7 @@
        그래서 객체에 값을 한 개도 저장할 수 없다.
        객체에 값을 한 개도 저장할 수 없으면 List에 null을 저장한다.
        해결책?
-       => 셋터의 이름과 같은 이름으로 컬럼의 별명을 설정하라! 
+       => 셋터의 이름(프로퍼티명)과 같은 이름으로 컬럼의 별명을 설정하라! 
   -->
 </mapper>
 

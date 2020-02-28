@@ -37,7 +37,7 @@
   <mappers>
     <!-- 맵퍼 파일의 경로를 지정할 때 classpath 경로를 사용해야 한다.
          단 패키지명을 구분할 때 '.' 대신에 '/'를 사용해야 한다. -->
-    <mapper resource="com/eomcs/mybatis/ex01/BoardMapper.xml"/>
+    <mapper resource="com/eomcs/mybatis/ex01/BoardMapper01.xml"/>
   </mappers>
 </configuration>
 
