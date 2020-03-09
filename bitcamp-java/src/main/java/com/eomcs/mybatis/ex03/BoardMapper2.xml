@@ -3,7 +3,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="BoardMapper">
+<mapper namespace="BoardMapper2">
 	<resultMap type="Board" id="BoardMap">
 		<id column="board_id" property="no" />
 		<!-- <result column="title" property="title"/> -->
@@ -12,36 +12,29 @@
 		<result column="view_count" property="viewCount" />
 	</resultMap>
 
+  <sql id="sql1">
+    select
+	    board_id,     <!-- Board.setBoard_id() 호출 -->
+	    title,        <!-- Board.setTitle() 호출 -->
+	    contents,     <!-- Board.setContents() 호출 -->
+	    created_date, <!-- Board.setCreated_date 호출 -->
+	    view_count    <!-- Board.setView_count 호출 -->
+    from x_board
+  </sql>
+
+
 	<select id="select1" resultMap="BoardMap" parameterType="int">
-		select
-		board_id,     <!-- Board.setBoard_id() 호출 -->
-		title,        <!-- Board.setTitle() 호출 -->
-		contents,     <!-- Board.setContents() 호출 -->
-		created_date, <!-- Board.setCreated_date 호출 -->
-		view_count    <!-- Board.setView_count 호출 -->
-		from x_board
+    <include refid="sql1"/>
 		WHERE board_id = #{no}
 	</select>
 
 	<select id="select2" resultMap="BoardMap" parameterType="int">
-		select
-		board_id,     <!-- Board.setBoard_id() 호출 -->
-		title,        <!-- Board.setTitle() 호출 -->
-		contents,     <!-- Board.setContents() 호출 -->
-		created_date, <!-- Board.setCreated_date 호출 -->
-		view_count    <!-- Board.setView_count 호출 -->
-		from x_board
+    <include refid="sql1"/>
 	</select>
 
 	<!-- if조건문 문법 <if test = "조건">SQL문</if> -->
 	<select id="select3" resultMap="BoardMap" parameterType="int">
-		select
-		board_id,     <!-- Board.setBoard_id() 호출 -->
-		title,        <!-- Board.setTitle() 호출 -->
-		contents,     <!-- Board.setContents() 호출 -->
-		created_date, <!-- Board.setCreated_date 호출 -->
-		view_count    <!-- Board.setView_count 호출 -->
-		from x_board
+    <include refid="sql1"/>
 
 		<if test="value != null">
 			WHERE board_id = #{value}
@@ -50,13 +43,7 @@
 
 
 	<select id="select4" resultMap="BoardMap" parameterType="map">
-		select
-		board_id,     <!-- Board.setBoard_id() 호출 -->
-		title,        <!-- Board.setTitle() 호출 -->
-		contents,     <!-- Board.setContents() 호출 -->
-		created_date, <!-- Board.setCreated_date 호출 -->
-		view_count    <!-- Board.setView_count 호출 -->
-		from x_board
+    <include refid="sql1"/>
 
 		<if test="item == 1">
 			WHERE board_id like (#{keyword})
@@ -72,13 +59,7 @@
 	</select>
 
 	<select id="select5" resultMap="BoardMap" parameterType="map">
-		select
-		board_id,     <!-- Board.setBoard_id() 호출 -->
-		title,        <!-- Board.setTitle() 호출 -->
-		contents,     <!-- Board.setContents() 호출 -->
-		created_date, <!-- Board.setCreated_date 호출 -->
-		view_count    <!-- Board.setView_count 호출 -->
-		from x_board
+    <include refid="sql1"/>
 
 		WHERE 1 = 0
 		<if test="no != null">
@@ -95,13 +76,7 @@
 	</select>
 
 	<select id="select6" resultMap="BoardMap" parameterType="map">
-		select
-		board_id,     <!-- Board.setBoard_id() 호출 -->
-		title,        <!-- Board.setTitle() 호출 -->
-		contents,     <!-- Board.setContents() 호출 -->
-		created_date, <!-- Board.setCreated_date 호출 -->
-		view_count    <!-- Board.setView_count 호출 -->
-		from x_board
+    <include refid="sql1"/>
 
 		<where>
 			<!-- where 태그에 or/and를 자동으로 제거한다 -->
@@ -120,13 +95,7 @@
 	</select>
 
 	<select id="select7" resultMap="BoardMap" parameterType="map">
-		select
-		board_id,     <!-- Board.setBoard_id() 호출 -->
-		title,        <!-- Board.setTitle() 호출 -->
-		contents,     <!-- Board.setContents() 호출 -->
-		created_date, <!-- Board.setCreated_date 호출 -->
-		view_count    <!-- Board.setView_count 호출 -->
-		from x_board
+    <include refid="sql1"/>
 
 		<trim prefix="where" prefixOverrides="OR | AND">
 			<!-- where 태그에 or/and를 자동으로 제거한다 -->
@@ -174,13 +143,7 @@
 	</select>
 
 	<select id="select21" resultMap="BoardMap" parameterType="map">
-		select
-			board_id,     <!-- Board.setBoard_id() 호출 -->
-			title,        <!-- Board.setTitle() 호출 -->
-			contents,     <!-- Board.setContents() 호출 -->
-			created_date, <!-- Board.setCreated_date 호출 -->
-			view_count    <!-- Board.setView_count 호출 -->
-		from x_board
+    <include refid="sql1"/>
 
 		WHERE
 		<choose>
@@ -200,13 +163,7 @@
 	</select>
 
 	<select id="select22" resultMap="BoardMap" parameterType="map">
-		select
-			board_id,     <!-- Board.setBoard_id() 호출 -->
-			title,        <!-- Board.setTitle() 호출 -->
-			contents,     <!-- Board.setContents() 호출 -->
-			created_date, <!-- Board.setCreated_date 호출 -->
-			view_count    <!-- Board.setView_count 호출 -->
-		from x_board
+    <include refid="sql1"/>
 
 		<where>
 			<!-- where 태그에 or/and를 자동으로 제거한다 -->
@@ -229,13 +186,7 @@
 	</select>
 
 	<select id="select23" resultMap="BoardMap" parameterType="map">
-		select
-	   	board_id,     <!-- Board.setBoard_id() 호출 -->
-			title,        <!-- Board.setTitle() 호출 -->
-			contents,     <!-- Board.setContents() 호출 -->
-			created_date, <!-- Board.setCreated_date 호출 -->
-			view_count    <!-- Board.setView_count 호출 -->
-		from x_board
+    <include refid="sql1"/>
 
 		<where>
 			<foreach collection="noList" item="no">
@@ -245,13 +196,7 @@
 	</select>
 
   <select id="select24" resultMap="BoardMap" parameterType="map">
-    select
-      board_id,     <!-- Board.setBoard_id() 호출 -->
-      title,        <!-- Board.setTitle() 호출 -->
-      contents,     <!-- Board.setContents() 호출 -->
-      created_date, <!-- Board.setCreated_date 호출 -->
-      view_count    <!-- Board.setView_count 호출 -->
-    from x_board
+    <include refid="sql1"/>
 
     <where>
     board_id in
@@ -262,13 +207,7 @@
   </select>
   
   <select id="select25" resultMap="BoardMap" parameterType="map">
-    select
-      board_id,     <!-- Board.setBoard_id() 호출 -->
-      title,        <!-- Board.setTitle() 호출 -->
-      contents,     <!-- Board.setContents() 호출 -->
-      created_date, <!-- Board.setCreated_date 호출 -->
-      view_count    <!-- Board.setView_count 호출 -->
-    from x_board
+    <include refid="sql1"/>
 
     <where>
       <foreach collection="words" item="word">
@@ -279,13 +218,7 @@
 
   <select id="select26" resultMap="BoardMap" parameterType="map">
   <bind name="titlePattern" value="'%' + _parameter.title + '%'" />
-    select
-      board_id,     <!-- Board.setBoard_id() 호출 -->
-      title,        <!-- Board.setTitle() 호출 -->
-      contents,     <!-- Board.setContents() 호출 -->
-      created_date, <!-- Board.setCreated_date 호출 -->
-      view_count    <!-- Board.setView_count 호출 -->
-    from x_board
+    <include refid="sql1"/>
 
     <where>
       title like #{titlePattern}
