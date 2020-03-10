@@ -20,7 +20,6 @@ public class MemberAddServlet implements Servlet {
     
     Member member = new Member();
 
-    member.setNo(Prompt.getInt(in, out, "번호? "));
     member.setName(Prompt.getString(in, out, "이름? "));
     member.setEmail(Prompt.getString(in, out, "이메일? "));
     member.setPassword(Prompt.getString(in, out, "암호? "));

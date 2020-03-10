@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="PhotoFileMapper">
+	<resultMap type="PhotoFile" id="PhotoFileMap">
+		<id column="photo_file_id" property="no" />
+		<result column="photo_id" property="boardNo" />
+    <result column="file_path" property="filePath" />
+	</resultMap>
+
+	<select id="findAll" resultMap="PhotoFileMap" parameterType="int">
+		SELECT
+		  photo_file_id,
+		  photo_id,
+		  file_path
+		FROM lms_photo_file
+		<if test="value!=null">
+		WHERE photo_id = #{boardNo}
+		</if>
+		ORDER BY photo_file_id asc
+	</select>
+
+	<select id="deleteAll" resultType="int" parameterType="int">
+		DELETE
+		  FROM lms_photo_file
+		WHERE photo_id = #{boardNo}
+	</select>
+
+  <insert id="insert" parameterType="PhotoFile">
+    INSERT INTO lms_photo_file(photo_id, file_path)
+    VALUES (#{boardNo}, #{filePath})
+  </insert>
+ 
+ 
+ 
+
+</mapper>
+
+
+
+
+
+
+

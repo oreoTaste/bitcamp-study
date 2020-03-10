@@ -6,7 +6,6 @@ public class Lesson implements java.io.Serializable{
   private static final long serialVersionUID = 20200131L;
   private int no;
   private String title;
-  private Date date;
   private String context;
   private int viewCount;
   private Date startDate;
@@ -16,7 +15,7 @@ public class Lesson implements java.io.Serializable{
   
   @Override
   public String toString() {
-    return "Lesson [no=" + no + ", title=" + title + ", date=" + date + ", context=" + context
+    return "Lesson [no=" + no + ", title=" + title + ", context=" + context
         + ", viewCount=" + viewCount + ", startDate=" + startDate + ", endDate=" + endDate
         + ", totalHour=" + totalHour + ", dailyHour=" + dailyHour + "]";
   }
@@ -61,12 +60,6 @@ public class Lesson implements java.io.Serializable{
   }
   public void setTitle(String title) {
     this.title = title;
-  }
-  public Date getDate() {
-    return date;
-  }
-  public void setDate(Date date) {
-    this.date = date;
   }
   public int getViewCount() {
     return viewCount;
@@ -118,9 +111,6 @@ public class Lesson implements java.io.Serializable{
     if(this.title.equals(other.title))
       return false;
 
-    if(this.date != other.date)
-      return false;
-    
     if(this.viewCount != other.viewCount)
       return false;
     
