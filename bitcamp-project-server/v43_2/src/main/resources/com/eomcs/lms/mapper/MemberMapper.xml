@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="MemberMapper">
+	<resultMap type="Member" id="MemberMap">
+		<id column="member_id" property="no" />
+		<result column="name" property="name" />
+    <result column="email" property="email" />
+    <result column="pwd" property="password" />
+    <result column="cdt" property="registeredDate" />
+    <result column="tel" property="tel" />
+		<result column="photo" property="photo" />
+	</resultMap>
+
+	<select id="selectMember" resultMap="MemberMap">
+	SELECT
+		member_id,
+		name,
+		email,
+		pwd,
+		cdt,
+		tel,
+		photo
+	FROM lms_member
+  </select>
+
+  <select id="findByNo" resultMap="MemberMap" parameterType="int">
+  SELECT
+    member_id,
+    name,
+    email,
+    pwd,
+    cdt,
+    tel,
+    photo
+  FROM lms_member
+  WHERE member_id = #{no}
+  </select>
+  
+  <select id="findByKeyword" resultMap="MemberMap" parameterType="string">
+  <bind name="pattern" value="'%' + _parameter + '%'" />
+  SELECT
+    member_id,
+    name,
+    email,
+    pwd,
+    cdt,
+    tel,
+    photo
+  FROM lms_member
+  WHERE name like #{pattern}
+   or email like #{pattern}
+   or tel like concat('%', #{keyword}, '%')
+  </select>
+
+  <select id="findByEmailAndPassword" resultMap="MemberMap" parameterType="map">
+  SELECT * 
+  from lms_member
+  WHERE
+	  <if test="email!=null and password!=null">
+	  email = #{email} and pwd = password( #{password} )
+    </if>
+  </select>
+
+
+	<select id="deleteMember" resultType="int" parameterType="int">
+		DELETE 
+		  FROM lms_member
+		WHERE member_id = #{no}
+	</select>
+
+  <select id="insertMember" resultType="int" parameterType="Member">
+    INSERT INTO lms_member(name, email, pwd, tel, photo)
+    VALUES(
+	    #{name},
+	    #{email},
+	    password(#{password}),
+	    #{tel},
+	    #{photo}
+	  )
+  </select>
+ 
+   <select id="updateMember" resultType="int" parameterType="Member">
+     UPDATE lms_member SET 
+      name = #{name},
+      email = #{email},
+      pwd = password(#{password}),
+      cdt = #{registeredDate},
+      tel = #{tel},
+      photo = #{photo}
+     where member_id = #{no}
+  </select>
+ 
+ 
+
+</mapper>
+
+
+
+
+
+
+
