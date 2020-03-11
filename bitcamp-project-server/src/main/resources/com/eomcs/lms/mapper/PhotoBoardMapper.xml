@@ -15,12 +15,11 @@
       <result column="lesson_titl" property="title" />
     </association>
     
-    <!--  
     <collection property="files" ofType="PhotoFile">
       <id column="photo_file_id"   property="no"/>
       <result column="file_path"  property="filePath"/>
+      <result column="photo_id"  property="boardNo"/>
     </collection>
-    -->
 	</resultMap>
 
 	<select id="findAllByLessonNo" resultMap="PhotoBoardMap" parameterType="int">
@@ -44,13 +43,13 @@
 	    p.cdt, 
 	    p.vw_cnt, 
 	    l.lesson_id, 
-	    l.titl lesson_titl 
+	    l.titl lesson_titl,
+	    f.file_path,
+	    f.photo_file_id
     FROM lms_photo p inner join lms_lesson l
     on p.lesson_id = l.lesson_id
-    <!--  
     left outer join lms_photo_file f
     on p.photo_id=f.photo_id
-    -->
     <if test="value!=null">
       WHERE p.photo_id = #{lessonNo}
     </if>
@@ -69,8 +68,8 @@
   </insert>
  
    <update id="updatePhotoBoard" parameterType="PhotoBoard">
-     UPDATE lms_photo SET 
-        titl = #{title},
+     UPDATE lms_photo SET
+     <if test="title!=null and title!=''">titl = #{title},</if>
         cdt = now(),
         vw_cnt = 0
      WHERE photo_id = #{no}

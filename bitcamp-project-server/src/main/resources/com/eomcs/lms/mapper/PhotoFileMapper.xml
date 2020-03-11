@@ -26,9 +26,12 @@
 		WHERE photo_id = #{boardNo}
 	</delete>
 
-  <insert id="insert" parameterType="PhotoFile">
+  <insert id="insert" parameterType="PhotoBoard">
     insert into lms_photo_file(photo_id,file_path) 
-    values(#{boardNo}, #{filePath})
+    values
+    <foreach collection="files" item="file" separator=",">
+    (#{file.no}, #{file.filePath})
+    </foreach>
   </insert>
  
  

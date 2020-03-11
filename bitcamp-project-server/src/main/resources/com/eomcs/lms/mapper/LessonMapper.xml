@@ -14,19 +14,7 @@
 		<result column="conts" property="context" />
 	</resultMap>
 
-	<select id="selectLesson" resultMap="LessonMap">
-		SELECT
-		  lesson_id,
-		  sdt,
-		  edt,
-		  tot_hr,
-		  day_hr,
-		  titl,
-		  conts 
-		FROM lms_lesson
-	</select>
-
-  <select id="detailLesson" resultMap="LessonMap" parameterType="int">
+  <sql id="select">
     SELECT
       lesson_id,
       sdt,
@@ -36,6 +24,25 @@
       titl,
       conts 
     FROM lms_lesson
+  </sql>
+
+  <select id="findByKeyword" resultMap="LessonMap" parameterType="map">
+  <include refid="select"/>
+  <where>
+    <if test="title!=null">titl like concat('%',#{title},'%')</if>
+    <if test="startDate!=null">and sdt >= #{startDate}</if>
+    <if test="endDate!=null">and edt &lt;= #{endDate}</if>
+    <if test="totalHour!=null">and tot_hr &lt;= #{totalHour}</if>
+    <if test="dailyHour!=null">and day_hr &lt;= #{dailyHour}</if>
+  </where>
+  </select>
+
+	<select id="selectLesson" resultMap="LessonMap">
+  <include refid="select"/>
+	</select>
+
+  <select id="detailLesson" resultMap="LessonMap" parameterType="int">
+  <include refid="select"/>
     WHERE lesson_id = #{no}
   </select>
 
@@ -59,13 +66,15 @@
   </insert>
  
    <update id="updateLesson" parameterType="Lesson">
-     UPDATE lms_lesson SET
-	     sdt = #{startDate},
-	     edt = #{endDate},
-	     tot_hr = #{totalHour},
-	     day_hr = #{dailyHour},
-	     titl = #{title},
-	     conts = #{context}
+     UPDATE lms_lesson
+     <set>
+     <if test="startDate!=null"> sdt = #{startDate}, </if>
+	   <if test="endDate!=null">   edt = #{endDate}, </if>
+	   <if test="totalHour>0">   tot_hr = #{totalHour}, </if>
+	   <if test="dailyHour>0">   day_hr = #{dailyHour}, </if>
+	   <if test="title!=null and title!=''">   titl = #{title}, </if>
+	   <if test="context!=null and context!=''">   conts = #{context}</if>
+	   </set>
      WHERE lesson_id = #{no}
   </update>
  

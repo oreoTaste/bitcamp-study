@@ -25,19 +25,35 @@ public class Prompt {
   
   
   public static int getInt(Scanner in, PrintStream out, String title) {
-    return Integer.parseInt(getString(in, out, title));
+    try {
+      return Integer.parseInt(getString(in, out, title));
+    } catch(Exception e) {
+      return 0;
+    }
   }
   
   public static int getInt(Scanner in, PrintStream out, String title, String defaultValue) {
-    return Integer.parseInt(getString(in, out, title, defaultValue));
+    try {
+      return Integer.parseInt(getString(in, out, title, defaultValue));
+    } catch(Exception e) {
+      return 0;
+    }
   }
   
   public static Date getDate(Scanner in, PrintStream out, String title) {
-    return Date.valueOf(getString(in, out, title));
+    try {
+      return Date.valueOf(getString(in, out, title));
+    } catch(Exception e) {
+      return null;
+    }
   }
 
   public static Date getDate(Scanner in, PrintStream out, String title, String defaultValue) {
-    return Date.valueOf(getString(in, out, title, defaultValue));
+    try {
+      return Date.valueOf(getString(in, out, title, defaultValue));
+    } catch(Exception e) {
+      return null;
+    }
   }
   
   

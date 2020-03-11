@@ -48,6 +48,7 @@ public class MemberUpdateServlet implements Servlet {
 
     } catch (Exception e) {
       out.println("멤버 정보 수정중 오류발생");
+      e.printStackTrace();
     }
     
   }

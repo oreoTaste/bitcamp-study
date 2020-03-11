@@ -33,8 +33,8 @@ public class PhotoBoardUpdateServlet implements Servlet {
 
     int no = Prompt.getInt(in, out, "번호? ");
 
-    PhotoBoard photoBoard = photoBoardDao.findByNo(no);
-    if(photoBoard == null) {
+    PhotoBoard old = photoBoardDao.findByNo(no);
+    if(old == null) {
       out.println("해당 번호의 사진 게시글이 없습니다.");
       out.flush();
       return;
@@ -42,31 +42,28 @@ public class PhotoBoardUpdateServlet implements Servlet {
 
     PhotoBoard newPhotoBoard = new PhotoBoard();
     newPhotoBoard.setTitle(
-        Prompt.getString(in, out, String.format("제목(%s)", photoBoard.getTitle())));
-    newPhotoBoard.setNo(photoBoard.getNo());
+        Prompt.getString(in, out, String.format("제목(%s)", old.getTitle())));
+    newPhotoBoard.setNo(old.getNo());
     newPhotoBoard.setCreatedDate(new Date(System.currentTimeMillis()));
     newPhotoBoard.setViewCount(0);
 
-    transactionTemplate.execute(()->{
+    printPhotoFiles(in, out, old);
+    out.println();
+    out.println("사진은 일부만 변경할 수 없습니다.");
+    out.println("전체를 새로 등록해야 합니다.");
+    String response = Prompt.getString(in, out, "사진을 변경하시겠습니까?(y/N))");
 
+    if(response.equalsIgnoreCase("y")) {
+      newPhotoBoard.setFiles(inputPhotoFiles(in, out));
+    }
+
+    transactionTemplate.execute(()->{
       if(photoBoardDao.update(newPhotoBoard) == 0)
         throw new Exception("사진 게시글 등록에 실패했습니다.");
 
-      printPhotoFiles(in, out, no);
-      out.println();
-      out.println("사진은 일부만 변경할 수 없습니다.");
-      out.println("전체를 새로 등록해야 합니다.");
-      String response = Prompt.getString(in, out, "사진을 변경하시겠습니까?(y/N))");
-      if(response.equalsIgnoreCase("y")) {
-
+      if(newPhotoBoard.getFiles() != null) {
         photoFileDao.deleteAll(no);
-
-        List<PhotoFile> photoFiles = inputPhotoFiles(in, out);
-
-        for(PhotoFile photoFile : photoFiles) {
-          photoFile.setBoardNo(no);
-          photoFileDao.insert(photoFile);
-        }
+        photoFileDao.insert(old);
       }
       out.println("사진 게시글을 변경했습니다.");
       out.flush();
@@ -74,10 +71,10 @@ public class PhotoBoardUpdateServlet implements Servlet {
     });
   }
 
-  private void printPhotoFiles(Scanner in, PrintStream out, int boardNo) throws Exception {
+  private void printPhotoFiles(Scanner in, PrintStream out, PhotoBoard photoBoard) throws Exception {
 
     out.println("사진파일 : ");
-    List<PhotoFile> oldPhotoFiles = photoFileDao.findAll(boardNo);
+    List<PhotoFile> oldPhotoFiles = photoBoard.getFiles();
 
     for(PhotoFile photoFile : oldPhotoFiles) {
       out.printf("> %s\n", photoFile.getFilePath());
@@ -102,20 +99,7 @@ public class PhotoBoardUpdateServlet implements Servlet {
         }
         break;
       }
-
-      //      기본 생성자를 사용할때
-      //      PhotoFile photoFile = new PhotoFile();
-      //      photoFile.setFilePath(filePath);
-      //      photoFile.setBoardNo(photoBoard.getNo());
-
-      //    초기값을 설정하는 생성자를 사용할때
-      //
-      //      PhotoFile photoFile = new PhotoFile(filePath, photoBoard.getNo());
-      //      photoFiles.add(photoFile);
-
-      //      세터메서드를 이용하여 체인방식으로 인스턴스 필드값을 설정
       photoFiles.add(new PhotoFile().setFilePath(filePath));
-
     }
     return photoFiles;
   }

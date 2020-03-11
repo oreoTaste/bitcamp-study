@@ -13,20 +13,8 @@
     <result column="tel" property="tel" />
 		<result column="photo" property="photo" />
 	</resultMap>
-
-	<select id="selectMember" resultMap="MemberMap">
-	SELECT
-		member_id,
-		name,
-		email,
-		pwd,
-		cdt,
-		tel,
-		photo
-	FROM lms_member
-  </select>
-
-  <select id="findByNo" resultMap="MemberMap" parameterType="int">
+  
+  <sql id="select">
   SELECT
     member_id,
     name,
@@ -36,28 +24,27 @@
     tel,
     photo
   FROM lms_member
+  </sql>
+
+	<select id="selectMember" resultMap="MemberMap">
+	<include refid="select"/>
+  </select>
+
+  <select id="findByNo" resultMap="MemberMap" parameterType="int">
+  <include refid="select"/>
   WHERE member_id = #{no}
   </select>
   
   <select id="findByKeyword" resultMap="MemberMap" parameterType="string">
   <bind name="pattern" value="'%' + _parameter + '%'" />
-  SELECT
-    member_id,
-    name,
-    email,
-    pwd,
-    cdt,
-    tel,
-    photo
-  FROM lms_member
+  <include refid="select"/>
   WHERE name like #{pattern}
    or email like #{pattern}
    or tel like concat('%', #{keyword}, '%')
   </select>
 
   <select id="findByEmailAndPassword" resultMap="MemberMap" parameterType="map">
-  SELECT * 
-  from lms_member
+  <include refid="select"/>
   WHERE
 	  <if test="email!=null and password!=null">
 	  email = #{email} and pwd = password( #{password} )
@@ -65,33 +52,36 @@
   </select>
 
 
-	<select id="deleteMember" resultType="int" parameterType="int">
+	<delete id="deleteMember" parameterType="int">
 		DELETE 
 		  FROM lms_member
 		WHERE member_id = #{no}
-	</select>
+	</delete>
 
-  <select id="insertMember" resultType="int" parameterType="Member">
-    INSERT INTO lms_member(name, email, pwd, tel, photo)
+  <insert id="insertMember" parameterType="Member">
+    INSERT INTO lms_member(name, email, pwd, tel, photo, cdt)
     VALUES(
 	    #{name},
 	    #{email},
 	    password(#{password}),
 	    #{tel},
-	    #{photo}
+	    #{photo},
+	    now()
 	  )
-  </select>
+  </insert>
  
-   <select id="updateMember" resultType="int" parameterType="Member">
-     UPDATE lms_member SET 
-      name = #{name},
-      email = #{email},
-      pwd = password(#{password}),
-      cdt = #{registeredDate},
-      tel = #{tel},
-      photo = #{photo}
+   <update id="updateMember" parameterType="Member">
+     UPDATE lms_member
+     <set>
+      cdt = now()
+      <if test="name!=null and name!=''">,name = #{name}</if>
+      <if test="email!=null and email!=''">,email = #{email}</if>
+      <if test="password!=null and password!=''">,pwd = password(#{password})</if>
+      <if test="tel!=null and tel!=''">,tel = #{tel}</if>
+      <if test="photo!=null and photo!=''">,photo = #{photo}</if>
+    </set>
      where member_id = #{no}
-  </select>
+  </update>
  
  
 

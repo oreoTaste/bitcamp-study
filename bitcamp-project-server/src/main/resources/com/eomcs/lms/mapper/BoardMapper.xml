@@ -11,13 +11,17 @@
 		<result column="vw_cnt" property="viewCount" />
 	</resultMap>
 
+  <sql id="select">
+    SELECT
+      board_id,
+      conts,
+      cdt,
+      vw_cnt
+    FROM lms_board
+  </sql>
+
 	<select id="selectBoard" resultMap="BoardMap" parameterType="int">
-		SELECT
-			board_id,
-			conts,
-			cdt,
-			vw_cnt
-		FROM lms_board
+    <include refid="select"/>
 		<if test="no!=null">
 			WHERE board_id = #{no}
 		</if>
