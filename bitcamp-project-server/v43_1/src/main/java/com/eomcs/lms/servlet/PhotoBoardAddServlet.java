@@ -1,86 +1,73 @@
 package com.eomcs.lms.servlet;
 
 import java.io.PrintStream;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import com.eomcs.lms.dao.LessonDao;
 import com.eomcs.lms.dao.PhotoBoardDao;
 import com.eomcs.lms.dao.PhotoFileDao;
+import com.eomcs.lms.domain.Lesson;
 import com.eomcs.lms.domain.PhotoBoard;
 import com.eomcs.lms.domain.PhotoFile;
 import com.eomcs.sql.PlatformTransactionManager;
 import com.eomcs.sql.TransactionTemplate;
 import com.eomcs.util.Prompt;
 
-public class PhotoBoardUpdateServlet implements Servlet {
+public class PhotoBoardAddServlet implements Servlet {
 
   TransactionTemplate transactionTemplate;
   PhotoBoardDao photoBoardDao;
+  LessonDao lessonDao;
   PhotoFileDao photoFileDao;
 
-  public PhotoBoardUpdateServlet() {}
-
-  public PhotoBoardUpdateServlet(PlatformTransactionManager txManager,
-      PhotoBoardDao photoBoardDao, PhotoFileDao photoFileDao) {
-    transactionTemplate = new TransactionTemplate(txManager);
+  public PhotoBoardAddServlet(PlatformTransactionManager txManager,
+      PhotoBoardDao photoBoardDao, LessonDao lessonDao, PhotoFileDao photoFileDao) {
+    
+    // PlatformTransactionManager를 알아서 관리해줄 TransactionTemplate을 생성
+    this.transactionTemplate = new TransactionTemplate(txManager);
     this.photoBoardDao = photoBoardDao;
+    this.lessonDao = lessonDao;
     this.photoFileDao = photoFileDao;
   }
 
   @Override
   public void service(Scanner in, PrintStream out) throws Exception {
 
-    int no = Prompt.getInt(in, out, "번호? ");
+    PhotoBoard photoBoard = new PhotoBoard();
 
-    PhotoBoard photoBoard = photoBoardDao.findByNo(no);
-    if(photoBoard == null) {
-      out.println("해당 번호의 사진 게시글이 없습니다.");
-      out.flush();
+    photoBoard.setTitle(
+        Prompt.getString(in, out, "제목? "));
+    int lessonNo =
+        Prompt.getInt(in, out, "수업번호? ");
+
+    Lesson lesson = lessonDao.findByNo(lessonNo);
+    if(lesson == null) {
+      out.println("수업번호가 유효하지 않습니다.");
       return;
     }
 
-    PhotoBoard newPhotoBoard = new PhotoBoard();
-    newPhotoBoard.setTitle(
-        Prompt.getString(in, out, String.format("제목(%s)", photoBoard.getTitle())));
-    newPhotoBoard.setNo(photoBoard.getNo());
-    newPhotoBoard.setCreatedDate(new Date(System.currentTimeMillis()));
-    newPhotoBoard.setViewCount(0);
+    photoBoard.setLesson(lesson);
 
-    transactionTemplate.execute(()->{
+    // ArrayList에 들어있는 photoFile데이터를 lms_photo_file데이터에 저장한다
+    List<PhotoFile> photoFiles = inputPhotoFiles(in, out);
 
-      if(photoBoardDao.update(newPhotoBoard) == 0)
-        throw new Exception("사진 게시글 등록에 실패했습니다.");
-
-      printPhotoFiles(in, out, no);
-      out.println();
-      out.println("사진은 일부만 변경할 수 없습니다.");
-      out.println("전체를 새로 등록해야 합니다.");
-      String response = Prompt.getString(in, out, "사진을 변경하시겠습니까?(y/N))");
-      if(response.equalsIgnoreCase("y")) {
-
-        photoFileDao.deleteAll(no);
-
-        List<PhotoFile> photoFiles = inputPhotoFiles(in, out);
+    try {
+      transactionTemplate.execute(() -> {
+        
+        if (photoBoardDao.insert(photoBoard) == 0)
+          throw new Exception("사진 게시글 등록에 실패했습니다.");
 
         for(PhotoFile photoFile : photoFiles) {
-          photoFile.setBoardNo(no);
+          photoFile.setBoardNo(photoBoard.getNo());
           photoFileDao.insert(photoFile);
         }
-      }
-      out.println("사진 게시글을 변경했습니다.");
-      out.flush();
-      return null;
+        out.println("새 사진 게시글을 등록했습니다.");
+        return null;
     });
-  }
-
-  private void printPhotoFiles(Scanner in, PrintStream out, int boardNo) throws Exception {
-
-    out.println("사진파일 : ");
-    List<PhotoFile> oldPhotoFiles = photoFileDao.findAll(boardNo);
-
-    for(PhotoFile photoFile : oldPhotoFiles) {
-      out.printf("> %s\n", photoFile.getFilePath());
+      
+    } catch(Exception e) {
+      out.println(e.getMessage());
     }
 
   }
@@ -119,7 +106,5 @@ public class PhotoBoardUpdateServlet implements Servlet {
     }
     return photoFiles;
   }
-
-
 
 }
