@@ -7,7 +7,7 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MyAnnotation3 {
     String value();
-    String tel(); 
+    String tel() default "1";
 }
 
 

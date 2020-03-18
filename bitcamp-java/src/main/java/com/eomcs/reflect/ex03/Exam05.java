@@ -4,7 +4,7 @@ package com.eomcs.reflect.ex03;
 import java.lang.reflect.Method;
 
 public class Exam05 {
-    // 스태틱 메서드 
+    // 스태틱 메서드
     public static void plus(int a, int b) {
         System.out.printf("합계: %d\n", a + b);
     }
@@ -15,7 +15,7 @@ public class Exam05 {
     }
     
     public static void main(String[] args) throws Exception {
-        Class clazz = Exam05.class;
+        Class<?> clazz = Exam05.class;
 
         // 메서드 호출 방법
         // invoke(인스턴스, 아규먼트, ...);

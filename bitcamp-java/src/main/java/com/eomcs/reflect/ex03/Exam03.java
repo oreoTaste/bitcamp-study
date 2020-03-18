@@ -6,12 +6,12 @@ import java.lang.reflect.Method;
 public class Exam03 {
     public static void m1() {}
     public void m2() {}
-    protected void m3() {} 
+    protected void m3() {}
     void m4() {}
     private void m5() {}
     
     public static void main(String[] args) throws Exception {
-        Class clazz = Exam03.class;
+        Class<?> clazz = Exam03.class;
 
         // 해당 클래스에 선언된 메서드와 상속 받은 메서드까지 포함하여
         // 파라미터가 없는 "m3" 이름을 가진 public 메서드 추출
