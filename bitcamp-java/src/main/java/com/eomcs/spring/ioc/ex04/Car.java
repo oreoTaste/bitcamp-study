@@ -9,7 +9,7 @@ public class Car {
     public Car() {
         System.out.println("Car() 생성자 호출됨!");
     }
-    
+     
     @Override
     public String toString() {
         return "Car [model=" + model + ", maker=" + maker + ", cc=" + cc + ", engine=" + engine + "]";
@@ -42,6 +42,9 @@ public class Car {
         System.out.println("setCc() 호출됨!");
         this.cc = cc;
     }
+
+
+
     
     
 }
