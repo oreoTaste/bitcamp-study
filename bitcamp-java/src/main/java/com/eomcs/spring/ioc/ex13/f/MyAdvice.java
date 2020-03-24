@@ -34,7 +34,7 @@ public class MyAdvice {
       pointcut="execution(* com.eomcs.spring.ioc.ex13.f.X.*(..))",
       returning="returnValue")
   public void doAfterReturning(Object returnValue) {
-    System.out.printf("MyAdvice.doAfterReturning(): %d\n", returnValue);
+    System.out.printf("MyAdvice.doA fterReturning(): %d\n", returnValue);
   }
 
   // 타겟 객체의 메서드를 호출할 때 예외가 발생했다면 그 예외 객체를 받기
