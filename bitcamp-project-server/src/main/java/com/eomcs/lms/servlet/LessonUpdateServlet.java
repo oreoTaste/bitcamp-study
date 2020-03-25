@@ -1,11 +1,11 @@
 package com.eomcs.lms.servlet;
 
 import java.io.PrintStream;
-import java.util.Scanner;
+import java.sql.Date;
+import java.util.Map;
 import org.springframework.stereotype.Component;
 import com.eomcs.lms.domain.Lesson;
 import com.eomcs.lms.service.LessonService;
-import com.eomcs.util.Prompt;
 import com.eomcs.util.RequestMapping;
 
 @Component
@@ -18,40 +18,48 @@ public class LessonUpdateServlet {
   }
 
   @RequestMapping("/lesson/update")
-  public void service(Scanner in, PrintStream out) throws Exception {
+  public void service(Map<String, String> map, PrintStream out) throws Exception {
 
     try {
-      
-      int no = Prompt.getInt(in, out, "번호? ");
-      
-      Lesson oldLesson = lessonService.get(no);
+      printHead(out);
+      out.println("<h1> 수업 정보 변경 </h1>");
+
       Lesson newLesson = new Lesson();
 
-      newLesson.setNo(oldLesson.getNo());
-      newLesson.setTitle(
-          Prompt.getString(in, out, String.format("수업명? (%s) ", oldLesson.getTitle())));
-      newLesson.setContext(
-          Prompt.getString(in, out, String.format("수업내용? (%s) ", oldLesson.getContext())));
-      newLesson.setStartDate(
-          Prompt.getDate(in, out, String.format("시작일? (%s) ", oldLesson.getStartDate())));
-      newLesson.setEndDate(
-          Prompt.getDate(in, out, String.format("종료일? (%s) ", oldLesson.getEndDate())));
-      newLesson.setTotalHour(
-          Prompt.getInt(in, out, String.format("총수업시간? (%d)", oldLesson.getTotalHour())));
-      newLesson.setDailyHour(
-          Prompt.getInt(in, out, String.format("일수업시간? (%d)", oldLesson.getDailyHour())));
+      newLesson.setNo(Integer.parseInt(map.get("no")));
+      newLesson.setTitle(map.get("title"));
+      newLesson.setContext(map.get("context"));
+      newLesson.setStartDate(Date.valueOf(map.get("startDate")));
+      newLesson.setEndDate(Date.valueOf(map.get("endDate")));
+      newLesson.setTotalHour(Integer.parseInt(map.get("totalHour")));
+      newLesson.setDailyHour(Integer.parseInt(map.get("dailyHour")));
       
-
-      if (newLesson.equals(oldLesson)) {
-        out.println("수업 변경을 취소했습니다.");
-        return;
-      }
       lessonService.update(newLesson);
         out.println("수업을 변경했습니다.");
         
     } catch (Exception e) {
       out.println("수업정보 업데이트 중 오류발생");
     }
+    
+    printTail(out);
 
   }
+  
+  private void printTail(PrintStream out) {
+    out.println("</body>");
+    out.println("</html>");
+  }
+
+  private void printHead(PrintStream out) {
+    out.println("<!DOCTYPE html>");
+    out.println("<html>");
+    out.println("<head>");
+    out.println("<meta charset='UTF-8'>");
+    out.println("<meta http-equiv='refresh' content='2 url=/lesson/list'>");
+    out.println("<title> 수업 정보 변경 </title>");
+    out.println("</head>");
+
+    out.println("<body>");
+  }
+  
 }

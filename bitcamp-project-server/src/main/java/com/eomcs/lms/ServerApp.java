@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -13,8 +14,8 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import com.eomcs.lms.context.ApplicationContextListener;
 import com.eomcs.util.RequestHandler;
@@ -29,7 +30,7 @@ public class ServerApp {
   Map<String, Object> context = new HashMap<>();
   boolean serverStop = false;
   ExecutorService executorService = Executors.newCachedThreadPool();
-  
+
   RequestMappingHandlerMapping handlerMapper;
   // IoC 컨테이너 준비
   ApplicationContext iocContainer;
@@ -55,18 +56,17 @@ public class ServerApp {
     }
   }
 
-
   public void service() {
     notifyApplicationInitialized();
 
     handlerMapper =
         (RequestMappingHandlerMapping) context.get("handlerMapper");
-    
+
     // ApplicationContext(IoC 컨테이너)를 꺼낸다.
     iocContainer = (ApplicationContext) context.get("iocContainer");
-    
+
     try(ServerSocket serverSocket = new ServerSocket(9999)) {
-      
+
       logger.info("...클라이언트 연결 대기중");
 
       while(true) {
@@ -112,19 +112,35 @@ public class ServerApp {
         Scanner in = new Scanner(socket.getInputStream());
         PrintStream out = new PrintStream(socket.getOutputStream())) {
 
-      String request = in.nextLine();
-      logger.info(String.format("요청명령 => %s",request));
+      String[] requestLine = in.nextLine().split(" ");
+      while(true) {
+        String line = in.nextLine();
+        if(line.length() == 0) {
+          break;
+        }
+      }
+      String method = requestLine[0];
+      logger.info(String.format("method => %s", method));
+      String requestUri = requestLine[1];
+      logger.info(String.format("requestUri => %s", requestUri));
+      
+      String servletPath = getServletPath(requestUri);
+      logger.debug(String.format("servlet path :%s", servletPath));
+      printResponseHeader(out);
+      
+      Map<String, String> params = getParameters(requestUri);
+      
 
-      if(request.equalsIgnoreCase("/server/stop")) {
+      if(servletPath.equalsIgnoreCase("/server/stop")) {
         quit(out);
         return;
       }
 
-      RequestHandler requestHandler = handlerMapper.getHandler(request);
+      RequestHandler requestHandler = handlerMapper.getHandler(servletPath);
       if(requestHandler != null) {
         try {
-//          servlet.service(in, out);
-          requestHandler.getMethod().invoke(requestHandler.getBean(), in, out);
+          //          servlet.service(in, out);
+          requestHandler.getMethod().invoke(requestHandler.getBean(), params, out);
         } catch (Exception e) {
           out.println("요청처리중 오류 발생!");
           out.println(e.getMessage());
@@ -140,9 +156,6 @@ public class ServerApp {
         logger.info("해당 명령을 지원하지 않습니다.");
       }
 
-
-      out.println("!end!");
-
       out.flush();
       logger.info("클라이언트에게 응답하였음!");
 
@@ -155,15 +168,53 @@ public class ServerApp {
 
   }
 
+  private String getServletPath(String requestUri) {
+    return requestUri.split("\\?")[0];              // board/add
+  }
+  
+  private Map<String, String> getParameters(String requestUri) throws Exception {
+    String[] items = requestUri.split("\\?");
+    Map<String, String> params = new HashMap<>();
+    if(items.length > 1) {
+      String[] entries = items[1].split("&");
+      logger.debug(String.format("query string :%s", items[1]));
+      for(String entry : entries) {
+        logger.debug(String.format("parameter :%s", entry));
+        String[] kv = entry.split("=");
+        logger.debug(String.format("key value :%s, %s", kv[0], kv[1]));
+        String value = URLDecoder.decode(kv[1], "UTF-8");
+        params.put(kv[0], value);
+      }
+    }
+    return params;
+  }
+
   private void quit(PrintStream out) throws IOException {
     serverStop = true;
     out.println("OK");
-    out.println("!end!");
     out.flush();
+  }
+  
+  private void printResponseHeader(PrintStream out) {
+    out.println("HTTP/1.1 200 OK");
+    out.println("Server : bitcamp Server");
+    out.println();
   }
 
   private void notFound(PrintStream out) throws IOException {
-    out.println("요청한 명령을 처리할 수 없습니다.");
+    out.println("<!DOCTYPE html>");
+    out.println("<html>");
+    out.println("<head>");
+    out.println("<meta charset='UTF-8'>");
+    out.println("<title>게시글 입력</title>");
+    out.println("</head>");
+      
+    out.println("<body style=background:silver>");
+
+    out.println("<h1>실행오류</h1>");
+    out.println("<p>요청한 명령을 처리할 수 없습니다.</p>");
+    out.println("</body>");
+    out.println("</html>");
   }
 
   public static void main(String[] args) {

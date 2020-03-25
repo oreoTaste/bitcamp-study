@@ -1,11 +1,11 @@
 package com.eomcs.lms.servlet;
 
 import java.io.PrintStream;
-import java.util.Scanner;
+import java.sql.Date;
+import java.util.Map;
 import org.springframework.stereotype.Component;
 import com.eomcs.lms.domain.Lesson;
 import com.eomcs.lms.service.LessonService;
-import com.eomcs.util.Prompt;
 import com.eomcs.util.RequestMapping;
 
 @Component
@@ -18,16 +18,18 @@ public class LessonAddServlet {
   }
 
   @RequestMapping("/lesson/add")
-  public void service(Scanner in, PrintStream out) throws Exception {
+  public void service(Map<String, String> map, PrintStream out) throws Exception {
     try {
-      Lesson lesson = new Lesson();
+      printHead(out);
+      out.println("<h1>수업 입력</h1>");
       
-      lesson.setTitle(Prompt.getString(in, out, "수업명? "));
-      lesson.setContext(Prompt.getString(in, out, "수업내용? "));
-      lesson.setStartDate(Prompt.getDate(in, out, "시작일? (형식 : 2019-01-01) "));
-      lesson.setEndDate(Prompt.getDate(in, out, "종료일? (형식 : 2019-01-01) "));
-      lesson.setTotalHour(Prompt.getInt(in, out, "총수업시간? (형식: 1000) "));
-      lesson.setDailyHour(Prompt.getInt(in, out, "일수업시간? (형식: 8) "));
+      Lesson lesson = new Lesson();
+      lesson.setTitle(map.get("title"));
+      lesson.setContext(map.get("context"));
+      lesson.setStartDate(Date.valueOf(map.get("startDate")));
+      lesson.setEndDate(Date.valueOf(map.get("endDate")));
+      lesson.setTotalHour(Integer.parseInt(map.get("totalHour")));
+      lesson.setDailyHour(Integer.parseInt(map.get("dailyHour")));
 
       if (lessonService.add(lesson)){
         out.println("새 글을 등록했습니다.");
@@ -39,5 +41,26 @@ public class LessonAddServlet {
     } catch (Exception e) {
       System.out.println("수업정도 추가중 오류발생");
     }
+    printTail(out);
+
   }
+  
+  
+  private void printTail(PrintStream out) {
+    out.println("</body>");
+    out.println("</html>");
+  }
+
+  private void printHead(PrintStream out) {
+    out.println("<!DOCTYPE html>");
+    out.println("<html>");
+    out.println("<head>");
+    out.println("<meta charset='UTF-8'>");
+    out.println("<meta http-equiv='refresh' content='2; url=/lesson/list'>");
+    out.println("<title> 수업 입력 </title>");
+    out.println("</head>");
+
+    out.println("<body>");
+  }
+  
 }

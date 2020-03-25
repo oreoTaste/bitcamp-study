@@ -1,14 +1,11 @@
 package com.eomcs.lms.servlet;
 
 import java.io.PrintStream;
-import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Scanner;
 import org.springframework.stereotype.Component;
 import com.eomcs.lms.domain.Lesson;
 import com.eomcs.lms.service.LessonService;
-import com.eomcs.util.Prompt;
 import com.eomcs.util.RequestMapping;
 
 @Component
@@ -21,35 +18,19 @@ public class LessonSearchServlet {
   }
   
   @RequestMapping("/lesson/search")
-  public void service(Scanner in, PrintStream out) throws Exception {
+  public void service(HashMap<String, Object> map, PrintStream out) throws Exception {
 
-    HashMap<String, Object> map = new HashMap<>();
+    printHead(out);
+    out.println("<h1> 수업 정보 검색 </h1>");
     
-    String keyword = Prompt.getString(in, out, "수업명 검색(xx포함)?");
+    String keyword = (String) map.get("keyword");
     if(keyword.length() > 0) {
       map.put("title", keyword);
-    }
-    
-//    conts는 뺌 : lesson.setContext(Prompt.getString(in, out, "수업내용? "));
-    
-    Date date = Prompt.getDate(in, out, "시작일 검색(xx이후)?");
-    if(date != null) {
-      map.put("startDate", date);
-    }
-    
-    date = Prompt.getDate(in, out, "종료일 검색 (xx이전)?");
-    if(date != null) {
-      map.put("endDate", date);
-    }
-    
-    int hour = Prompt.getInt(in, out, "총 수업시간 검색 (xx이내)?");
-    if(hour > 0) {
-      map.put("totalHour", hour);
-    }
-    
-    hour = Prompt.getInt(in, out, "일 수업시간 검색 (xx이내)?");
-    if(hour > 0) {
-      map.put("dailyHour", hour);
+      map.put("context", keyword);
+      map.put("startDate", keyword);
+      map.put("endDate", keyword);
+      map.put("totalHour", keyword);
+      map.put("dailyHour", keyword);
     }
     
     List<Lesson> lesson = lessonService.search(map);
@@ -57,7 +38,7 @@ public class LessonSearchServlet {
     out.println("------------------");
     out.println("검색결과 :");
     for (Lesson ls : lesson) {
-      out.printf("%d, \t%-8s, \t%s, %tF ~ %tF, %d, %d\n",
+      out.printf("%d, \t%-8s, \t%s, %tF ~ %tF, %d, %d<br>",
       ls.getNo(),
       ls.getTitle(),
       ls.getContext(),
@@ -66,6 +47,25 @@ public class LessonSearchServlet {
       ls.getTotalHour(),
       ls.getDailyHour());
     }
+    printTail(out);
+
+  }
+  
+  private void printTail(PrintStream out) {
+    out.println("</body>");
+    out.println("</html>");
+  }
+
+  private void printHead(PrintStream out) {
+    out.println("<!DOCTYPE html>");
+    out.println("<html>");
+    out.println("<head>");
+    out.println("<meta charset='UTF-8'>");
+//    out.println("<meta http-equiv='refresh' content='2 url=/lesson/list'>");
+    out.println("<title> 수업 정보 검색 </title>");
+    out.println("</head>");
+
+    out.println("<body>");
   }
 
 }

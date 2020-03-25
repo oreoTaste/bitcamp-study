@@ -51,12 +51,12 @@
     VALUES(#{title})
   </insert>
  
-   <select id="update" resultType="int" parameterType="Board">
+   <update id="update" parameterType="Board">
      UPDATE lms_board SET 
 	     conts = #{title},
 	     cdt = #{date}
      WHERE board_id = #{no}
-  </select>
+  </update>
  
  
 
