@@ -2,11 +2,10 @@ package com.eomcs.lms.servlet;
 
 import java.io.PrintStream;
 import java.sql.Date;
-import java.util.Scanner;
+import java.util.Map;
 import org.springframework.stereotype.Component;
 import com.eomcs.lms.domain.Member;
 import com.eomcs.lms.service.MemberService;
-import com.eomcs.util.Prompt;
 import com.eomcs.util.RequestMapping;
 
 @Component
@@ -19,40 +18,58 @@ public class MemberUpdateServlet {
   }
 
   @RequestMapping("/member/update")
-  public void service(Scanner in, PrintStream out) throws Exception {
+  public void service(Map<String, String> map, PrintStream out) throws Exception {
+    int no = Integer.parseInt(map.get("no"));
+    
+    try {
+      out.println("<!DOCTYPE html>");
+      out.println("<html>");
+      out.println("<head>");
+      out.println("<meta charset='UTF-8'>");
+      out.printf("<meta http-equiv='refresh' content=\"2; url='/member/detail?no=%d'\">", no);
+      out.println("<title>멤버 정보 수정</title>");
+      out.println("</head>");
+
+      out.println("<body>");
+      out.println("<h1>멤버 정보 수정</h1>");
+    } catch(Exception e) {
+      
+    }
     
     try {
       
-      int no = Prompt.getInt(in, out, "번호? ");
+      String name = map.get("name");
+      String email = map.get("email");
+      String password =map.get("password");
+      String photo = map.get("photo");
+      String tel  =map.get("tel");
       
-      Member oldMember = memberService.get(no);
       Member newMember = new Member();
 
-      newMember.setNo(oldMember.getNo());
+      newMember.setNo(no);
       newMember.setRegisteredDate(new Date(System.currentTimeMillis()));
-      newMember.setName(
-          Prompt.getString(in, out, String.format("이름(%s)? ", oldMember.getName())));
-      newMember.setEmail(
-          Prompt.getString(in, out, String.format("이메일(%s)? ", oldMember.getEmail())));
-      newMember.setPassword(
-          Prompt.getString(in, out, String.format("암호(%s)? ", oldMember.getPassword())));
-      newMember.setPhoto(
-          Prompt.getString(in, out, String.format("사진(%s)? ", oldMember.getPhoto())));
-      newMember.setTel(
-          Prompt.getString(in, out, String.format("전화(%s)? ", oldMember.getTel())));
+      newMember.setName(name);
+      newMember.setEmail(email);
+      newMember.setPassword(password);
+      newMember.setPhoto(photo);
+      newMember.setTel(tel);
       
-      if (oldMember.equals(newMember)) {
-        out.println("회원 변경을 취소하였습니다.");
-        return;
-      }
       memberService.update(newMember);
 
       out.println("회원을 변경했습니다.");
 
     } catch (Exception e) {
       out.println("멤버 정보 수정중 오류발생");
-      e.printStackTrace();
     }
     
+    printTail(out);
+    
   }
+  
+  private void printTail(PrintStream out) {
+    out.println("</body>");
+    out.println("</html>");
+  }
+
+  
 }

@@ -30,10 +30,11 @@
   <include refid="select"/>
   <where>
     <if test="title!=null">titl like concat('%',#{title},'%')</if>
-    <if test="startDate!=null">and sdt >= #{startDate}</if>
-    <if test="endDate!=null">and edt &lt;= #{endDate}</if>
-    <if test="totalHour!=null">and tot_hr &lt;= #{totalHour}</if>
-    <if test="dailyHour!=null">and day_hr &lt;= #{dailyHour}</if>
+    <if test="context!=null">or conts like concat('%',#{context},'%')</if>
+    <if test="startDate!=null">or sdt >= #{startDate}</if>
+    <if test="endDate!=null">or edt &lt;= #{endDate}</if>
+    <if test="totalHour!=null">or tot_hr &lt;= #{totalHour}</if>
+    <if test="dailyHour!=null">or day_hr &lt;= #{dailyHour}</if>
   </where>
   </select>
 

@@ -12,45 +12,64 @@ import com.eomcs.util.RequestMapping;
 public class LessonSearchServlet {
 
   LessonService lessonService;
-  
+
   public LessonSearchServlet(LessonService lessonService) {
     this.lessonService = lessonService;
   }
-  
+
   @RequestMapping("/lesson/search")
   public void service(HashMap<String, Object> map, PrintStream out) throws Exception {
 
     printHead(out);
     out.println("<h1> 수업 정보 검색 </h1>");
-    
-    String keyword = (String) map.get("keyword");
+
+    String keyword = map.get("keyword").toString();
+    HashMap<String, Object> searchMap = new HashMap<>();
     if(keyword.length() > 0) {
-      map.put("title", keyword);
-      map.put("context", keyword);
-      map.put("startDate", keyword);
-      map.put("endDate", keyword);
-      map.put("totalHour", keyword);
-      map.put("dailyHour", keyword);
+      searchMap.put("title", keyword);
+      searchMap.put("context", keyword);
+      //      searchMap.put("startDate", keyword);
+      //      searchMap.put("endDate", keyword);
+      //      searchMap.put("totalHour", keyword);
+      //      searchMap.put("dailyHour", keyword);
+      out.printf("입력값 : %s<br>", keyword);
+      out.println("------------------------------------<br>");
     }
+
+    List<Lesson> lesson = lessonService.search(searchMap);
+
+    out.println("검색결과 : <br>");
+
     
-    List<Lesson> lesson = lessonService.search(map);
-    
-    out.println("------------------");
-    out.println("검색결과 :");
-    for (Lesson ls : lesson) {
-      out.printf("%d, \t%-8s, \t%s, %tF ~ %tF, %d, %d<br>",
-      ls.getNo(),
-      ls.getTitle(),
-      ls.getContext(),
-      ls.getStartDate(),
-      ls.getEndDate(),
-      ls.getTotalHour(),
-      ls.getDailyHour());
+    if(!lesson.isEmpty()) {
+      out.printf("<table border='1'");
+      out.printf("<tr>");
+      out.printf("<th>레슨번호</th>");
+      out.printf("<th>수업명</th>");
+      out.printf("<th>수업내용</th>");
+      out.printf("<th>시작일</th>");
+      out.printf("<th>종료일</th>");
+      out.printf("<th>총시간</th>");
+      out.printf("<th>일시간</th>");
+      out.printf("</tr>");
+      
+      for (Lesson ls : lesson) {
+        out.printf("<tr>");
+        out.printf("<td><a href='/lesson/detail?no=%d'>%d</a></td>", ls.getNo(), ls.getNo());
+        out.printf("<td><a href='/lesson/detail?no=%d'>%s</a></td>", ls.getNo(), ls.getTitle());
+        out.printf("<td><a href='/lesson/detail?no=%d'>%s</a></td>", ls.getNo(), ls.getContext());
+        out.printf("<td><a href='/lesson/detail?no=%d'>%tF</a></td>", ls.getNo(), ls.getStartDate());
+        out.printf("<td><a href='/lesson/detail?no=%d'>%tF</a></td>", ls.getNo(), ls.getEndDate());
+        out.printf("<td><a href='/lesson/detail?no=%d'>%d</a></td>", ls.getNo(), ls.getTotalHour());
+        out.printf("<td><a href='/lesson/detail?no=%d'>%d</a></td>", ls.getNo(), ls.getDailyHour());
+        out.printf("</tr>");
+      }
     }
+
     printTail(out);
 
   }
-  
+
   private void printTail(PrintStream out) {
     out.println("</body>");
     out.println("</html>");
@@ -61,7 +80,7 @@ public class LessonSearchServlet {
     out.println("<html>");
     out.println("<head>");
     out.println("<meta charset='UTF-8'>");
-//    out.println("<meta http-equiv='refresh' content='2 url=/lesson/list'>");
+    //    out.println("<meta http-equiv='refresh' content='2 url=/lesson/list'>");
     out.println("<title> 수업 정보 검색 </title>");
     out.println("</head>");
 

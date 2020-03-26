@@ -52,5 +52,23 @@ public class PhotoBoardListServlet {
       );
     }
   }
+  
+
+  private void printTail(PrintStream out) {
+    out.println("</body>");
+    out.println("</html>");
+  }
+
+  private void printHead(PrintStream out) {
+    out.println("<!DOCTYPE html>");
+    out.println("<html>");
+    out.println("<head>");
+    out.println("<meta charset='UTF-8'>");
+    out.println("<title> 멤버 목록 </title>");
+    out.println("</head>");
+
+    out.println("<body>");
+    out.println("<h1>멤버 목록</h1>");
+  }
 
 }

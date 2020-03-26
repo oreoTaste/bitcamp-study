@@ -22,8 +22,7 @@ public class BoardListServlet {
 
     printHead(out);
 
-    out.println("<h1>게시글</h1>");
-    out.println("<a href='/board/addForm'>새글</a><br>");
+
     out.println("<table border='1'>");
     out.println("<tr>");
     out.println("<th>번호</th>");
@@ -61,6 +60,8 @@ public class BoardListServlet {
     out.println("</head>");
 
     out.println("<body>");
+    out.println("<h1>게시글</h1>");
+    out.println("<a href='/board/addForm'>새글</a><br>");
   }
 
 }

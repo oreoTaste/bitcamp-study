@@ -20,13 +20,13 @@ public class LessonAddFormServlet {
     out.println("내용");
     out.println("<textarea name='context' rows='1' cols='63'></textarea><br>");
     out.println("시작일");
-    out.println("<input name='startDate'>");
+    out.println("<input type='date' name='startDate'>");
     out.println("    종료일");
-    out.println("<input name='endDate'><br>");
+    out.println("<input type='date' name='endDate'><br>");
     out.println("총수업시간");
-    out.println("<input name='totalHour'>");
+    out.println("<input type='number' name='totalHour'>");
     out.println("일수업시간");
-    out.println("<input name='dailyHour'><br>");
+    out.println("<input type='number' name='dailyHour'><br>");
     out.println("<button>제출하기</button>");
     out.println("</form>");
     
