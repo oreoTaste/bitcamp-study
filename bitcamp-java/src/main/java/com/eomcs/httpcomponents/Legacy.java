@@ -1,15 +1,14 @@
 // Apache HttpComponent 사용 - HttpGet 클래스
-package com.eomcs.net.ex08중요;
+package com.eomcs.httpcomponents;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.core5.http.HttpEntity;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
   
-public class Exam0310 {
-
+public class Legacy {
   public static void main(String[] args) throws Exception {
     
     // HttpClient, HttpGet 등 클래스
