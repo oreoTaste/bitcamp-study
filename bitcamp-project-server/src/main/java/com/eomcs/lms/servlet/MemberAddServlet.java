@@ -1,32 +1,40 @@
 package com.eomcs.lms.servlet;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
-import java.util.Map;
-import org.springframework.stereotype.Component;
+import javax.servlet.GenericServlet;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebServlet;
+import org.springframework.context.ApplicationContext;
 import com.eomcs.lms.domain.Member;
 import com.eomcs.lms.service.MemberService;
-import com.eomcs.util.RequestMapping;
 
-@Component
-public class MemberAddServlet {
+@WebServlet("/member/add")
+public class MemberAddServlet extends GenericServlet {
+  private static final long serialVersionUID =20200331;
 
-  MemberService memberService;
+  @Override
+  public void service(ServletRequest req, ServletResponse res)
+      throws ServletException, IOException {
 
-  public MemberAddServlet(MemberService memberService) {
-    this.memberService = memberService;
-  }
+    res.setContentType("text/html;charset=UTF-8");
+    PrintWriter out = res.getWriter();
+    ServletContext servletContext = req.getServletContext();
+    ApplicationContext iocContainer =(ApplicationContext) servletContext.getAttribute("iocContainer");
+    MemberService memberService = iocContainer.getBean(MemberService.class);
 
-  @RequestMapping("/member/add")
-  public void service(Map<String, String> map, PrintWriter out) throws Exception {
     printHead(out);
     Member member = new Member();
 
-    member.setName(map.get("name"));
-    member.setEmail(map.get("email"));
-    member.setPassword(map.get("password"));
-    member.setPhoto(map.get("photo"));
-    member.setTel(map.get("tel"));
+    member.setName(req.getParameter("name"));
+    member.setEmail(req.getParameter("email"));
+    member.setPassword(req.getParameter("password"));
+    member.setPhoto(req.getParameter("photo"));
+    member.setTel(req.getParameter("tel"));
     member.setRegisteredDate(new Date(System.currentTimeMillis()));
 
     try {
@@ -36,10 +44,10 @@ public class MemberAddServlet {
     } catch (Exception e) {
       out.println("멤버 추가 중복값이 있어 등록이 불가합니다.");
     }
-    
+
     printTail(out);
   }
-  
+
   private void printTail(PrintWriter out) {
     out.println("</body>");
     out.println("</html>");
@@ -50,7 +58,7 @@ public class MemberAddServlet {
     out.println("<html>");
     out.println("<head>");
     out.println("<meta charset='UTF-8'>");
-    out.println("<meta http-equiv='refresh' content=\"2; url='/member/list'\">");
+    out.println("<meta http-equiv='refresh' content=\"2; url='list'\">");
     out.println("<meta >");
     out.println("<title>멤버 추가</title>");
     out.println("</head>");

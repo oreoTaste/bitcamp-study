@@ -1,34 +1,42 @@
 package com.eomcs.lms.servlet;
 
+import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Map;
-import org.springframework.stereotype.Component;
+import javax.servlet.GenericServlet;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebServlet;
+import org.springframework.context.ApplicationContext;
 import com.eomcs.lms.service.PhotoBoardService;
-import com.eomcs.util.RequestMapping;
 
-@Component
-public class PhotoBoardDeleteServlet {
+@WebServlet("/photoboard/delete")
+public class PhotoBoardDeleteServlet extends GenericServlet {
+  private static final long serialVersionUID =20200331;
 
-  PhotoBoardService photoBoardService;
+  @Override
+  public void service(ServletRequest req, ServletResponse res)
+      throws ServletException, IOException {
 
-  public PhotoBoardDeleteServlet(PhotoBoardService photoBoardService) {
-    this.photoBoardService = photoBoardService;
-  }
+    res.setContentType("text/html;charset=UTF-8");
+    PrintWriter out = res.getWriter();
+    ServletContext servletContext = req.getServletContext();
+    ApplicationContext iocContainer =(ApplicationContext) servletContext.getAttribute("iocContainer");
+    PhotoBoardService photoBoardService = iocContainer.getBean(PhotoBoardService.class);
 
-  @RequestMapping("/photoboard/delete")
-  public void service(Map<String, String> params, PrintWriter out) throws Exception {
     out.println("<!DOCTYPE html>");
     out.println("<html>");
     out.println("<head>");
     out.println("<meta charset='UTF-8'>");
-    out.printf("<meta http-equiv='refresh' content='2;url=/photoboard/list?lessonNo=%d'>\n", //
-        Integer.parseInt(params.get("lessonNo")));
+    out.printf("<meta http-equiv='refresh' content='2;url=list?lessonNo=%d'>\n", //
+        Integer.parseInt(req.getParameter("lessonNo")));
     out.println("<title>사진 삭제</title>");
     out.println("</head>");
     out.println("<body>");
     out.println("<h1>사진 삭제 결과</h1>");
 
-    int no = Integer.parseInt(params.get("no"));
+    int no = Integer.parseInt(req.getParameter("no"));
     try {
       photoBoardService.delete(no);
       out.println("<p>사진을 삭제했습니다.</p>");

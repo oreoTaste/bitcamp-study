@@ -1,26 +1,33 @@
 package com.eomcs.lms.servlet;
 
+import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Map;
-import org.springframework.stereotype.Component;
+import javax.servlet.GenericServlet;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebServlet;
+import org.springframework.context.ApplicationContext;
 import com.eomcs.lms.service.MemberService;
-import com.eomcs.util.RequestMapping;
 
-@Component
-public class MemberDeleteServlet {
+@WebServlet("/member/delete")
+public class MemberDeleteServlet extends GenericServlet {
+  private static final long serialVersionUID =20200331;
 
-  MemberService memberService;
+  @Override
+  public void service(ServletRequest req, ServletResponse res)
+      throws ServletException, IOException {
 
-  public MemberDeleteServlet(MemberService memberService) {
-    this.memberService = memberService;
-  }
-
-  @RequestMapping("/member/delete")
-  public void service(Map<String, String> map, PrintWriter out) throws Exception {
-    
+    res.setContentType("text/html;charset=UTF-8");
+    PrintWriter out = res.getWriter();
     try {
+      ServletContext servletContext = req.getServletContext();
+      ApplicationContext iocContainer =(ApplicationContext) servletContext.getAttribute("iocContainer");
+      MemberService memberService = iocContainer.getBean(MemberService.class);
+
       printHead(out);
-      int no = Integer.parseInt(map.get("no"));
+      int no = Integer.parseInt(req.getParameter("no"));
 
       if(memberService.delete(no)) {
         out.println("회원을 삭제했습니다.");
@@ -29,11 +36,11 @@ public class MemberDeleteServlet {
       }
 
     } catch (Exception e) {
-      
+
     }
     printTail(out);
   }
-  
+
   private void printTail(PrintWriter out) {
     out.println("</body>");
     out.println("</html>");
@@ -44,12 +51,12 @@ public class MemberDeleteServlet {
     out.println("<html>");
     out.println("<head>");
     out.println("<meta charset='UTF-8'>");
-    out.println("<meta http-equiv='refresh' content=\"2; url='/member/list'\">");
+    out.println("<meta http-equiv='refresh' content=\"2; url='list'\">");
     out.println("<title> 멤버 삭제 </title>");
     out.println("</head>");
 
     out.println("<body>");
     out.println("<h1>멤버 삭제</h1>");
   }
-  
+
 }

@@ -1,30 +1,36 @@
 package com.eomcs.lms.servlet;
 
+import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Map;
-import org.springframework.stereotype.Component;
-import com.eomcs.util.RequestMapping;
+import javax.servlet.GenericServlet;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebServlet;
 
-@Component
-public class LoginFormServlet {
+@WebServlet("/auth/loginForm")
+public class LoginFormServlet extends GenericServlet {
+  private static final long serialVersionUID =20200331;
 
-  @RequestMapping("/auth/loginForm")
-  public void service(Map<String, String> map, PrintWriter out) throws Exception {
-    try {
-      printHead(out);
-      
-      out.printf("<form action='/auth/login'>");
-      out.printf("<div><table border='1'>");
-      out.printf("<tr><th>이메일</th><td><input name='email'></td></tr>");
-      out.printf("<tr><th>비밀번호</th><td><input type='password' name='password'></td></tr></div>");
-      
-      out.printf("<button>로그인</button>");
+  @Override
+  public void service(ServletRequest req, ServletResponse res)
+      throws ServletException, IOException {
 
-    } catch(Exception e) {
-    }
+    res.setContentType("text/html;charset=UTF-8");
+    PrintWriter out = res.getWriter();
+
+    printHead(out);
+
+    out.printf("<form action='login'>");
+    out.printf("<div><table border='1'>");
+    out.printf("<tr><th>이메일</th><td><input name='email'></td></tr>");
+    out.printf("<tr><th>비밀번호</th><td><input type='password' name='password'></td></tr></div>");
+
+    out.printf("<button>로그인</button>");
+
     printTail(out);
   }
-  
+
   private void printTail(PrintWriter out) {
     out.println("</body>");
     out.println("</html>");
@@ -41,5 +47,5 @@ public class LoginFormServlet {
     out.println("<body>");
     out.println("<h1>멤버 정보 수정</h1>");
   }
-  
+
 }

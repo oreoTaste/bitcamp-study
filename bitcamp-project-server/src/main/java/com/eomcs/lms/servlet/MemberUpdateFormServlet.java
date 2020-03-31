@@ -1,31 +1,38 @@
 package com.eomcs.lms.servlet;
 
+import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Map;
-import org.springframework.stereotype.Component;
+import javax.servlet.GenericServlet;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebServlet;
+import org.springframework.context.ApplicationContext;
 import com.eomcs.lms.domain.Member;
 import com.eomcs.lms.service.MemberService;
-import com.eomcs.util.RequestMapping;
 
-@Component
-public class MemberUpdateFormServlet {
+@WebServlet("/member/updateForm")
+public class MemberUpdateFormServlet extends GenericServlet {
+  private static final long serialVersionUID =20200331;
 
-  MemberService memberService;
+  @Override
+  public void service(ServletRequest req, ServletResponse res)
+      throws ServletException, IOException {
 
-  public MemberUpdateFormServlet(MemberService memberService) {
-    this.memberService = memberService;
-  }
-
-  @RequestMapping("/member/updateForm")
-  public void service(Map<String, String> map, PrintWriter out) throws Exception {
-    
+    res.setContentType("text/html;charset=UTF-8");
+    PrintWriter out = res.getWriter();
     try {
+      ServletContext servletContext = req.getServletContext();
+      ApplicationContext iocContainer =(ApplicationContext) servletContext.getAttribute("iocContainer");
+      MemberService memberService = iocContainer.getBean(MemberService.class);
       printHead(out);
-      int no = Integer.parseInt(map.get("no"));
-      
+
+      int no = Integer.parseInt(req.getParameter("no"));
+
       Member member = memberService.get(no);
 
-      out.printf("<form action='/member/update'>");
+      out.printf("<form action='update'>");
       out.printf("번호 : <input readonly name='no' type='text' value='%d'><br>", member.getNo());
       out.printf("성함: <input name='name' type='text' value='%s'><br>", member.getName());
       out.printf("이메일: <input name='email' type='text' value='%s'><br>", member.getEmail());
@@ -37,11 +44,11 @@ public class MemberUpdateFormServlet {
 
     } catch (Exception e) {
     }
-    
+
     printTail(out);
-    
+
   }
-  
+
 
   private void printTail(PrintWriter out) {
     out.println("</body>");
@@ -59,5 +66,5 @@ public class MemberUpdateFormServlet {
     out.println("<body>");
     out.println("<h1>멤버 정보 수정</h1>");
   }
-  
+
 }
