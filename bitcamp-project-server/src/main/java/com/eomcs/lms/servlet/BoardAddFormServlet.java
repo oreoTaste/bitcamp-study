@@ -8,7 +8,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
 
-@WebServlet
+@WebServlet("/board/addForm")
 public class BoardAddFormServlet extends GenericServlet {
   private static final long serialVersionUID =20200331;
 
@@ -29,7 +29,7 @@ public class BoardAddFormServlet extends GenericServlet {
     out.println("<body style=background:silver>");
 
     out.println("<h1>게시물입력</h1>");
-    out.println("<form action='/board/add'>");
+    out.println("<form action='add'>");
     out.println("내용:<br>");
     out.println("<textarea name='title' rows='5' cols='60'></textarea><br>");
     out.println("<button>제출하기</button>");

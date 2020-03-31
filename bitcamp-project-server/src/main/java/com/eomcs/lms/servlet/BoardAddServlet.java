@@ -12,26 +12,10 @@ import org.springframework.context.ApplicationContext;
 import com.eomcs.lms.domain.Board;
 import com.eomcs.lms.service.BoardService;
 
-@WebServlet
+@WebServlet("/board/add")
 public class BoardAddServlet extends GenericServlet {
   private static final long serialVersionUID = 20200331;
 
-  private void printTail(PrintWriter out) {
-    out.println("</body>");
-    out.println("</html>");
-  }
-
-  private void printHead(PrintWriter out) {
-    out.println("<!DOCTYPE html>");
-    out.println("<html>");
-    out.println("<head>");
-    out.println("<meta charset='UTF-8'>");
-    out.println("<meta http-equiv=\"refresh\" content='2; url=/board/list'>");
-    out.println("<title> 게시글 목록 </title>");
-    out.println("</head>");
-
-    out.println("<body>");
-  }
 
   @Override
   public void service(ServletRequest req, ServletResponse res)
@@ -63,6 +47,24 @@ public class BoardAddServlet extends GenericServlet {
     } catch (Exception e) {
       throw new ServletException();
     }
+  }
+  
+
+  private void printTail(PrintWriter out) {
+    out.println("</body>");
+    out.println("</html>");
+  }
+
+  private void printHead(PrintWriter out) {
+    out.println("<!DOCTYPE html>");
+    out.println("<html>");
+    out.println("<head>");
+    out.println("<meta charset='UTF-8'>");
+    out.println("<meta http-equiv=\"refresh\" content='2; url=list'>");
+    out.println("<title> 게시글 목록 </title>");
+    out.println("</head>");
+
+    out.println("<body>");
   }
   
 }

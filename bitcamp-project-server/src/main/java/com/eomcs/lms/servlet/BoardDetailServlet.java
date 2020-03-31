@@ -1,44 +1,60 @@
 package com.eomcs.lms.servlet;
 
+import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Map;
-import org.springframework.stereotype.Component;
+import javax.servlet.GenericServlet;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebServlet;
+import org.springframework.context.ApplicationContext;
 import com.eomcs.lms.domain.Board;
 import com.eomcs.lms.service.BoardService;
-import com.eomcs.util.RequestMapping;
 
-@Component
-public class BoardDetailServlet {
+@WebServlet("/board/detail")
+public class BoardDetailServlet  extends GenericServlet {
+  private static final long serialVersionUID =20200331;
 
-  BoardService boardService;
+  @Override
+  public void service(ServletRequest req, ServletResponse res)
+      throws ServletException, IOException {
 
-  public BoardDetailServlet(BoardService boardService) {
-    this.boardService = boardService;
-  }
-
-  @RequestMapping("/board/detail")
-  public void service(Map<String, String> map, PrintWriter out) throws Exception {
-
-    int no = Integer.parseInt(map.get("no"));
-    Board board = boardService.get(no);
+    try {
+    res.setContentType("text/html;charset=UTF-8");
+    PrintWriter out = res.getWriter();
 
     printHead(out);
-    
+
+    ServletContext servletContext = req.getServletContext();
+    ApplicationContext iocContainer =(ApplicationContext) servletContext.getAttribute("iocContainer");
+    BoardService boardService = iocContainer.getBean(BoardService.class);
+
+    int no = Integer.parseInt(req.getParameter("no"));
+    Board board;
+      board = boardService.get(no);
+
+    printHead(out);
+
     if(board != null) {
       out.printf("번호: %d<br>", board.getNo());
       out.printf("제목: %s<br>", board.getTitle());
       out.printf("등록일: %1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS<br>", board.getDate());
       out.printf("조회수: %d<br>", board.getViewCount());
-      out.printf("<div><a href='/board/delete?no=%d'>삭제</a>", board.getNo());
+      out.printf("<div><a href='delete?no=%d'>삭제</a>", board.getNo());
       out.printf("  ..  ");
-      out.printf("<a href='/board/updateForm?no=%d'>변경</a>", board.getNo());
+      out.printf("<a href='updateForm?no=%d'>변경</a>", board.getNo());
     } else {
       out.println("해당 번호의 게시물이 없습니다.<br>");
       out.flush();
     }
     out.println("  ..  ");
-    out.println("<a href='/board/list'>게시글 목록으로 돌아가기</a></div>");
+    out.println("<a href='list'>게시글 목록으로 돌아가기</a></div>");
     printTail(out);
+    
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   private void printTail(PrintWriter out) {
@@ -51,7 +67,6 @@ public class BoardDetailServlet {
     out.println("<html>");
     out.println("<head>");
     out.println("<meta charset='UTF-8'>");
-//    out.println("<meta http-equiv='refresh' content='3; url=/board/list'>");
     out.println("<title>게시글 상세정보</title>");
     out.println("</head>");
     out.println("<body>");
