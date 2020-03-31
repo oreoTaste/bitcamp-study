@@ -1,39 +1,21 @@
 package com.eomcs.lms.servlet;
 
+import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Map;
-import org.springframework.stereotype.Component;
+import javax.servlet.GenericServlet;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebServlet;
+import org.springframework.context.ApplicationContext;
 import com.eomcs.lms.domain.Board;
 import com.eomcs.lms.service.BoardService;
-import com.eomcs.util.RequestMapping;
 
-@Component
-public class BoardAddServlet {
-  BoardService boardService;
+@WebServlet
+public class BoardAddServlet extends GenericServlet {
+  private static final long serialVersionUID = 20200331;
 
-  public BoardAddServlet(BoardService boardService) {
-    this.boardService = boardService;
-  }
-
-  @RequestMapping("/board/add")
-  public void service(Map<String, String> map, PrintWriter out) throws Exception {
-    
-    printHead(out);
-    
-    Board board = new Board();
-    String title = map.get("title");
-    board.setTitle(title);
-
-    out.println("<h1>입력결과</h1>");
-    if (boardService.add(board)) { // 삭제했다면
-      out.println("<p>새 글을 등록했습니다.</p>");
-    } else {
-      out.println("<p>게시물 등록에 실패했습니다.</p>");
-    }
-    
-    printTail(out);
-  }
-  
   private void printTail(PrintWriter out) {
     out.println("</body>");
     out.println("</html>");
@@ -49,6 +31,38 @@ public class BoardAddServlet {
     out.println("</head>");
 
     out.println("<body>");
+  }
+
+  @Override
+  public void service(ServletRequest req, ServletResponse res)
+      throws ServletException, IOException {
+    
+    try {
+    res.setContentType("text/html;charset=UTF-8");
+    PrintWriter out = res.getWriter();
+    
+    ServletContext servletContext = req.getServletContext();
+    ApplicationContext iocContainer =(ApplicationContext) servletContext.getAttribute("iocContainer");
+    BoardService boardService = iocContainer.getBean(BoardService.class);
+    
+    printHead(out);
+    
+    Board board = new Board();
+    String title = req.getParameter("title");
+    board.setTitle(title);
+
+    out.println("<h1>입력결과</h1>");
+      if (boardService.add(board)) { // 삭제했다면
+        out.println("<p>새 글을 등록했습니다.</p>");
+      } else {
+        out.println("<p>게시물 등록에 실패했습니다.</p>");
+      }
+    
+    printTail(out);
+    
+    } catch (Exception e) {
+      throw new ServletException();
+    }
   }
   
 }

@@ -1,15 +1,23 @@
 package com.eomcs.lms.servlet;
 
+import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Map;
-import org.springframework.stereotype.Component;
-import com.eomcs.util.RequestMapping;
+import javax.servlet.GenericServlet;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebServlet;
 
-@Component
-public class BoardAddFormServlet {
+@WebServlet
+public class BoardAddFormServlet extends GenericServlet {
+  private static final long serialVersionUID =20200331;
 
-  @RequestMapping("/board/addForm")
-  public void service(Map<String, String> map, PrintWriter out) throws Exception {
+  @Override
+  public void service(ServletRequest req, ServletResponse res)
+      throws ServletException, IOException {
+    
+    res.setContentType("text/html;charset=UTF-8");
+    PrintWriter out = res.getWriter();
     
     out.println("<!DOCTYPE html>");
     out.println("<html>");
