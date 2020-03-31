@@ -1,56 +1,32 @@
 package com.eomcs.lms;
 
-import java.lang.reflect.Method;
-import java.util.Map;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.stereotype.Component;
-import com.eomcs.lms.context.ApplicationContextListener;
-import com.eomcs.util.RequestHandler;
-import com.eomcs.util.RequestMapping;
-import com.eomcs.util.RequestMappingHandlerMapping;
 
-public class ContextLoaderListener implements ApplicationContextListener {
+@WebListener // 이 애노테이션을 붙이면 서블릿 컨테이너가 이 객체를 관리한다.
+public class ContextLoaderListener implements ServletContextListener {
+
   static Logger logger = LogManager.getLogger(ContextLoaderListener.class);
 
   @Override
-  public void contextInitialized(Map<String, Object> context) {
+  public void contextInitialized(ServletContextEvent sce) {
+    ServletContext servletContext = sce.getServletContext();
 
     try {
-//      beans.put("sqlSessionFactory", sqlSessionFactory);
-//      PlatformTransactionManager txManager = new PlatformTransactionManager(sqlSessionFactory);
-//      beans.put("transactionManager", txManager);
-      
-      // Spring IoC 컨테이너 준비
-      ApplicationContext appCtx = new AnnotationConfigApplicationContext(
-          AppConfig.class
-//          DatabaseConfig.class,
-//          MybatisConfig.class
-          );
-      
-      printBeans(appCtx);
-      
-      context.put("iocContainer", appCtx);
-//      appCtx.printBeans();
-      
+      ApplicationContext iocContainer = new AnnotationConfigApplicationContext(//
+          AppConfig.class);
+      printBeans(iocContainer);
+
+      servletContext.setAttribute("iocContainer", iocContainer);
+
       logger.debug("======================================================");
-      RequestMappingHandlerMapping handlerMapper = new RequestMappingHandlerMapping();
-      String[] beanNames = appCtx.getBeanNamesForAnnotation(Component.class);
-      for(String beanName : beanNames) {
-        Object component = appCtx.getBean(beanName);
-        Method method = getRequestHandler(component.getClass());
-        
-        if(method != null) {
-          RequestHandler requestHandler = new RequestHandler(method, component);
-          handlerMapper.addHandler(requestHandler.getPath(), requestHandler);
-        }
-      }
-      
-      //ServerApp에서 RequestHandler를 사용할 수 있도록 공유한다.
-      context.put("handlerMapper", handlerMapper);
-      
+
     } catch(Exception e) {
 
     }
@@ -66,19 +42,8 @@ public class ContextLoaderListener implements ApplicationContextListener {
   }
 
 
-  private Method getRequestHandler(Class<?> type) {
-    Method[] methods = type.getMethods();
-    for(Method method : methods) {
-      RequestMapping anno = method.getAnnotation(RequestMapping.class);
-      if(anno != null)
-        return method;
-    }
-    return null;
-  }
-
-
   @Override
-  public void contextDestroyed(Map<String, Object> context) {
+  public void contextDestroyed(ServletContextEvent sce) {
   }
 
 
