@@ -1,35 +1,44 @@
 package com.eomcs.lms.servlet;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
-import java.util.Map;
-import org.springframework.stereotype.Component;
+import javax.servlet.GenericServlet;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebServlet;
+import org.springframework.context.ApplicationContext;
 import com.eomcs.lms.domain.Lesson;
 import com.eomcs.lms.service.LessonService;
-import com.eomcs.util.RequestMapping;
 
-@Component
-public class LessonAddServlet {
+@WebServlet("/lesson/add")
+public class LessonAddServlet extends GenericServlet {
+  private static final long serialVersionUID = 20200331;
 
-  LessonService lessonService;
 
-  public LessonAddServlet(LessonService lessonService) {
-    this.lessonService = lessonService;
-  }
+  @Override
+  public void service(ServletRequest req, ServletResponse res)
+      throws ServletException, IOException {
 
-  @RequestMapping("/lesson/add")
-  public void service(Map<String, String> map, PrintWriter out) throws Exception {
     try {
+      res.setContentType("text/html;charset=UTF-8");
+      PrintWriter out = res.getWriter();
+
+      ServletContext servletContext = req.getServletContext();
+      ApplicationContext iocContainer =(ApplicationContext) servletContext.getAttribute("iocContainer");
+      LessonService lessonService = iocContainer.getBean(LessonService.class);
       printHead(out);
       out.println("<h1>수업 입력</h1>");
-      
+
       Lesson lesson = new Lesson();
-      lesson.setTitle(map.get("title"));
-      lesson.setContext(map.get("context"));
-      lesson.setStartDate(Date.valueOf(map.get("startDate")));
-      lesson.setEndDate(Date.valueOf(map.get("endDate")));
-      lesson.setTotalHour(Integer.parseInt(map.get("totalHour")));
-      lesson.setDailyHour(Integer.parseInt(map.get("dailyHour")));
+      lesson.setTitle(req.getParameter("title"));
+      lesson.setContext(req.getParameter("context"));
+      lesson.setStartDate(Date.valueOf(req.getParameter("startDate")));
+      lesson.setEndDate(Date.valueOf(req.getParameter("endDate")));
+      lesson.setTotalHour(Integer.parseInt(req.getParameter("totalHour")));
+      lesson.setDailyHour(Integer.parseInt(req.getParameter("dailyHour")));
 
       if (lessonService.add(lesson)){
         out.println("새 글을 등록했습니다.");
@@ -37,15 +46,16 @@ public class LessonAddServlet {
       } else {
         out.println("수업정보 등록에 실패했습니다.");
       }
+      printTail(out);
 
     } catch (Exception e) {
       System.out.println("수업정도 추가중 오류발생");
+      throw new ServletException();
     }
-    printTail(out);
 
   }
-  
-  
+
+
   private void printTail(PrintWriter out) {
     out.println("</body>");
     out.println("</html>");
@@ -56,11 +66,11 @@ public class LessonAddServlet {
     out.println("<html>");
     out.println("<head>");
     out.println("<meta charset='UTF-8'>");
-    out.println("<meta http-equiv='refresh' content='2; url=/lesson/list'>");
+    out.println("<meta http-equiv='refresh' content='2; url=list'>");
     out.println("<title> 수업 입력 </title>");
     out.println("</head>");
 
     out.println("<body>");
   }
-  
+
 }
