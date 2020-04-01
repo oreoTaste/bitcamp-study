@@ -36,7 +36,7 @@ public class LessonAddFormServlet extends GenericServlet {
     out.println("<input type='number' name='totalHour'>");
     out.println("일수업시간");
     out.println("<input type='number' name='dailyHour'><br>");
-    out.println("<button>제출하기</button>");
+    out.println("<button>등록</button>");
     out.println("</form>");
     
     printTail(out);

@@ -27,7 +27,7 @@ public class MemberAddFormServlet extends GenericServlet {
       out.printf("비밀번호: <input name='password' type='text'><br>");
       out.printf("사진: <input name='photo' type='text'><br>");
       out.printf("전화번호: <input name='tel' type='text'><br>");
-      out.printf("<button>저장하기</button>");
+      out.printf("<button>등록</button>");
 
       System.out.println("저장하였습니다.");
 

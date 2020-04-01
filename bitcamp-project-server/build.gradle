@@ -1,8 +1,8 @@
 
 plugins {
     id 'java'
-    id 'eclipse'
-    id 'war'
+    id 'eclipse-wtp' // eclipse-wtp = eclipse + 웹프로젝트용 설정파일
+    id 'war' // 배치 관련 기능 처리
 }
 
 repositories {
