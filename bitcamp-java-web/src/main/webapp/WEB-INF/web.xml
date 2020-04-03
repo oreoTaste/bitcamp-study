@@ -23,6 +23,17 @@
   <servlet-class>com.eomcs.web.ex01.Servlet03</servlet-class>
 </servlet>
 
+<filter>
+  <filter-name>Filter01</filter-name>
+  <filter-class>com.eomcs.web.ex02.Filter01</filter-class>
+</filter>
+
+<listener>
+  <listener-class>com.eomcs.web.ex02.Listener01</listener-class>
+</listener>
+<!-- 
+ -->
+
 <!-- 서블릿을 실행할때 사용할 URL path를 설정 -->
 <servlet-mapping>
   <servlet-name>Servlet01</servlet-name>
@@ -39,4 +50,10 @@
   <url-pattern>/ex01/s03</url-pattern>
 </servlet-mapping>
 
+<filter-mapping>
+  <filter-name>Filter01</filter-name>
+  <url-pattern>/ex02/s01</url-pattern>
+</filter-mapping>
+<!-- 
+-->
 </web-app>
