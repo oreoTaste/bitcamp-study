@@ -5,15 +5,18 @@
 <title>test06</title>
 </head>
 <body>
-<h1>POST 요청 - 같은 이름으로 여러 개의 데이터 보내기</h1>
-<form action="s6" method="post">
-  이름1: <input type="text" name="name"><br>
-  이름2: <input type="text" name="name"><br>
-  이름3: <input type="text" name="name"><br>
-  이름4: <input type="text" name="name"><br>
-  이름5: <input type="text" name="name"><br>
-  <input type="submit" value="전송">
-</form>
+	<h1>POST 요청 - 같은 이름으로 여러 개의 데이터 보내기</h1>
+	<h2>좋아하는 영화 장르</h2>
+	<form action="s6" method="get">
+		<input name="genre" type="checkbox" value="romantic">로맨틱<br>
+		<input name="genre" type="checkbox" value="thriller">스릴러<br>
+    <input name="genre"	type="checkbox" value="horror">호러<br>
+    <input name="genre" type="checkbox" value="drama">드라마<br>
+    <input name="genre" type="checkbox" value="action">액션<br>
+    <input name="genre" type="checkbox" value="science fiction">SF<br>
+    <input name="genre" type="checkbox" value="comic">코믹<br>
+    <input type="submit" value="전송">
+	</form>
 </body>
 </html>
 
