@@ -133,4 +133,11 @@
 </filter-mapping>
 <!-- 
 -->
+
+<!-- 
+<session-config>
+  <session-timeout>1</session-timeout>
+</session-config>
+ -->
+  <!-- 1이란 1분을 의미함 -->
 </web-app>
