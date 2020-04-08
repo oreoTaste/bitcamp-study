@@ -18,18 +18,18 @@ public class MemberSearchServlet extends GenericServlet {
   private static final long serialVersionUID =20200331;
 
   @Override
-  public void service(ServletRequest req, ServletResponse res)
+  public void service(ServletRequest request, ServletResponse response)
       throws ServletException, IOException {
 
-    res.setContentType("text/html;charset=UTF-8");
-    PrintWriter out = res.getWriter();
+    response.setContentType("text/html;charset=UTF-8");
+    PrintWriter out = response.getWriter();
     try {
-      ServletContext servletContext = req.getServletContext();
+      ServletContext servletContext = request.getServletContext();
       ApplicationContext iocContainer =(ApplicationContext) servletContext.getAttribute("iocContainer");
       MemberService memberService = iocContainer.getBean(MemberService.class);
       printHead(out);
 
-      String keyword = req.getParameter("keyword");
+      String keyword = request.getParameter("keyword");
 
       List<Member> members;
       members = memberService.search(keyword);

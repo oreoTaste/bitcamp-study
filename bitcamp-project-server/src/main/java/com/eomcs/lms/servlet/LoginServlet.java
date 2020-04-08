@@ -17,11 +17,11 @@ public class LoginServlet extends HttpServlet {
   private static final long serialVersionUID =20200331;
 
   @Override
-  protected void doGet(HttpServletRequest req, HttpServletResponse res)
+  protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     
-    res.setContentType("text/html;charset=UTF-8");
-    PrintWriter out = res.getWriter();
+    response.setContentType("text/html;charset=UTF-8");
+    PrintWriter out = response.getWriter();
 
     printHead(out);
     printHead2(out);
