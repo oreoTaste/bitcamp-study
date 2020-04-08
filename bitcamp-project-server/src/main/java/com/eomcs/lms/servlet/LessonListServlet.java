@@ -18,15 +18,15 @@ public class LessonListServlet extends GenericServlet {
   private static final long serialVersionUID =20200331;
 
   @Override
-  public void service(ServletRequest req, ServletResponse res)
+  public void service(ServletRequest request, ServletResponse response)
       throws ServletException, IOException {
 
-    res.setContentType("text/html;charset=UTF-8");
-    PrintWriter out = res.getWriter();
+    response.setContentType("text/html;charset=UTF-8");
+    PrintWriter out = response.getWriter();
 
     printHead(out);
 
-    ServletContext servletContext = req.getServletContext();
+    ServletContext servletContext = request.getServletContext();
     ApplicationContext iocContainer =(ApplicationContext) servletContext.getAttribute("iocContainer");
     LessonService lessonService = iocContainer.getBean(LessonService.class);
 
