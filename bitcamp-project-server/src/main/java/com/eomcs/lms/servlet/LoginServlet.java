@@ -20,20 +20,18 @@ public class LoginServlet extends HttpServlet {
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     
+    request.setCharacterEncoding("UTF-8");
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();
+    request.getRequestDispatcher("/header").include(request, response);
 
-    printHead(out);
-    printHead2(out);
-    
+    out.printf("<h2>로그인 화면입니다.</h2>");
     out.printf("<form action='login' method='post'>");
-    out.printf("<div><table border='1'>");
-    out.printf("<tr><th>이메일</th><td><input name='email'></td></tr>");
-    out.printf("<tr><th>비밀번호</th><td><input type='password' name='password'></td></tr></div>");
+    out.printf("<table border='1'>");
+    out.printf("<tr><th>이메일</th><td><input name='email'></td><td rowspan='2'><button style='line-height: 4'>로그인</button</td></tr>");
+    out.printf("<tr><th>비밀번호</th><td><input type='password' name='password'></td></tr>");
 
-    out.printf("<button>로그인</button>");
-
-    printTail(out);
+    request.getRequestDispatcher("/footer").include(request, response);
     
   }
   
@@ -49,9 +47,10 @@ public class LoginServlet extends HttpServlet {
       ApplicationContext iocContainer =(ApplicationContext) servletContext.getAttribute("iocContainer");
       MemberService memberService = iocContainer.getBean(MemberService.class);
 
-      printHead(out);
-      out.println("<meta http-equiv='refresh' content=\"1; url='../index.html'\">");
-      printHead2(out);
+      String refreshUrl = "../index.html";
+      request.setAttribute("refreshUrl", refreshUrl);
+      request.getRequestDispatcher("/header").include(request, response);
+
 
       String email = request.getParameter("email");
       String password = request.getParameter("password");
@@ -66,43 +65,8 @@ public class LoginServlet extends HttpServlet {
       out.println("사용자 정보가 유효하지 않습니다.");
     }
 
-    printTail(out);
+    request.getRequestDispatcher("/footer").include(request, response);
   }
 
-  private void printTail(PrintWriter out) {
-    out.println("</body>");
-    out.println("</html>");
-  }
-
-  private void printHead(PrintWriter out) {
-    out.println("<!DOCTYPE html>");
-    out.println("<html>");
-    out.println("<head>");
-    out.println("<meta charset='UTF-8'>");
-  }
-  
-  private void printHead2(PrintWriter out) {
-    out.println("<title>로그인</title>");
-    out.println("<link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css' integrity='sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh' crossorigin='anonymous'>");
-    out.println("</head>");
-
-    out.println("<body>");
-    out.println("<nav class='navbar navbar-expand-lg navbar-light bg-light'>");
-    out.println("<a class='navbar-brand' href='../'>LMS 시스템</a>");
-    out.println("<button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#navbarNavAltMarkup' aria-controls='navbarNavAltMarkup' aria-expanded='false' aria-label='Toggle navigation'>");
-    out.println("<span class='navbar-toggler-icon'></span>");
-    out.println("</button>");
-    out.println("<div class='collapse navbar-collapse' id='navbarNavAltMarkup'>");
-    out.println("<div class='navbar-nav'>");
-    out.println("<a class='nav-item nav-link' href='../auth/login'>로그인 <span class='sr-only'>(current)</span></a>");
-    out.println("<a class='nav-item nav-link' href='../board/list'>게시글 목록 보기</a>");
-    out.println("<a class='nav-item nav-link' href='../lesson/list'>수업목록 보기</a>");
-    out.println("<a class='nav-item nav-link' href='../member/list'>멤버목록 보기</a>");
-    out.println("</div>");
-    out.println("</div>");
-    out.println("</nav>");
-
-    out.println("<h1>환영합니다! 로그인을 해주세요</h1>");
-  }
 
 }

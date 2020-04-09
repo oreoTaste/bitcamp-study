@@ -25,9 +25,7 @@ public class MemberAddServlet extends HttpServlet {
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();
     try {
-      printHead(out);
-      printHead2(out);
-
+      request.getRequestDispatcher("/header").include(request, response);
       out.printf("<form action='add' method='post'>");
       out.printf("성함: <input name='name' type='text'><br>");
       out.printf("이메일: <input name='email' type='text'><br>");
@@ -41,8 +39,8 @@ public class MemberAddServlet extends HttpServlet {
     } catch (Exception e) {
       System.out.println("멤버 추가 저장 중 오류발생");
     }
-    printTail(out);
-  }
+    request.getRequestDispatcher("/footer").include(request, response);
+    }
 
 
   @Override
@@ -78,39 +76,4 @@ public class MemberAddServlet extends HttpServlet {
     }
   }
 
-  private void printTail(PrintWriter out) {
-    out.println("</body>");
-    out.println("</html>");
-  }
-
-  private void printHead(PrintWriter out) {
-    out.println("<!DOCTYPE html>");
-    out.println("<html>");
-    out.println("<head>");
-    out.println("<meta charset='UTF-8'>");
-  }
-
-  private void printHead2(PrintWriter out) {
-    out.println("<title>멤버 추가</title>");
-    out.println("<link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css' integrity='sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh' crossorigin='anonymous'>");
-    out.println("</head>");
-
-    out.println("<body>");
-    out.println("<nav class='navbar navbar-expand-lg navbar-light bg-light'>");
-    out.println("<a class='navbar-brand' href='../'>LMS 시스템</a>");
-    out.println("<button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#navbarNavAltMarkup' aria-controls='navbarNavAltMarkup' aria-expanded='false' aria-label='Toggle navigation'>");
-    out.println("<span class='navbar-toggler-icon'></span>");
-    out.println("</button>");
-    out.println("<div class='collapse navbar-collapse' id='navbarNavAltMarkup'>");
-    out.println("<div class='navbar-nav'>");
-    out.println("<a class='nav-item nav-link' href='../auth/login'>로그인 <span class='sr-only'>(current)</span></a>");
-    out.println("<a class='nav-item nav-link' href='../board/list'>게시글 목록 보기</a>");
-    out.println("<a class='nav-item nav-link' href='../lesson/list'>수업목록 보기</a>");
-    out.println("<a class='nav-item nav-link' href='../member/list'>멤버목록 보기</a>");
-    out.println("</div>");
-    out.println("</div>");
-    out.println("</nav>");
-
-    out.println("<h1>멤버 추가</h1>");
-  }
 }
