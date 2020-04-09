@@ -56,42 +56,10 @@ public class MemberUpdateServlet extends HttpServlet {
 
     request.setCharacterEncoding("UTF-8");
     response.setContentType("text/html;charset=UTF-8");
-    PrintWriter out = response.getWriter();
     ServletContext servletContext = request.getServletContext();
     ApplicationContext iocContainer =(ApplicationContext) servletContext.getAttribute("iocContainer");
     MemberService memberService = iocContainer.getBean(MemberService.class);
     int no = Integer.parseInt(request.getParameter("no"));
-
-    try {
-      out.println("<!DOCTYPE html>");
-      out.println("<html>");
-      out.println("<head>");
-      out.println("<meta charset='UTF-8'>");
-      out.printf("<meta http-equiv='refresh' content=\"2; url='detail?no=%d'\">", no);
-      out.println("<title>멤버 정보 수정</title>");
-      out.println("<link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css' integrity='sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh' crossorigin='anonymous'>");
-      out.println("</head>");
-
-      out.println("<body>");
-      out.println("<nav class='navbar navbar-expand-lg navbar-light bg-light'>");
-      out.println("<a class='navbar-brand' href='../'>LMS 시스템</a>");
-      out.println("<button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#navbarNavAltMarkup' aria-controls='navbarNavAltMarkup' aria-expanded='false' aria-label='Toggle navigation'>");
-      out.println("<span class='navbar-toggler-icon'></span>");
-      out.println("</button>");
-      out.println("<div class='collapse navbar-collapse' id='navbarNavAltMarkup'>");
-      out.println("<div class='navbar-nav'>");
-      out.println("<a class='nav-item nav-link' href='../auth/login'>로그인 <span class='sr-only'>(current)</span></a>");
-      out.println("<a class='nav-item nav-link' href='../board/list'>게시글 목록 보기</a>");
-      out.println("<a class='nav-item nav-link' href='../lesson/list'>수업목록 보기</a>");
-      out.println("<a class='nav-item nav-link' href='../member/list'>멤버목록 보기</a>");
-      out.println("</div>");
-      out.println("</div>");
-      out.println("</nav>");
-      
-      out.println("<h1>멤버 정보 수정</h1>");
-    } catch(Exception e) {
-
-    }
 
     try {
 
@@ -111,15 +79,17 @@ public class MemberUpdateServlet extends HttpServlet {
       newMember.setPhoto(photo);
       newMember.setTel(tel);
 
-      memberService.update(newMember);
+      if(memberService.update(newMember)) {
+        response.sendRedirect("list");
+      } else
+        throw new Exception("멤버정보 수정에 실패했습니다.");
 
-      out.println("회원을 변경했습니다.");
 
     } catch (Exception e) {
-      out.println("멤버 정보 수정중 오류발생");
+      request.getSession().setAttribute("errorMsg", e);
+      request.getSession().setAttribute("errorUrl", "list");
+      request.getRequestDispatcher("/error").forward(request, response);
     }
-
-    printTail(out);
 
   }
 

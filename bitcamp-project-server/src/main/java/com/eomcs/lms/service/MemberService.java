@@ -11,11 +11,11 @@ public interface MemberService {
 
   Member get(int memberNo) throws Exception;
 
-  void update(Member member) throws Exception;
+  boolean update(Member member) throws Exception;
 
   boolean delete(int memberNo) throws Exception;
 
-  void add(Member member) throws Exception;
+  boolean add(Member member) throws Exception;
 
   Member get(String email, String password) throws Exception;
 

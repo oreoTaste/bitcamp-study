@@ -87,39 +87,12 @@ public class PhotoBoardAddServlet extends HttpServlet {
 
     request.setCharacterEncoding("UTF-8");
     response.setContentType("text/html;charset=UTF-8");
-    PrintWriter out = response.getWriter();
     ServletContext servletContext = request.getServletContext();
     ApplicationContext iocContainer =(ApplicationContext) servletContext.getAttribute("iocContainer");
     LessonService lessonService = iocContainer.getBean(LessonService.class);
     PhotoBoardService photoBoardService = iocContainer.getBean(PhotoBoardService.class);
 
     int lessonNo = Integer.parseInt(request.getParameter("lessonNo"));
-    out.println("<!DOCTYPE html>");
-    out.println("<html>");
-    out.println("<head>");
-    out.println("<meta charset='UTF-8'>");
-    out.println("<meta http-equiv='refresh'" //
-        + " content='2;url=list?lessonNo=" + lessonNo + "'>");
-    out.println("<title>사진 입력</title>");
-    out.println("<link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css' integrity='sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh' crossorigin='anonymous'>");
-    out.println("</head>");
-    out.println("<body>");
-    out.println("<nav class='navbar navbar-expand-lg navbar-light bg-light'>");
-    out.println("<a class='navbar-brand' href='../'>LMS 시스템</a>");
-    out.println("<button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#navbarNavAltMarkup' aria-controls='navbarNavAltMarkup' aria-expanded='false' aria-label='Toggle navigation'>");
-    out.println("<span class='navbar-toggler-icon'></span>");
-    out.println("</button>");
-    out.println("<div class='collapse navbar-collapse' id='navbarNavAltMarkup'>");
-    out.println("<div class='navbar-nav'>");
-    out.println("<a class='nav-item nav-link' href='../auth/login'>로그인 <span class='sr-only'>(current)</span></a>");
-    out.println("<a class='nav-item nav-link' href='../board/list'>게시글 목록 보기</a>");
-    out.println("<a class='nav-item nav-link' href='../lesson/list'>수업목록 보기</a>");
-    out.println("<a class='nav-item nav-link' href='../member/list'>멤버목록 보기</a>");
-    out.println("</div>");
-    out.println("</div>");
-    out.println("</nav>");
-    
-    out.println("<h1>사진 입력 결과</h1>");
 
     try {
       Lesson lesson = lessonService.get(lessonNo);
@@ -142,14 +115,15 @@ public class PhotoBoardAddServlet extends HttpServlet {
         throw new Exception("최소 한 개의 사진 파일을 등록해야 합니다.");
 
       photoBoard.setFiles(photoFiles);
-      photoBoardService.add(photoBoard);
-
-      out.println("<p>새 사진 게시글을 등록했습니다.</p>");
+      if(photoBoardService.add(photoBoard)) {
+        response.sendRedirect("../lesson/list");
+      } else
+        throw new Exception("사진게시물 등록이 불가합니다.(중복값 발생)");
 
     } catch (Exception e) {
-      out.printf("<p>%s</p>\n", e.getMessage());
+      request.getSession().setAttribute("errorMsg", e);
+      request.getSession().setAttribute("errorUrl","list");
+      request.getRequestDispatcher("/error").forward(request, response);
     }
-    out.println("</body>");
-    out.println("</html>");
   }
 }

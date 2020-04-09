@@ -64,18 +64,11 @@ public class LessonUpdateServlet  extends HttpServlet {
       throws ServletException, IOException {
     request.setCharacterEncoding("UTF-8");
     response.setContentType("text/html;charset=UTF-8");
-    PrintWriter out = response.getWriter();
     try {
-      printHead(out);
-      out.println("<meta http-equiv='refresh' content='2 url=list'>");
-      printHead2(out);
       
       ServletContext servletContext = request.getServletContext();
       ApplicationContext iocContainer =(ApplicationContext) servletContext.getAttribute("iocContainer");
       LessonService lessonService = iocContainer.getBean(LessonService.class);
-
-
-      out.println("<h1> 수업 정보 변경 </h1>");
 
       Lesson newLesson = new Lesson();
 
@@ -87,14 +80,15 @@ public class LessonUpdateServlet  extends HttpServlet {
       newLesson.setTotalHour(Integer.parseInt(request.getParameter("totalHour")));
       newLesson.setDailyHour(Integer.parseInt(request.getParameter("dailyHour")));
 
-      lessonService.update(newLesson);
-      out.println("수업을 변경했습니다.");
-
+      if(lessonService.update(newLesson)) {
+        response.sendRedirect("list");
+      } else
+        throw new Exception("수업정보 수정에 실패했습니다.");
     } catch (Exception e) {
-      out.println("수업정보 업데이트 중 오류발생");
+      request.getSession().setAttribute("errorMsg", e);
+      request.getSession().setAttribute("errorUrl", "list");
+      request.getRequestDispatcher("/error").forward(request, response);
     }
-
-    printTail(out);
 
   }
 

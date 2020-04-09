@@ -29,13 +29,13 @@ public class BoardDeleteServlet extends HttpServlet {
       int no = Integer.parseInt(request.getParameter("no"));
       if(boardService.delete(no)) {
         response.sendRedirect("list");
-      } else {
-        request.getSession().setAttribute("errorMsg", "삭제할 게시글 번호가 유효하지 않습니다.");
-        request.getSession().setAttribute("errorUrl", "board/list");
-        response.sendRedirect("../error");
-      }
+      } else
+        throw new Exception("삭제할 게시물 정보가 유효하지 않습니다.");
 
     } catch (Exception e) {
+      request.getSession().setAttribute("errorMsg", e);
+      request.getSession().setAttribute("errorUrl", "list");
+      request.getRequestDispatcher("/error").forward(request, response);
     }
 
   }
@@ -58,7 +58,7 @@ public class BoardDeleteServlet extends HttpServlet {
     out.println("</head>");
 
     out.println("<body>");
-    
+
     out.println("<nav class='navbar navbar-expand-lg navbar-light bg-light'>");
     out.println("<a class='navbar-brand' href='../'>LMS 시스템</a>");
     out.println("<button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#navbarNavAltMarkup' aria-controls='navbarNavAltMarkup' aria-expanded='false' aria-label='Toggle navigation'>");

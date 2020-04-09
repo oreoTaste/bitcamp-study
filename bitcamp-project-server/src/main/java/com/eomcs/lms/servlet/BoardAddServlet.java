@@ -75,14 +75,13 @@ public class BoardAddServlet extends HttpServlet {
       board.setTitle(request.getParameter("title"));
       if(boardService.add(board)) {
         response.sendRedirect("list");
-      } else {
-        request.getSession().setAttribute("errorMsg", "중복값이 있어 입력할 수 없습니다.");
-        request.getSession().setAttribute("errorUrl", "board/list");
-        response.sendRedirect("../error");
-      }
+      } else
+        throw new Exception("추가할 게시물 정보가 유효하지 않습니다.");
 
     } catch (Exception e) {
-      throw new ServletException();
+      request.getSession().setAttribute("errorMsg", e);
+      request.getSession().setAttribute("errorUrl", "list");
+      request.getRequestDispatcher("/error").forward(request, response);
     }
   }
 

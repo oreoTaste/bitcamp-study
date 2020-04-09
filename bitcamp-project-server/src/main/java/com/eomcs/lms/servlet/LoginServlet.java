@@ -50,7 +50,7 @@ public class LoginServlet extends HttpServlet {
       MemberService memberService = iocContainer.getBean(MemberService.class);
 
       printHead(out);
-      out.println("<meta http-equiv='refresh' content=\"3; url='../index.html'\">");
+      out.println("<meta http-equiv='refresh' content=\"1; url='../index.html'\">");
       printHead2(out);
 
       String email = request.getParameter("email");

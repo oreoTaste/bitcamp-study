@@ -51,14 +51,11 @@ public class MemberAddServlet extends HttpServlet {
 
     request.setCharacterEncoding("UTF-8");
     response.setContentType("text/html;charset=UTF-8");
-    PrintWriter out = response.getWriter();
+    
+    try {
     ServletContext servletContext = request.getServletContext();
     ApplicationContext iocContainer =(ApplicationContext) servletContext.getAttribute("iocContainer");
     MemberService memberService = iocContainer.getBean(MemberService.class);
-
-    printHead(out);
-    out.println("<meta http-equiv='refresh' content=\"2; url='list'\">");
-    printHead2(out);
 
     Member member = new Member();
 
@@ -69,15 +66,16 @@ public class MemberAddServlet extends HttpServlet {
     member.setTel(request.getParameter("tel"));
     member.setRegisteredDate(new Date(System.currentTimeMillis()));
 
-    try {
-      memberService.add(member);
-      out.println("저장하였습니다.");
+    if(memberService.add(member)) {
+      response.sendRedirect("list");
+    } else
+      throw new Exception("멤버정보 등록이 불가합니다.(중복값 발생)");
 
     } catch (Exception e) {
-      out.println("멤버 추가 중복값이 있어 등록이 불가합니다.");
+      request.getSession().setAttribute("errorMsg",e);
+      request.getSession().setAttribute("errorUrl","list");
+      request.getRequestDispatcher("/error").forward(request, response);
     }
-
-    printTail(out);
   }
 
   private void printTail(PrintWriter out) {

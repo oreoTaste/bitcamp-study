@@ -31,8 +31,8 @@ public class MemberServiceImpl implements MemberService {
   }
 
   @Override
-  public void update(Member member) throws Exception {
-    memberDao.update(member);
+  public boolean update(Member member) throws Exception {
+    return memberDao.update(member) > 0;
   }
 
   @Override
@@ -41,8 +41,8 @@ public class MemberServiceImpl implements MemberService {
   }
 
   @Override
-  public void add(Member member) throws Exception {
-    memberDao.insert(member);
+  public boolean add(Member member) throws Exception {
+    return memberDao.insert(member) > 0;
   }
 
   @Override

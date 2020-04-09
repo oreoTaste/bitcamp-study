@@ -102,14 +102,13 @@ public class BoardUpdateServlet extends HttpServlet {
  
       if(boardService.update(newBoard)) {
         response.sendRedirect("list");
-      } else {
-        request.getSession().setAttribute("errorMsg", "중복값이 있어 변경할 수 없습니다.");
-        request.getSession().setAttribute("errorUrl", "board/list");
-        response.sendRedirect("../error");
-      }
+      } else
+        throw new Exception("수정할 게시물 정보가 유효하지 않습니다.");
         
     } catch(Exception e) {
-      
+      request.getSession().setAttribute("errorMsg", e);
+      request.getSession().setAttribute("errorUrl", "list");
+      request.getRequestDispatcher("/error").forward(request, response);
     }
     
   }
