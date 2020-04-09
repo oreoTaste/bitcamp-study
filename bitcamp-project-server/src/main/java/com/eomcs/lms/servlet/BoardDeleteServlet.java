@@ -20,35 +20,33 @@ public class BoardDeleteServlet extends HttpServlet {
       throws ServletException, IOException {
 
     response.setContentType("text/html;charset=UTF-8");
-    PrintWriter out = response.getWriter();
 
     try {
-      printHead(out);
-
       ServletContext servletContext = request.getServletContext();
       ApplicationContext iocContainer =(ApplicationContext) servletContext.getAttribute("iocContainer");
       BoardService boardService = iocContainer.getBean(BoardService.class);
 
-      out.println("<h1>게시글 삭제 결과</h1>");
       int no = Integer.parseInt(request.getParameter("no"));
       if(boardService.delete(no)) {
-        out.println("<p>게시글을 삭제했습니다.</p>");
+        response.sendRedirect("list");
       } else {
-        out.println("<p>해당 번호의 게시글이 없습니다.</p>");
+        request.getSession().setAttribute("errorMsg", "삭제할 게시글 번호가 유효하지 않습니다.");
+        request.getSession().setAttribute("errorUrl", "board/list");
+        response.sendRedirect("../error");
       }
 
     } catch (Exception e) {
-      out.println("<p>게시판 정보 삭제 중 오류발생!</p>");
     }
 
-    printTail(out);
   }
 
+  @SuppressWarnings("unused")
   private void printTail(PrintWriter out) {
     out.println("</body>");
     out.println("</html>");
   }
 
+  @SuppressWarnings("unused")
   private void printHead(PrintWriter out) {
     out.println("<!DOCTYPE html>");
     out.println("<html>");

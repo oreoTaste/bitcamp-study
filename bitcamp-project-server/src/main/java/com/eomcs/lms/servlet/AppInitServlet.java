@@ -1,27 +1,30 @@
-package com.eomcs.lms;
+package com.eomcs.lms.servlet;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import com.eomcs.lms.AppConfig;
 
-//@WebListener // 이 애노테이션을 붙이면 서블릿 컨테이너가 이 객체를 관리한다.
-public class ContextLoaderListener implements ServletContextListener {
+@WebServlet(value="/AppInitServlet", loadOnStartup=1)
+public class AppInitServlet extends HttpServlet {
+  private static final long serialVersionUID = 1L;
 
-  static Logger logger = LogManager.getLogger(ContextLoaderListener.class);
-
+  static Logger logger = LogManager.getLogger(AppInitServlet.class);
+  
   @Override
-  public void contextInitialized(ServletContextEvent sce) {
-
+  public void init() throws ServletException {
+    
     try {
       ApplicationContext iocContainer = new AnnotationConfigApplicationContext(//
           AppConfig.class);
       printBeans(iocContainer);
 
-      ServletContext servletContext = sce.getServletContext();
+      ServletContext servletContext = getServletContext();
       servletContext.setAttribute("iocContainer", iocContainer);
 
       logger.debug("======================================================");
@@ -29,9 +32,13 @@ public class ContextLoaderListener implements ServletContextListener {
     } catch(Exception e) {
 
     }
+    
+    super.init();
   }
-
-
+  
+  
+  
+  
   private void printBeans(ApplicationContext appCtx) {
     logger.debug("Spring IoC 컨테이너에 들어있는 객체들");
     String[] beanNames = appCtx.getBeanDefinitionNames();
@@ -39,12 +46,5 @@ public class ContextLoaderListener implements ServletContextListener {
       logger.debug(String.format("%s ===>\n\t\t %s", beanName, appCtx.getBean(beanName).getClass().getName()));
     }
   }
-
-
-  @Override
-  public void contextDestroyed(ServletContextEvent sce) {
-  }
-
-
-
+  
 }

@@ -17,41 +17,36 @@ public class LessonDeleteServlet extends HttpServlet {
 
 
   @Override
-  protected void doGet(HttpServletRequest resquest, HttpServletResponse response)
+  protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
     response.setContentType("text/html;charset=UTF-8");
-    PrintWriter out = response.getWriter();
 
-    printHead(out);
-
-    ServletContext servletContext = resquest.getServletContext();
+    ServletContext servletContext = request.getServletContext();
     ApplicationContext iocContainer =(ApplicationContext) servletContext.getAttribute("iocContainer");
     LessonService lessonService = iocContainer.getBean(LessonService.class);
 
-    out.println("<h1> 수업 삭제 </h1>");
-
     try {
-      int no = Integer.parseInt(resquest.getParameter("no"));
+      int no = Integer.parseInt(request.getParameter("no"));
 
       if(lessonService.delete(no)) {
-        out.println("수업을 삭제했습니다.");
+        response.sendRedirect("list");
       } else {
-        out.println("해당 번호의 수업이 없습니다");
+        response.sendRedirect("../error");
       }
 
     } catch (Exception e) {
-      out.println("수업정보 삭제중 오류발생!");
     }
 
-    printTail(out);
   }
 
+  @SuppressWarnings("unused")
   private void printTail(PrintWriter out) {
     out.println("</body>");
     out.println("</html>");
   }
 
+  @SuppressWarnings("unused")
   private void printHead(PrintWriter out) {
     out.println("<!DOCTYPE html>");
     out.println("<html>");

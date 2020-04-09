@@ -78,18 +78,14 @@ public class BoardUpdateServlet extends HttpServlet {
     }
   }
   
-  
-  
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
     response.setContentType("text/html;charset=UTF-8");
     request.setCharacterEncoding("UTF-8");
-    PrintWriter out = response.getWriter();
 
     try {
-      printHead(out);
 
       ServletContext servletContext = request.getServletContext();
       ApplicationContext iocContainer =(ApplicationContext) servletContext.getAttribute("iocContainer");
@@ -104,24 +100,27 @@ public class BoardUpdateServlet extends HttpServlet {
       newBoard.setDate(new Date(System.currentTimeMillis()));
       newBoard.setViewCount(0);
  
-      out.println("<h1>게시글 변경 결과</h1>");
-      if(boardService.update(newBoard)){
-        out.println("<p>게시글을 변경했습니다.</p>");
+      if(boardService.update(newBoard)) {
+        response.sendRedirect("list");
       } else {
-        out.println("<p>게시글 변경을 취소했습니다</p>");
+        request.getSession().setAttribute("errorMsg", "중복값이 있어 변경할 수 없습니다.");
+        request.getSession().setAttribute("errorUrl", "board/list");
+        response.sendRedirect("../error");
       }
+        
     } catch(Exception e) {
       
     }
     
-    printTail(out);
   }
   
+  @SuppressWarnings("unused")
   private void printTail(PrintWriter out) {
     out.println("</body>");
     out.println("</html>");
   }
 
+  @SuppressWarnings("unused")
   private void printHead(PrintWriter out) {
     out.println("<!DOCTYPE html>");
     out.println("<html>");
