@@ -21,16 +21,14 @@ public class LessonAddServlet extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-    
+
     request.setCharacterEncoding("UTF-8");
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();
 
-
-    printHead(out);
-    printHead2(out);
+    request.getRequestDispatcher("/header").include(request, response);
     out.println("<h1>수업 입력</h1>");
-    
+
     out.println("<form action='add' method='post'>");
     out.println("제목");
     out.println("<textarea name='title' rows='1' cols='63'></textarea><br>");
@@ -46,11 +44,11 @@ public class LessonAddServlet extends HttpServlet {
     out.println("<input type='number' name='dailyHour'><br>");
     out.println("<button>등록</button>");
     out.println("</form>");
-    
-    printTail(out);
+
+    request.getRequestDispatcher("/footer").include(request, response);
   }
-  
-  
+
+
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
@@ -58,15 +56,10 @@ public class LessonAddServlet extends HttpServlet {
 
       request.setCharacterEncoding("UTF-8");
       response.setContentType("text/html;charset=UTF-8");
-      PrintWriter out = response.getWriter();
 
       ServletContext servletContext = request.getServletContext();
       ApplicationContext iocContainer =(ApplicationContext) servletContext.getAttribute("iocContainer");
       LessonService lessonService = iocContainer.getBean(LessonService.class);
-      printHead(out);
-      out.println("<meta http-equiv='refresh' content='2; url=list'>");
-      printHead2(out);
-      out.println("<h1>수업 입력</h1>");
 
       Lesson lesson = new Lesson();
       lesson.setTitle(request.getParameter("title"));
@@ -77,54 +70,19 @@ public class LessonAddServlet extends HttpServlet {
       lesson.setDailyHour(Integer.parseInt(request.getParameter("dailyHour")));
 
       if (lessonService.add(lesson)){
-        out.println("새 글을 등록했습니다.");
-
-      } else {
-        out.println("수업정보 등록에 실패했습니다.");
-      }
-      printTail(out);
+        response.sendRedirect("list");
+      } else
+        throw new Exception("수업정보 입력에 실패했습니다.(중복값)");
 
     } catch (Exception e) {
-      System.out.println("수업정도 추가중 오류발생");
-      throw new ServletException();
+//      throw new ServletException();
+      request.getSession().setAttribute("errorMsg", e);
+      request.getSession().setAttribute("errorUrl", "list");
+      request.getRequestDispatcher("/error").forward(request, response);
     }
 
   }
 
 
-  private void printTail(PrintWriter out) {
-    out.println("</body>");
-    out.println("</html>");
-  }
-
-  private void printHead(PrintWriter out) {
-    out.println("<!DOCTYPE html>");
-    out.println("<html>");
-    out.println("<head>");
-    out.println("<meta charset='UTF-8'>");
-  }
-  
-  private void printHead2(PrintWriter out) {
-    out.println("<title> 수업 입력 </title>");
-    out.println("<link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css' integrity='sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh' crossorigin='anonymous'>");
-    out.println("</head>");
-
-    out.println("<body>");
-    out.println("<nav class='navbar navbar-expand-lg navbar-light bg-light'>");
-    out.println("<a class='navbar-brand' href='../'>LMS 시스템</a>");
-    out.println("<button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#navbarNavAltMarkup' aria-controls='navbarNavAltMarkup' aria-expanded='false' aria-label='Toggle navigation'>");
-    out.println("<span class='navbar-toggler-icon'></span>");
-    out.println("</button>");
-    out.println("<div class='collapse navbar-collapse' id='navbarNavAltMarkup'>");
-    out.println("<div class='navbar-nav'>");
-    out.println("<a class='nav-item nav-link' href='../auth/login'>로그인 <span class='sr-only'>(current)</span></a>");
-    out.println("<a class='nav-item nav-link' href='../board/list'>게시글 목록 보기</a>");
-    out.println("<a class='nav-item nav-link' href='../lesson/list'>수업목록 보기</a>");
-    out.println("<a class='nav-item nav-link' href='../member/list'>멤버목록 보기</a>");
-    out.println("</div>");
-    out.println("</div>");
-    out.println("</nav>");
-    
-  }
 
 }

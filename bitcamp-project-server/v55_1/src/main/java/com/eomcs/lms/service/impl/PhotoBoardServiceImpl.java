@@ -28,12 +28,12 @@ public class PhotoBoardServiceImpl implements PhotoBoardService {
   // 예외 없으면 : 자동 commit()
   // 예외 있으면 : rollback;
   @Override
-  public void add(PhotoBoard photoBoard) throws Exception {
+  public boolean add(PhotoBoard photoBoard) throws Exception {
 
     if (photoBoardDao.insert(photoBoard) == 0)
       throw new Exception("사진 게시글 등록에 실패했습니다.");
 
-    photoFileDao.insert(photoBoard);
+    return photoFileDao.insert(photoBoard) > 0;
   }
 
   @Transactional
@@ -50,21 +50,22 @@ public class PhotoBoardServiceImpl implements PhotoBoardService {
 
   @Transactional
   @Override
-  public void update(PhotoBoard photoBoard) throws Exception {
+  public boolean update(PhotoBoard photoBoard) throws Exception {
     if(photoBoardDao.update(photoBoard) == 0)
       throw new Exception("사진 게시글 등록에 실패했습니다.");
     if(photoBoard.getFiles() != null) {
       photoFileDao.deleteAll(photoBoard.getNo());
-      photoFileDao.insert(photoBoard);
+      return photoFileDao.insert(photoBoard) > 0;
     }
+    return true;
   }
 
   @Transactional
   @Override
-  public void delete(int photoFileNo) throws Exception {
-    photoFileDao.deleteAll(photoFileNo);
-    if(photoBoardDao.delete(photoFileNo) == 0)
-      throw new Exception("해당 번호의 사진 게시글이 없습니다.");
+  public boolean delete(int photoFileNo) throws Exception {
+    return photoFileDao.deleteAll(photoFileNo) > 0;
+//    if(photoBoardDao.delete(photoFileNo) == 0)
+//      throw new Exception("해당 번호의 사진 게시글이 없습니다.");
   }
 
   /*

@@ -3,17 +3,21 @@ package com.eomcs.lms.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
+import java.util.UUID;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 import org.springframework.context.ApplicationContext;
 import com.eomcs.lms.domain.Member;
 import com.eomcs.lms.service.MemberService;
 
 @WebServlet("/member/add")
+@MultipartConfig(maxFileSize = 100000000)
 public class MemberAddServlet extends HttpServlet {
   private static final long serialVersionUID =20200331;
 
@@ -25,24 +29,39 @@ public class MemberAddServlet extends HttpServlet {
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();
     try {
-      printHead(out);
-      printHead2(out);
-
-      out.printf("<form action='add' method='post'>");
-      out.printf("성함: <input name='name' type='text'><br>");
-      out.printf("이메일: <input name='email' type='text'><br>");
-      out.printf("비밀번호: <input name='password' type='text'><br>");
-      out.printf("사진: <input name='photo' type='text'><br>");
-      out.printf("전화번호: <input name='tel' type='text'><br>");
+      request.getRequestDispatcher("/header").include(request, response);
+      
+      out.printf("<form action='add' method='post' enctype='multipart/form-data'>");
+      out.printf("<table>");
+      out.printf("<tr>");
+      out.printf("<td>성함</td>");
+      out.printf("<td><input name='name' type='text' style='width:300px'></td>");
+      out.printf("</tr>");
+      out.printf("<tr>");
+      out.printf("<td>이메일</td>");
+      out.printf("<td><input name='email' type='text' style='width:300px'></td>");
+      out.printf("</tr>");
+      out.printf("<tr>");
+      out.printf("<td>비밀번호</td>");
+      out.printf("<td><input name='password' type='text' style='width:300px'></td>");
+      out.printf("</tr>");
+      out.printf("<tr>");
+      out.printf("<td>사진</td>");
+      out.printf("<td><input name='photo' type='file' style='width:300px'></td>");
+      out.printf("</tr>");
+      out.printf("<tr>");
+      out.printf("<td>전화번호</td>");
+      out.printf("<td><input name='tel' type='text' style='width:300px'></td>");
+      out.printf("</tr>");
+      out.printf("</table>");
       out.printf("<button>등록</button>");
-
-      System.out.println("저장하였습니다.");
+      out.printf("</form>");
 
     } catch (Exception e) {
       System.out.println("멤버 추가 저장 중 오류발생");
     }
-    printTail(out);
-  }
+    request.getRequestDispatcher("/footer").include(request, response);
+    }
 
 
   @Override
@@ -51,68 +70,39 @@ public class MemberAddServlet extends HttpServlet {
 
     request.setCharacterEncoding("UTF-8");
     response.setContentType("text/html;charset=UTF-8");
-    PrintWriter out = response.getWriter();
+    
+    try {
     ServletContext servletContext = request.getServletContext();
     ApplicationContext iocContainer =(ApplicationContext) servletContext.getAttribute("iocContainer");
     MemberService memberService = iocContainer.getBean(MemberService.class);
-
-    printHead(out);
-    out.println("<meta http-equiv='refresh' content=\"2; url='list'\">");
-    printHead2(out);
 
     Member member = new Member();
 
     member.setName(request.getParameter("name"));
     member.setEmail(request.getParameter("email"));
     member.setPassword(request.getParameter("password"));
-    member.setPhoto(request.getParameter("photo"));
     member.setTel(request.getParameter("tel"));
     member.setRegisteredDate(new Date(System.currentTimeMillis()));
-
-    try {
-      memberService.add(member);
-      out.println("저장하였습니다.");
+    
+    Part photoPart = request.getPart("photo");
+    if(photoPart.getSize() > 0) {
+      String dirPath = getServletContext().getRealPath("/upload/member");
+      String filename = UUID.randomUUID().toString();
+      
+      photoPart.write(dirPath + "/" + filename); // 여기서 문제 발생
+      member.setPhoto(filename);
+    }
+    
+    if(memberService.add(member)) {
+      response.sendRedirect("list");
+    } else
+      throw new Exception("멤버정보 등록이 불가합니다.(중복값 발생)");
 
     } catch (Exception e) {
-      out.println("멤버 추가 중복값이 있어 등록이 불가합니다.");
+      request.getSession().setAttribute("errorMsg",e);
+      request.getSession().setAttribute("errorUrl","list");
+      request.getRequestDispatcher("/error").forward(request, response);
     }
-
-    printTail(out);
   }
 
-  private void printTail(PrintWriter out) {
-    out.println("</body>");
-    out.println("</html>");
-  }
-
-  private void printHead(PrintWriter out) {
-    out.println("<!DOCTYPE html>");
-    out.println("<html>");
-    out.println("<head>");
-    out.println("<meta charset='UTF-8'>");
-  }
-
-  private void printHead2(PrintWriter out) {
-    out.println("<title>멤버 추가</title>");
-    out.println("<link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css' integrity='sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh' crossorigin='anonymous'>");
-    out.println("</head>");
-
-    out.println("<body>");
-    out.println("<nav class='navbar navbar-expand-lg navbar-light bg-light'>");
-    out.println("<a class='navbar-brand' href='../'>LMS 시스템</a>");
-    out.println("<button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#navbarNavAltMarkup' aria-controls='navbarNavAltMarkup' aria-expanded='false' aria-label='Toggle navigation'>");
-    out.println("<span class='navbar-toggler-icon'></span>");
-    out.println("</button>");
-    out.println("<div class='collapse navbar-collapse' id='navbarNavAltMarkup'>");
-    out.println("<div class='navbar-nav'>");
-    out.println("<a class='nav-item nav-link' href='../auth/login'>로그인 <span class='sr-only'>(current)</span></a>");
-    out.println("<a class='nav-item nav-link' href='../board/list'>게시글 목록 보기</a>");
-    out.println("<a class='nav-item nav-link' href='../lesson/list'>수업목록 보기</a>");
-    out.println("<a class='nav-item nav-link' href='../member/list'>멤버목록 보기</a>");
-    out.println("</div>");
-    out.println("</div>");
-    out.println("</nav>");
-
-    out.println("<h1>멤버 추가</h1>");
-  }
 }

@@ -36,8 +36,8 @@ public class LessonServiceImpl implements LessonService {
   }
 
   @Override
-  public void update(Lesson newLesson) throws Exception {
-    lessonDao.update(newLesson);
+  public boolean update(Lesson newLesson) throws Exception {
+    return lessonDao.update(newLesson) > 0;
   }
 
   @Override

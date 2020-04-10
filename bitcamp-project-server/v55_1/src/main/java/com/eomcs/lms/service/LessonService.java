@@ -13,7 +13,7 @@ public interface LessonService {
 
   List<Lesson> list() throws Exception;
 
-  void update(Lesson newLesson) throws Exception;
+  boolean update(Lesson newLesson) throws Exception;
 
   List<Lesson> search(HashMap<String, Object> map) throws Exception;
   
