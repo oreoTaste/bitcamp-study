@@ -37,6 +37,12 @@ public class MemberDetailServlet extends GenericServlet {
         out.printf("<p>해당 멤버를 찾을 수 없습니다.</p>");
       }
       else {
+        
+        out.printf("<form action='update' method='post' enctype='multipart/form-data'>");
+        out.printf("<img src='../upload/member/%s' height ='40'><br>", member.getPhoto());
+        out.printf("</form>");
+        
+        
         out.printf("<table border='1'>");
         out.printf("<tr>");
         out.printf("<th>번호</th>");

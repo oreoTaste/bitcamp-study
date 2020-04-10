@@ -37,7 +37,7 @@ public class PhotoBoardDetailServlet extends HttpServlet {
       out.println("<h1>사진 상세정보</h1>");
 
       if (photoBoard != null) {
-        out.println("<form action='update' method='post'>");
+        out.println("<form action='update' method='post' enctype='multipart/form-data'>");
         out.printf("번호: <input name='no' type='text' readonly value='%d'><br>\n", //
             photoBoard.getNo());
         out.println("내용:<br>");
@@ -50,15 +50,15 @@ public class PhotoBoardDetailServlet extends HttpServlet {
         out.println("사진 파일:<br>");
         out.println("<ul>\n");
         for (PhotoFile photoFile : photoBoard.getFiles()) {
-          out.printf("  <li>%s</li>\n", photoFile.getFilePath());
+          out.printf("  <img src='../upload/photoboard/%s' height='80'>\n", photoFile.getFilePath());
         }
         out.println("</ul>");
 
-        out.println("사진: <input name='photo1' type='file'><br>");
-        out.println("사진: <input name='photo2' type='file'><br>");
-        out.println("사진: <input name='photo3' type='file'><br>");
-        out.println("사진: <input name='photo4' type='file'><br>");
-        out.println("사진: <input name='photo5' type='file'><br>");
+        out.println("사진: <input name='photo' type='file'><br>");
+        out.println("사진: <input name='photo' type='file'><br>");
+        out.println("사진: <input name='photo' type='file'><br>");
+        out.println("사진: <input name='photo' type='file'><br>");
+        out.println("사진: <input name='photo' type='file'><br>");
 
         out.println("<button>변경</button>");
         out.println("</form>");

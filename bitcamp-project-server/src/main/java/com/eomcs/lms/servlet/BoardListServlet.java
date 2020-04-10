@@ -1,7 +1,6 @@
 package com.eomcs.lms.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -21,40 +20,22 @@ public class BoardListServlet extends HttpServlet {
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
-    request.setCharacterEncoding("UTF-8");
-    response.setContentType("text/html;charset=UTF-8");
-    PrintWriter out = response.getWriter();
-
     try {
-      request.getRequestDispatcher("/header").include(request, response);
       ServletContext servletContext = request.getServletContext();
       ApplicationContext iocContainer =(ApplicationContext) servletContext.getAttribute("iocContainer");
       BoardService boardService = iocContainer.getBean(BoardService.class);
       
-      out.println("<h1>게시글</h1>");
-      out.println("<a href='add'>새글</a><br>");
-
-      out.println("<table border='1'>");
-      out.println("<tr>");
-      out.println("<th>번호</th>");
-      out.println("<th>제목</th>");
-      out.println("<th>등록일</th>");
-      out.println("<th>조회수</th>");
-      out.println("</tr>");
 
       List<Board> boards = boardService.list();
+      
+      // JSP에게 출력할 객체를 전달
+      request.setAttribute("list", boards);
 
-      for(Board board : boards) {
-
-        out.printf("<tr>");
-        out.printf("<td><a href='detail?no=%d'>%d</a></td>", board.getNo(), board.getNo());
-        out.printf("<td><a href='detail?no=%d'>%s</a></td>", board.getNo(), board.getTitle());
-        out.printf("<td><a href='detail?no=%d'>%s</a></td>", board.getNo(), board.getDate());
-        out.printf("<td><a href='detail?no=%d'>%d</a></td>", board.getNo(), board.getViewCount());
-        out.printf("</tr>"); //
-      }
-
-      request.getRequestDispatcher("/footer").include(request, response);
+      // JSP를 include하기
+      // 인클루드 하는 쪽에서 출력스트림의 콘텐트 타입은 필수!
+      response.setContentType("text/html;charset=UTF-8");
+      request.getRequestDispatcher("/board/list.jsp").include(request, response);
+      
     } catch(Exception e) {
       throw new ServletException();
     }

@@ -1,7 +1,6 @@
 package com.eomcs.lms.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Date;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -20,8 +19,6 @@ public class BoardUpdateServlet extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-    response.setContentType("text/html;charset=UTF-8");
-    PrintWriter out = response.getWriter();
 
     try {
       request.setCharacterEncoding("UTF-8");
@@ -29,26 +26,13 @@ public class BoardUpdateServlet extends HttpServlet {
       ApplicationContext iocContainer =(ApplicationContext) servletContext.getAttribute("iocContainer");
       BoardService boardService = iocContainer.getBean(BoardService.class);
 
-      request.getRequestDispatcher("/header").include(request, response);
-      out.println("<h1>게시글 수정</h1>");
-
       int no = Integer.parseInt(request.getParameter("no"));
       Board board = boardService.get(no);
-      if(board == null) {
-        out.println("<p>해당 번호의 게시글이 없습니다.</p>");
-      } else {
-
-        out.println("<form action='update' method='post'>");
-        out.printf("번호:<input name='no' type='text' value='%d' readonly><br>\n", board.getNo());
-        out.println("내용:<br>");
-        out.printf("<textarea name='title' rows='5' cols='60'>%s</textarea><br>",board.getTitle());
-        out.printf("등록일: %s<br>\n", board.getDate());
-        out.printf("조회수: %s<br>\n", board.getViewCount());
-        out.println("<button>수정하기</button>");
-        out.println("</form>");
-
-      }
-      request.getRequestDispatcher("/footer").include(request, response);
+      
+      response.setContentType("text/html;charset=UTF-8");
+      request.setAttribute("board", board);
+      request.getRequestDispatcher("/board/updateform.jsp").include(request, response);
+      
     } catch(Exception e) {
       throw new ServletException();
     }

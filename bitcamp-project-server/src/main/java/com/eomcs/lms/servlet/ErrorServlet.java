@@ -46,7 +46,7 @@ public class ErrorServlet extends HttpServlet {
     out.println("</nav>");
 
 //    String errorMsg = (String) request.getSession().getAttribute("errorMsg");
-    Exception errorMsg = (Exception) request.getAttribute("errorMsg");
+    Exception errorMsg = (Exception) request.getSession().getAttribute("errorMsg");
     String errorUrl = (String) request.getSession().getAttribute("errorUrl");
     
     out.println("<h1>오류 내용</h1>");
