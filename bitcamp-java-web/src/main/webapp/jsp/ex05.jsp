@@ -13,9 +13,9 @@ String[] names = {"홍길동", "임꺽정", "유관순"};
 <h1>표현식(expression element)</h1>
 <ul>
 <%for (String name : names) {%>
-<li><%=name%></li>
+<li><%=name);//ok%></li>
 <%}%>
-</ul>
+</ul> 
 </body>
 </html>
 <%--

@@ -16,15 +16,17 @@
 			<th>조회수</th>
 		</tr>
 
+    <jsp:useBean id="list" type="java.util.List<Board>" class="java.util.ArrayList" scope="request"/>
+
 		<%
-			List<Board> list = (List<Board>) request.getAttribute("list");
 			for(Board item : list) {
+			  pageContext.setAttribute("item", item);
 			%>
 		<tr>
-			<td><a href='detail?no=<%=item.getNo()%>'><%=item.getNo()%></a></td>
-			<td><a href='detail?no=<%=item.getNo()%>'><%=item.getTitle()%></a></td>
-			<td><a href='detail?no=<%=item.getNo()%>'><%=item.getDate()%></a></td>
-			<td><a href='detail?no=<%=item.getNo()%>'><%=item.getViewCount()%></a></td>
+			<td><a href='detail?no=${item.getNo()}'>${item.getNo()}</a></td>
+			<td><a href='detail?no=${item.getNo()}'>${item.getTitle()}</a></td>
+			<td><a href='detail?no=${item.getNo()}'>${item.getDate()}</a></td>
+			<td><a href='detail?no=${item.getNo()}'>${item.getViewCount()}</a></td>
 		</tr>
 		<%
 			}

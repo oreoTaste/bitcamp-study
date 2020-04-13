@@ -3,8 +3,6 @@
     contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"
     trimDirectiveWhitespaces="true"%>
-<%@ page import="bitcamp.vo.Board"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,7 +11,7 @@
 </head>
 <body>
 <h1>JSP 액션 태그 - jsp:useBean (계속)</h1>
-<%-- 보관소에 저장된 객체 꺼내기 --%>
+<%-- 보관소에 객체 저장하기 --%>
 <%
 application.setAttribute("s1", "홍길동");
 session.setAttribute("s2", "임꺽정");
@@ -35,8 +33,9 @@ pageContext.setAttribute("s4", "윤봉길");
 <%=s4%><br>
 
 <%-- 보관소에 없는 객체를 꺼내려 하면 예외 발생! --%>
-<%-- <jsp:useBean id="s5" type="java.lang.String" scope="page"/> --%>
-
+<%--
+<jsp:useBean id="s5" type="java.lang.String" scope="page"/>
+ --%>
 </body>
 </html>
 <%--

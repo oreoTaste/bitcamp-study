@@ -1,11 +1,9 @@
-<%@page import="java.util.ArrayList"%>
 <%@ page 
     language="java" 
     contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"
     trimDirectiveWhitespaces="true"%>
-<%@ page import="bitcamp.vo.Board"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page import="com.eomcs.web.vo.Board"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,7 +17,9 @@
      class 속성에 지정된 타입의 인스턴스를 생성한다.
      그래서 class 속성에는 인터페이스나 추상 클래스를 지정할 수 없다.
      왜? 인터페이스나 추상클래스는 인스턴스를 생성할 수 없기 때문이다.--%>
+<!-- 
 <jsp:useBean id="list" class="java.util.List" scope="page"/>
+ -->
 <%-- 자바코드로 표현해보면,
   java.util.List list = 
      (java.util.List) pageContext.getAttribute("list");

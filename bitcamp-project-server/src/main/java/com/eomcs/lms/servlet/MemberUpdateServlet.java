@@ -1,7 +1,6 @@
 package com.eomcs.lms.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Date;
 import java.util.UUID;
 import javax.servlet.ServletContext;
@@ -27,26 +26,16 @@ public class MemberUpdateServlet extends HttpServlet {
     
     request.setCharacterEncoding("UTF-8");
     response.setContentType("text/html;charset=UTF-8");
-    PrintWriter out = response.getWriter();
     try {
       ServletContext servletContext = request.getServletContext();
       ApplicationContext iocContainer =(ApplicationContext) servletContext.getAttribute("iocContainer");
       MemberService memberService = iocContainer.getBean(MemberService.class);
 
-      request.getRequestDispatcher("/header").include(request, response);
       int no = Integer.parseInt(request.getParameter("no"));
 
       Member member = memberService.get(no);
-
-      out.printf("<form action='update' method='post' enctype='multipart/form-data'>");
-      out.printf("번호 : <input readonly name='no' type='text' value='%d'><br>", member.getNo());
-      out.printf("성함: <input name='name' type='text' value='%s'><br>", member.getName());
-      out.printf("이메일: <input name='email' type='text' value='%s'><br>", member.getEmail());
-      out.printf("비밀번호: <input name='password' type='text' value='%s'><br>", member.getPassword());
-      out.printf("사진: <input name='photo' type='file' value='%s'><br>", member.getPhoto());
-      out.printf("전화번호: <input name='tel' type='text' value='%s'><br>", member.getTel());
-      out.printf("등록일: <input readonly name='registeredDate' type='text' value='%1$tF %1$tH:%1$tM:%1$tS'><br>", member.getRegisteredDate());
-      out.printf("<button>수정하기</button>", member.getTel());
+      request.setAttribute("member", member);
+      request.getRequestDispatcher("/member/updateform.jsp").include(request, response);
 
     } catch (Exception e) {
     }

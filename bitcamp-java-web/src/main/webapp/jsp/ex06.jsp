@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,6 +7,7 @@
 <title>ex06</title>
 </head>
 <%!
+// 클래스안에 복사한다 
 // 다음과 같이 상속 받은 메서드를 오버라이딩 할 수 있다.
 public void jspInit() {
   System.out.println("ex06.jsp의 jspInit()");

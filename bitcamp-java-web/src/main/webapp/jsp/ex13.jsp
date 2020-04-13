@@ -4,8 +4,6 @@
     contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"
     trimDirectiveWhitespaces="true"%>
-<%@ page import="bitcamp.vo.Board"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,7 +22,6 @@ names.add("윤봉길");
 
 pageContext.setAttribute("list", names);
 %>
-
 <jsp:useBean id="list" type="java.util.ArrayList<String>" scope="page"/>
 <%-- 자바코드로 표현해보면,
   java.util.ArrayList<String> list = 

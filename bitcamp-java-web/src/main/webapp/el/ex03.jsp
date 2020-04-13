@@ -20,10 +20,10 @@
 session.setAttribute("name", null);
 application.setAttribute("name", null);
 
-pageContext.setAttribute("name", "홍길동");
-request.setAttribute("name", "임꺽정");
-session.setAttribute("name", "유관순");
-application.setAttribute("name", "안중근");
+//pageContext.setAttribute("name", "홍길동");
+//request.setAttribute("name", "임꺽정");
+//session.setAttribute("name", "유관순");
+//application.setAttribute("name", "안중근");
 %>
 
 <h2>보관소에서 값 꺼내기 : ${name}</h2> 

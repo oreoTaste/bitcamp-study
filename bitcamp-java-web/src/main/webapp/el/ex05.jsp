@@ -17,8 +17,10 @@ pageContext.setAttribute("names", new String[]{"홍길동","임꺽정","유관�
 ${names[0]}<br>
 ${names[1]}<br>
 ${names[2]}<br>
+<!--
+에러가 뜨지 않는다. 빈문자열이 춢력 
 ${names[3]}<br>
-
+ -->
 </body>
 </html>
 

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"
+    trimDirectiveWhitespaces="true"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -49,6 +50,22 @@ JSP 실행을 요청하기
 JSP를 변경한 후 실행을 요청하기
 - 그냥 JSP 파일이 있는 위치를 지정하면 된다.
 - 위에서 설명한대로 JSP 구동 원리에 따라 동작된다.
+
+JSP 서블릿을 만들때 지켜야할 규칙:
+- JSP파일을 가지고 서블릿을 만들때 HttpJspPage를 구현해야한다.
+- 클래스 예상도
+  Servlet
+  - init(ServletConfig) : void
+  - destroy() : void
+  - service(ServletRequest, ServletResponse) : void
+  - getServletInfo : void
+  - getServletConfig() : void
+  ㄴ JspPage
+    - jspInit() : void
+    - jspDestroy() : void
+    ㄴ HttpJspPage
+      - _jspService(HttpServletRequest, HttpServletResponse) : void
+
 
 </pre>
 </body>

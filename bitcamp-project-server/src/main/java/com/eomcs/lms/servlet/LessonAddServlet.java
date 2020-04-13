@@ -1,7 +1,6 @@
 package com.eomcs.lms.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Date;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -24,28 +23,7 @@ public class LessonAddServlet extends HttpServlet {
 
     request.setCharacterEncoding("UTF-8");
     response.setContentType("text/html;charset=UTF-8");
-    PrintWriter out = response.getWriter();
-
-    request.getRequestDispatcher("/header").include(request, response);
-    out.println("<h1>수업 입력</h1>");
-
-    out.println("<form action='add' method='post'>");
-    out.println("제목");
-    out.println("<textarea name='title' rows='1' cols='63'></textarea><br>");
-    out.println("내용");
-    out.println("<textarea name='context' rows='1' cols='63'></textarea><br>");
-    out.println("시작일");
-    out.println("<input type='date' name='startDate'>");
-    out.println("    종료일");
-    out.println("<input type='date' name='endDate'><br>");
-    out.println("총수업시간");
-    out.println("<input type='number' name='totalHour'>");
-    out.println("일수업시간");
-    out.println("<input type='number' name='dailyHour'><br>");
-    out.println("<button>등록</button>");
-    out.println("</form>");
-
-    request.getRequestDispatcher("/footer").include(request, response);
+    request.getRequestDispatcher("/lesson/form.jsp").include(request, response);
   }
 
 

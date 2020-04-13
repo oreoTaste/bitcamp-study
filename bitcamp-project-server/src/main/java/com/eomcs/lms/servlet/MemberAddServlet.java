@@ -1,7 +1,6 @@
 package com.eomcs.lms.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Date;
 import java.util.UUID;
 import javax.servlet.ServletContext;
@@ -25,78 +24,50 @@ public class MemberAddServlet extends HttpServlet {
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
-    request.setCharacterEncoding("UTF-8");
-    response.setContentType("text/html;charset=UTF-8");
-    PrintWriter out = response.getWriter();
     try {
-      request.getRequestDispatcher("/header").include(request, response);
-      
-      out.printf("<form action='add' method='post' enctype='multipart/form-data'>");
-      out.printf("<table>");
-      out.printf("<tr>");
-      out.printf("<td>성함</td>");
-      out.printf("<td><input name='name' type='text' style='width:300px'></td>");
-      out.printf("</tr>");
-      out.printf("<tr>");
-      out.printf("<td>이메일</td>");
-      out.printf("<td><input name='email' type='text' style='width:300px'></td>");
-      out.printf("</tr>");
-      out.printf("<tr>");
-      out.printf("<td>비밀번호</td>");
-      out.printf("<td><input name='password' type='text' style='width:300px'></td>");
-      out.printf("</tr>");
-      out.printf("<tr>");
-      out.printf("<td>사진</td>");
-      out.printf("<td><input name='photo' type='file' style='width:300px'></td>");
-      out.printf("</tr>");
-      out.printf("<tr>");
-      out.printf("<td>전화번호</td>");
-      out.printf("<td><input name='tel' type='text' style='width:300px'></td>");
-      out.printf("</tr>");
-      out.printf("</table>");
-      out.printf("<button>등록</button>");
-      out.printf("</form>");
+      response.setContentType("text/html;charset=UTF-8");
+      request.getRequestDispatcher("/member/form.jsp").include(request, response);
 
     } catch (Exception e) {
-      System.out.println("멤버 추가 저장 중 오류발생");
+      request.getSession().setAttribute("errorMsg",e);
+      request.getSession().setAttribute("errorUrl","list");
+      request.getRequestDispatcher("/error").forward(request, response);
     }
-    request.getRequestDispatcher("/footer").include(request, response);
-    }
+  }
 
 
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
-    request.setCharacterEncoding("UTF-8");
-    response.setContentType("text/html;charset=UTF-8");
-    
+
     try {
-    ServletContext servletContext = request.getServletContext();
-    ApplicationContext iocContainer =(ApplicationContext) servletContext.getAttribute("iocContainer");
-    MemberService memberService = iocContainer.getBean(MemberService.class);
+      ServletContext servletContext = request.getServletContext();
+      ApplicationContext iocContainer =(ApplicationContext) servletContext.getAttribute("iocContainer");
+      MemberService memberService = iocContainer.getBean(MemberService.class);
 
-    Member member = new Member();
+      Member member = new Member();
 
-    member.setName(request.getParameter("name"));
-    member.setEmail(request.getParameter("email"));
-    member.setPassword(request.getParameter("password"));
-    member.setTel(request.getParameter("tel"));
-    member.setRegisteredDate(new Date(System.currentTimeMillis()));
-    
-    Part photoPart = request.getPart("photo");
-    if(photoPart.getSize() > 0) {
-      String dirPath = getServletContext().getRealPath("/upload/member");
-      String filename = UUID.randomUUID().toString();
-      
-      photoPart.write(dirPath + "/" + filename); // 여기서 문제 발생
-      member.setPhoto(filename);
-    }
-    
-    if(memberService.add(member)) {
-      response.sendRedirect("list");
-    } else
-      throw new Exception("멤버정보 등록이 불가합니다.(중복값 발생)");
+      request.setCharacterEncoding("UTF-8");
+      member.setName(request.getParameter("name"));
+      member.setEmail(request.getParameter("email"));
+      member.setPassword(request.getParameter("password"));
+      member.setTel(request.getParameter("tel"));
+      member.setRegisteredDate(new Date(System.currentTimeMillis()));
+
+      Part photoPart = request.getPart("photo");
+      if(photoPart.getSize() > 0) {
+        String dirPath = getServletContext().getRealPath("/upload/member");
+        String filename = UUID.randomUUID().toString();
+
+        photoPart.write(dirPath + "/" + filename); // 여기서 문제 발생
+        member.setPhoto(filename);
+      }
+
+      if(memberService.add(member)) {
+        response.sendRedirect("list");
+      } else
+        throw new Exception("멤버정보 등록이 불가합니다.(중복값 발생)");
 
     } catch (Exception e) {
       request.getSession().setAttribute("errorMsg",e);
