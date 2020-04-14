@@ -25,7 +25,6 @@ public class BoardListServlet extends HttpServlet {
       ApplicationContext iocContainer =(ApplicationContext) servletContext.getAttribute("iocContainer");
       BoardService boardService = iocContainer.getBean(BoardService.class);
       
-
       List<Board> boards = boardService.list();
       
       // JSP에게 출력할 객체를 전달
@@ -37,7 +36,9 @@ public class BoardListServlet extends HttpServlet {
       request.getRequestDispatcher("/board/list.jsp").include(request, response);
       
     } catch(Exception e) {
-      throw new ServletException();
+      request.setAttribute("error", e);
+      request.setAttribute("url", "list");
+      request.getRequestDispatcher("/error").forward(request, response);
     }
   }
 

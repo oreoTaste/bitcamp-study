@@ -2,6 +2,7 @@
 <%@ page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <jsp:include page="/header.jsp" />
 
@@ -16,21 +17,16 @@
 			<th>조회수</th>
 		</tr>
 
-    <jsp:useBean id="list" type="java.util.List<Board>" class="java.util.ArrayList" scope="request"/>
 
-		<%
-			for(Board item : list) {
-			  pageContext.setAttribute("item", item);
-			%>
-		<tr>
-			<td><a href='detail?no=${item.getNo()}'>${item.getNo()}</a></td>
-			<td><a href='detail?no=${item.getNo()}'>${item.getTitle()}</a></td>
-			<td><a href='detail?no=${item.getNo()}'>${item.getDate()}</a></td>
-			<td><a href='detail?no=${item.getNo()}'>${item.getViewCount()}</a></td>
-		</tr>
-		<%
-			}
-			%>
+<c:forEach items="${list}" var="item">
+  <tr>
+    <td><a href='detail?no=${item.no}'>${item.no}</a></td> 
+    <td><a href='detail?no=${item.no}'>${item.title}</a></td> 
+    <td><a href='detail?no=${item.no}'>${item.date}</a></td> 
+    <td><a href='detail?no=${item.no}'>${item.viewCount}</a></td>
+  </tr>
+</c:forEach>
+
 	</table>
 
 </div>

@@ -16,6 +16,9 @@ tasks.withType(JavaCompile) {
 }
 
 dependencies {
+  // JSTL
+  implementation 'jstl:jstl:1.2'
+      
   // javax servlet
   implementation 'javax.servlet:javax.servlet-api:4.0.1'
 
