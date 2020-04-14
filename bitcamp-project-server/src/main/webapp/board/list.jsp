@@ -17,17 +17,15 @@
 			<th>조회수</th>
 		</tr>
 
-
 <c:forEach items="${list}" var="item">
   <tr>
-    <td><a href='detail?no=${item.no}'>${item.no}</a></td> 
-    <td><a href='detail?no=${item.no}'>${item.title}</a></td> 
-    <td><a href='detail?no=${item.no}'>${item.date}</a></td> 
-    <td><a href='detail?no=${item.no}'>${item.viewCount}</a></td>
+    <td><a href='detail?no=${item.getNo()}'>${item.getNo()}</a></td> 
+    <td><a href='detail?no=${item.getNo()}'>${item.getTitle()}</a></td> 
+    <td><a href='detail?no=${item.getNo()}'>${item.getDate()}</a></td> 
+    <td><a href='detail?no=${item.getNo()}'>${item.getViewCount()}</a></td>
   </tr>
 </c:forEach>
-
-	</table>
+</table>
 
 </div>
 
