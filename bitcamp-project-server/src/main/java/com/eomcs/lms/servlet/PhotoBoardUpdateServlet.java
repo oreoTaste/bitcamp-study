@@ -71,8 +71,8 @@ public class PhotoBoardUpdateServlet extends HttpServlet {
       }
 
     } catch (Exception e1) {
-      request.getSession().setAttribute("errorMsg", e1);
-      request.getSession().setAttribute("errorUrl","list");
+      request.setAttribute("errorMsg", e1);
+      request.setAttribute("errorUrl", "list");
       request.getRequestDispatcher("/error").forward(request, response);
 
     }

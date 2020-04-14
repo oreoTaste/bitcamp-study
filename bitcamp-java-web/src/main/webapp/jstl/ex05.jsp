@@ -14,10 +14,10 @@
 <pre>
 - 조건문을 만든다.
 </pre>
-
+<%-- scope를 생략하면 page가 default이다 --%>
 <c:set var="name" value="홍길동"/>
-<c:set var="age" value="26"/>
-<c:set var="gender" value="man"/>
+<c:set var="age" value="16"/>
+<c:set var="gender" value="woman"/>
 
 <c:if test="${not empty name}">
     <p>${name}님 환영합니다!
@@ -28,7 +28,7 @@
 <c:if test="${age >= 19}">
     <p>성년입니다.</p>
 </c:if>
-
+<hr>
 <h2>조건문의 결과를 보관소에 저장하기</h2>
 <pre>
 var 속성으로 변수이름을 설정하면, 조건문의 테스트 결과는 지정된 이름으로 보관소에 저장된다.

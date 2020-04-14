@@ -31,9 +31,12 @@ public class MemberDetailServlet extends GenericServlet {
       Member member = memberService.get(no);
       if(member!=null) {
         request.setAttribute("member", member);
-        request.getRequestDispatcher("/member/detail.jsp").include(request, response);
+        request.setAttribute("viewUrl", "/member/detail.jsp");
       }
     } catch (Exception e) {
+      request.setAttribute("errorMsg", e);
+      request.setAttribute("errorUrl", "list");
+      request.getRequestDispatcher("/error").forward(request, response);
     }
   }
 

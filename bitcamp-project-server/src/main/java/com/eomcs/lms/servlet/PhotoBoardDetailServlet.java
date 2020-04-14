@@ -77,7 +77,9 @@ public class PhotoBoardDetailServlet extends HttpServlet {
       request.getRequestDispatcher("/footer").include(request, response);
       
     } catch (Exception e) {
-      e.printStackTrace();
+      request.setAttribute("errorMsg", e);
+      request.setAttribute("errorUrl", "list");
+      request.getRequestDispatcher("/error").forward(request, response);
     }
   }
 }

@@ -1,4 +1,4 @@
-package com.eomcs.lms.servlet;
+package com.eomcs.lms.web;
 
 import java.io.IOException;
 import javax.servlet.ServletContext;
@@ -8,33 +8,36 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.context.ApplicationContext;
-import com.eomcs.lms.service.PhotoBoardService;
+import com.eomcs.lms.service.LessonService;
 
-@WebServlet("/photoboard/delete")
-public class PhotoBoardDeleteServlet extends HttpServlet {
+@WebServlet("/lesson/delete")
+public class LessonDeleteServlet extends HttpServlet {
   private static final long serialVersionUID =20200331;
 
+
   @Override
-  protected void doPost(HttpServletRequest request, HttpServletResponse response)
+  protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
     response.setContentType("text/html;charset=UTF-8");
+
     ServletContext servletContext = request.getServletContext();
     ApplicationContext iocContainer =(ApplicationContext) servletContext.getAttribute("iocContainer");
-    PhotoBoardService photoBoardService = iocContainer.getBean(PhotoBoardService.class);
+    LessonService lessonService = iocContainer.getBean(LessonService.class);
 
-
-    int no = Integer.parseInt(request.getParameter("no"));
     try {
-      if(photoBoardService.delete(no)) {
-        response.sendRedirect("../lesson/list");
+      int no = Integer.parseInt(request.getParameter("no"));
+      if(lessonService.delete(no)) {
+        request.setAttribute("viewUrl", "redirect:list");
       } else
-        throw new Exception("사진게시물 삭제불가합니다.");
+        throw new Exception("수업정보 삭제에 실패했습니다.");
+
     } catch (Exception e) {
       request.setAttribute("errorMsg", e);
       request.setAttribute("errorUrl", "list");
-      request.getRequestDispatcher("/error").forward(request, response);
     }
 
   }
+
+
 }

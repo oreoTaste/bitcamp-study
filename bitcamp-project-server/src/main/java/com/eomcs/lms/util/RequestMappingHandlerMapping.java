@@ -1,18 +1,16 @@
-package com.eomcs.util;
+package com.eomcs.lms.util;
 
 import java.util.HashMap;
 
 public class RequestMappingHandlerMapping {
-  HashMap<String, RequestHandler> map = new HashMap<>();
-  
+
+  HashMap<String, RequestHandler> handlerMap = new HashMap<>();
+
   public void addHandler(String name, RequestHandler requestHandler) {
-    map.put(name, requestHandler);
+    handlerMap.put(name, requestHandler);
   }
-  
+
   public RequestHandler getHandler(String name) {
-    return map.get(name);
+    return handlerMap.get(name);
   }
-  
 }
-
-

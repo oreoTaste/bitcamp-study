@@ -26,12 +26,11 @@ public class MemberAddServlet extends HttpServlet {
 
     try {
       response.setContentType("text/html;charset=UTF-8");
-      request.getRequestDispatcher("/member/form.jsp").include(request, response);
+      request.setAttribute("viewUrl", "/member/form.jsp");
 
     } catch (Exception e) {
-      request.getSession().setAttribute("errorMsg",e);
-      request.getSession().setAttribute("errorUrl","list");
-      request.getRequestDispatcher("/error").forward(request, response);
+      request.setAttribute("errorMsg", e);
+      request.setAttribute("errorUrl", "list");
     }
   }
 
@@ -63,16 +62,16 @@ public class MemberAddServlet extends HttpServlet {
         photoPart.write(dirPath + "/" + filename); // 여기서 문제 발생
         member.setPhoto(filename);
       }
-
+      
       if(memberService.add(member)) {
-        response.sendRedirect("list");
+        response.setContentType("text/html;charset=UTF-8");
+        request.setAttribute("viewUrl", "redirect:list");
       } else
         throw new Exception("멤버정보 등록이 불가합니다.(중복값 발생)");
 
     } catch (Exception e) {
-      request.getSession().setAttribute("errorMsg",e);
-      request.getSession().setAttribute("errorUrl","list");
-      request.getRequestDispatcher("/error").forward(request, response);
+      request.setAttribute("errorMsg", e);
+      request.setAttribute("errorUrl", "list");
     }
   }
 

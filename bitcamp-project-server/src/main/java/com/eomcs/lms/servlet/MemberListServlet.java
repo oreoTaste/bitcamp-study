@@ -18,16 +18,18 @@ public class MemberListServlet extends GenericServlet {
   public void service(ServletRequest request, ServletResponse response)
       throws ServletException, IOException {
 
-    response.setContentType("text/html;charset=UTF-8");
     try {
       ServletContext servletContext = request.getServletContext();
       ApplicationContext iocContainer =(ApplicationContext) servletContext.getAttribute("iocContainer");
       MemberService memberService = iocContainer.getBean(MemberService.class);
       
+      response.setContentType("text/html;charset=UTF-8");
       request.setAttribute("list", memberService.list());
-      request.getRequestDispatcher("/member/list.jsp").include(request, response);
-    } catch(Exception e) {
+      request.setAttribute("viewUrl", "/member/list.jsp");
 
+    } catch(Exception e) {
+      request.setAttribute("errorMsg", e);
+      request.setAttribute("errorUrl", "list");
     }
   }
 

@@ -1,7 +1,6 @@
 package com.eomcs.lms.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,10 +20,6 @@ public class LessonDetailServlet  extends HttpServlet {
       throws ServletException, IOException {
 
     response.setContentType("text/html;charset=UTF-8");
-    PrintWriter out = response.getWriter();
-
-    request.getRequestDispatcher("/header").include(request, response);
-    out.println("<h1>수업 세부정보</h1>");
 
     ServletContext servletContext = request.getServletContext();
     ApplicationContext iocContainer =(ApplicationContext) servletContext.getAttribute("iocContainer");
@@ -33,26 +28,14 @@ public class LessonDetailServlet  extends HttpServlet {
     Lesson lesson = null;
     try {
       lesson = lessonService.get(Integer.parseInt(request.getParameter("no")));
-
-      out.printf("번호? %d<br>", lesson.getNo());
-      out.printf("수업명: %s<br>", lesson.getTitle());
-      out.printf("수업내용: %s<br>", lesson.getContext());
-      out.printf("기간 : %tF ~ %tF<br>", lesson.getStartDate(), lesson.getEndDate());
-      out.printf("일수업시간: %d<br>", lesson.getTotalHour());
-      out.printf("일수업시간: %d<br>", lesson.getDailyHour());
+      request.setCharacterEncoding("UTF-8");
+      request.setAttribute("lesson", lesson);
+      request.setAttribute("viewUrl", "/lesson/detail.jsp");
+      
     } catch (Exception e) {
-      e.printStackTrace();
-      System.out.println("수업정보 세부사항 수신 중 오류발생");
+      request.setAttribute("errorMsg", e);
+      request.setAttribute("errorUrl", "list");
     }
-
-
-
-    out.printf("<button type='button' onclick=location.href='../photoboard/list?lessonNo=%d'>사진게시판</button>  ..  ", lesson.getNo());
-
-    out.printf("<button type='button' onclick=location.href='delete?no=%d'>삭제</button>  ..  ", lesson.getNo());
-    out.printf("<button type='button' onclick=location.href='update?no=%d'>변경</button>  ..  ", lesson.getNo());
-    out.printf("<button type='button' onclick=location.href='list'>수업 목록으로 돌아가기</button>");
-    request.getRequestDispatcher("/footer").include(request, response);
   }
 
 

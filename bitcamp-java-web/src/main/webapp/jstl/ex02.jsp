@@ -16,9 +16,14 @@
   <c:out value="출력될 값" default="기본 값"/>
   <c:out value="출력될 값>기본값<c:out>
 --%>
-
+<%
+pageContext.setAttribute("name", "유관순");
+%>
 <c:out value="임꺽정"/><br>
-<c:out value="${null}" default="홍길동"/><br>
+<c:out value="${name}" default="홍길동"/><br>
+<c:out value="${name}">홍길동</c:out><br>
+<c:out value="${name2}" default="홍길동"/><br>
+<c:out value="${name2}">홍길동</c:out><br>
 <c:out value="${null}">홍길동</c:out><br>
 <c:out value="${'임꺽정'}" default="홍길동"/><br>
 </body>

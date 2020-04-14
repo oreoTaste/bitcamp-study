@@ -1,3 +1,4 @@
+<%@page import="java.util.List"%>
 <%@page import="com.eomcs.lms.domain.Member"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
@@ -5,49 +6,44 @@
 <jsp:include page="/header.jsp" />
 
 <div class='container'>
-	<h1>게시글 수정</h1>
+	<h1>멤버 수정</h1>
 
-	<%Member member = (Member) request.getAttribute("member");
+	<%
+	List<Member> member = (List<Member>) request.getAttribute("member");
 	  if(member == null) {
   %>
 	<p>해당 번호의 멤버가 없습니다.</p>
 	<%
       } else {
   %>
+        <table border='1'>
+        <tr>
+        <th>멤버번호</th>
+        <th>성함</th>
+        <th>이메일</th>
+        <th>전화번호</th>
+        <th>등록일</th>
+        </tr>
+  <%
+        for (Member m : member) {
+  %>
 
-  <form action='update' method='post' enctype='multipart/form-data'>
-  <table border="1">
-		<tr>
-		  <td>번호 : </td>
-		  <td><input  readonly name='no' type='text' value='${member.no}'></td>
-		</tr>
-    <tr>
-			<td>성함:</td>
-      <td><input  name='name' type='text' value='${member.name}'></td>
-    </tr>
-    <tr>
-			<td>이메일: </td>
-      <td><input  name='email' type='text' value='${member.email}'></td>
-    </tr>
-    <tr>
-			<td>비밀번호: </td>
-      <td><input  name='password' type='text' value='${member.password}'></td>
-    </tr>
-    <tr>
-			<td>사진: </td>
-      <td><input  name='photo' type='file' value='${member.photo}'></td>
-    </tr>
-    <tr>
-			<td>전화번호: </td>
-      <td><input  name='tel' type='text' value='${member.tel}'></td>
-    </tr>
-    <tr>
-			<td>등록일: </td>
-      <td><input  readonly name='registeredDate' type='text' value='${member.registeredDate}'></td>
-    </tr>
-	</table>
-	<button>수정하기</button>
-	</form>
+          <tr>
+          <td><a href='detail?no=${m.getNo()}'>${m.getNo()}</a></td>
+          <td><a href='detail?no=${m.getNo()}'>${m.getName()}</a></td>
+          <td><a href='detail?no=${m.getNo()}'>${m.getEmail()}</a></td>
+          <td><a href='detail?no=${m.getNo()}'>${m.getTel()}</a></td>
+          <td><a href='detail?no=${m.getNo()}'>${m.getRegisteredDate()}</a></td>
+          </tr>
+
+  <%
+  }
+  %>
+  </table>
+
+
+
+
 </div>
   <%
       }

@@ -35,11 +35,12 @@ public class MemberUpdateServlet extends HttpServlet {
 
       Member member = memberService.get(no);
       request.setAttribute("member", member);
-      request.getRequestDispatcher("/member/updateform.jsp").include(request, response);
+      request.setAttribute("viewUrl", "/member/updateform.jsp");
 
     } catch (Exception e) {
+      request.setAttribute("errorMsg", e);
+      request.setAttribute("errorUrl", "list");
     }
-    request.getRequestDispatcher("/footer").include(request, response);
   }
   
   
@@ -81,15 +82,14 @@ public class MemberUpdateServlet extends HttpServlet {
       newMember.setTel(tel);
 
       if(memberService.update(newMember)) {
-        response.sendRedirect("list");
+        request.setAttribute("viewUrl", "redirect:list");
       } else
         throw new Exception("멤버정보 수정에 실패했습니다.");
 
 
     } catch (Exception e) {
-      request.getSession().setAttribute("errorMsg", e);
-      request.getSession().setAttribute("errorUrl", "list");
-      request.getRequestDispatcher("/error").forward(request, response);
+      request.setAttribute("errorMsg", e);
+      request.setAttribute("errorUrl", "list");
     }
 
   }

@@ -31,11 +31,11 @@ for (String n : names) {
 */
 %>
 
-<ul>
+<ol>
 <c:forEach items="${pageScope.names}" var="n">
     <li>${n}</li>
 </c:forEach>
-</ul>
+</ol>
 
 <h2>Collection 객체</h2>
 <%
@@ -56,7 +56,7 @@ pageContext.setAttribute("names2", names2);
 <%
 Map<String,Object> names3 = new HashMap<>();
 names3.put("s01", "홍길동");
-names3.put("s02", "임꺽정");
+names3.put("s02", "임꺽정" );
 names3.put("s03", "유관순");
 pageContext.setAttribute("names3", names3);
 %>
@@ -64,8 +64,8 @@ pageContext.setAttribute("names3", names3);
 <ul>
 <%-- Map 객체에 대해 반복문을 돌리면 var로 저장하는 것은 
      key와 value를 갖고 있는 Entry 객체이다. --%>
-<c:forEach items="${pageScope.names3}" var="n">
-    <li>${n.key} : ${n.value}</li>
+<c:forEach items="${pageScope.names3}" var="entry">
+    <li>${entry.getKey()}  :  ${entry.getValue()}</li>
 </c:forEach>
 </ul>
 

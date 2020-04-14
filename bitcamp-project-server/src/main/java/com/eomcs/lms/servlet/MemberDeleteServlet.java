@@ -27,13 +27,14 @@ public class MemberDeleteServlet extends HttpServlet {
       int no = Integer.parseInt(request.getParameter("no"));
 
       if(memberService.delete(no)) {
-        response.sendRedirect("list");
+        response.setContentType("text/html;charset=UTF-8");
+        request.setAttribute("viewUrl", "redirect:list");
       } else
         throw new Exception("멤버정보 삭제에 실패했습니다.");
 
     } catch (Exception e) {
-      request.getSession().setAttribute("errorMsg", e);
-      request.getSession().setAttribute("errorUrl", "list");
+      request.setAttribute("errorMsg", e);
+      request.setAttribute("errorUrl", "list");
       request.getRequestDispatcher("/error").forward(request, response);
     }
   }

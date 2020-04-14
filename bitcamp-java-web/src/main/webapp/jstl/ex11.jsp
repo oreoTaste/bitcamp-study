@@ -15,6 +15,8 @@
 - redirect 응답하기
 </pre>
 
+<%request.getRequestDispatcher("ex11.jsp").include(request, response); %>
+
 <c:if test="${param.search == 'naver'}">
     <c:redirect url="http://www.naver.com"/>
 </c:if>

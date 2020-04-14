@@ -81,7 +81,9 @@ public class PhotoBoardListServlet extends HttpServlet {
       out.println("</table>");
 
     } catch (Exception e) {
-      out.printf("<p>%s</p>\n", e.getMessage());
+      request.setAttribute("errorMsg", e);
+      request.setAttribute("errorUrl", "list");
+      request.getRequestDispatcher("/error").forward(request, response);
     }
     request.getRequestDispatcher("/footer").include(request, response);
   }

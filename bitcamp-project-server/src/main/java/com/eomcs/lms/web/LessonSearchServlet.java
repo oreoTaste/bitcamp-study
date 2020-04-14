@@ -1,4 +1,4 @@
-package com.eomcs.lms.servlet;
+package com.eomcs.lms.web;
 
 import java.io.IOException;
 import java.util.HashMap;

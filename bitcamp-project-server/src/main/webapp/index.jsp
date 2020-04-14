@@ -55,9 +55,9 @@ div.container {
       '<%=loginUser.getName()%>'님 환영
       </span>
       
-      <button type="button" class="btn btn-outline-info" onclick="location.href='../auth/logout'">로그아웃</button>
+      <button type="button" class="btn btn-outline-info" onclick="location.href='auth/logout'">로그아웃</button>
       <%} else {%>
-      <button type="button" class="btn btn-outline-info" onclick="location.href='../auth/login'">로그인</button>
+      <button type="button" class="btn btn-outline-info" onclick="location.href='auth/login'">로그인</button>
       <%} %>
     </div>
   </nav>

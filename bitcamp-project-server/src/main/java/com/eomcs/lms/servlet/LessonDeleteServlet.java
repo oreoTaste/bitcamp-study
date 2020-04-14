@@ -27,16 +27,14 @@ public class LessonDeleteServlet extends HttpServlet {
 
     try {
       int no = Integer.parseInt(request.getParameter("no"));
-
       if(lessonService.delete(no)) {
-        response.sendRedirect("list");
+        request.setAttribute("viewUrl", "redirect:list");
       } else
         throw new Exception("수업정보 삭제에 실패했습니다.");
 
     } catch (Exception e) {
-      request.getSession().setAttribute("errorMsg", e);
-      request.getSession().setAttribute("errorUrl", "list");
-      request.getRequestDispatcher("/error").forward(request, response);
+      request.setAttribute("errorMsg", e);
+      request.setAttribute("errorUrl", "list");
     }
 
   }

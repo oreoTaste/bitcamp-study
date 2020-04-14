@@ -61,7 +61,9 @@ public class PhotoBoardAddServlet extends HttpServlet {
 
       request.getRequestDispatcher("/footer").include(request, response);
     } catch (Exception e) {
-      e.printStackTrace();
+      request.setAttribute("errorMsg", e);
+      request.setAttribute("errorUrl", "list");
+      request.getRequestDispatcher("/error").forward(request, response);
     }
   }
 
@@ -115,8 +117,8 @@ public class PhotoBoardAddServlet extends HttpServlet {
         throw new Exception("사진게시물 등록이 불가합니다.(중복값 발생)");
 
     } catch (Exception e) {
-      request.getSession().setAttribute("errorMsg", e);
-      request.getSession().setAttribute("errorUrl","list");
+      request.setAttribute("errorMsg", e);
+      request.setAttribute("errorUrl", "list");
       request.getRequestDispatcher("/error").forward(request, response);
     }
   }

@@ -1,3 +1,4 @@
+<%@page import="com.eomcs.lms.domain.Member"%>
 <%@page import="com.eomcs.lms.domain.Lesson"%>
 <%@ page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -23,19 +24,19 @@
 		</tr>
 		
 		<%
-		List<Lesson> lesson = (List<Lesson>)request.getAttribute("lesson");
+		List<Member> member = (List<Member>)request.getAttribute("member");
 		
-		for(Lesson ls : lesson) {
+		for(Member m : member) {
 		%>
 		
 		<tr>
-		  <td><a href='detail?no=${ls.getNo()}'>${ls.getNo()}</a></td>
-		  <td><a href='detail?no=${ls.getNo()}'>${ls.getTitle()}</a></td>
-		  <td><a href='detail?no=${ls.getNo()}'>${ls.getContext()}</a></td>
-		  <td><a href='detail?no=${ls.getNo()}'>${ls.getStartDate()}</a></td>
-		  <td><a href='detail?no=${ls.getNo()}'>${ls.getEndDate()}</a></td>
-		  <td><a href='detail?no=${ls.getNo()}'>${ls.getTotalHour()}</a></td>
-		  <td><a href='detail?no=${ls.getNo()}'>${ls.getDailyHour()}</a></td>
+		  <td><a href='detail?no=${m.getNo()}'>${m.getNo()}</a></td>
+		  <td><a href='detail?no=${m.getNo()}'>${m.getTitle()}</a></td>
+		  <td><a href='detail?no=${m.getNo()}'>${m.getContext()}</a></td>
+		  <td><a href='detail?no=${m.getNo()}'>${m.getStartDate()}</a></td>
+		  <td><a href='detail?no=${m.getNo()}'>${m.getEndDate()}</a></td>
+		  <td><a href='detail?no=${m.getNo()}'>${m.getTotalHour()}</a></td>
+		  <td><a href='detail?no=${m.getNo()}'>${m.getDailyHour()}</a></td>
 		</tr>
 		
 		<%

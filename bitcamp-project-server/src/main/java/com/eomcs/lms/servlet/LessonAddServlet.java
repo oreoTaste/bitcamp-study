@@ -23,7 +23,7 @@ public class LessonAddServlet extends HttpServlet {
 
     request.setCharacterEncoding("UTF-8");
     response.setContentType("text/html;charset=UTF-8");
-    request.getRequestDispatcher("/lesson/form.jsp").include(request, response);
+    request.setAttribute("viewUrl", "/lesson/form.jsp");
   }
 
 
@@ -48,15 +48,13 @@ public class LessonAddServlet extends HttpServlet {
       lesson.setDailyHour(Integer.parseInt(request.getParameter("dailyHour")));
 
       if (lessonService.add(lesson)){
-        response.sendRedirect("list");
+        request.setAttribute("viewUrl", "redirect:list");
       } else
         throw new Exception("수업정보 입력에 실패했습니다.(중복값)");
 
     } catch (Exception e) {
-//      throw new ServletException();
-      request.getSession().setAttribute("errorMsg", e);
-      request.getSession().setAttribute("errorUrl", "list");
-      request.getRequestDispatcher("/error").forward(request, response);
+      request.setAttribute("errorMsg", e);
+      request.setAttribute("errorUrl", "list");
     }
 
   }
