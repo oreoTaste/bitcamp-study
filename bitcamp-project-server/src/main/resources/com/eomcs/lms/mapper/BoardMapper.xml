@@ -54,7 +54,7 @@
    <update id="update" parameterType="Board">
      UPDATE lms_board SET 
 	     conts = #{title},
-	     cdt = #{date}
+	     cdt = now()
      WHERE board_id = #{no}
   </update>
  

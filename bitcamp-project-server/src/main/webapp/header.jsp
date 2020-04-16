@@ -35,7 +35,7 @@ a:hover { text-decoration:none; }
 
 
   <nav class='navbar navbar-expand-lg navbar-dark bd-navbar' style='background-color: #464159;'>
-    <a class='navbar-brand' href='../index.jsp'>LMS 시스템</a>
+    <a class='navbar-brand' href='../../index.jsp'>LMS 시스템</a>
     <button class='navbar-toggler' type='button' data-toggle='collapse'
       data-target='#navbarText' aria-controls='navbarText'
       aria-expanded='false' aria-label='Toggle navigation'>
@@ -58,7 +58,7 @@ a:hover { text-decoration:none; }
       <span class='navbar-text' style='margin-right: 15px;'>'<%=loginUser.getName()%>'님 환영</span>
       <button type="button" class="btn btn-outline-info" onclick="location.href='../auth/logout'">로그아웃</button>
       <%} else {%>
-      <button type="button" class="btn btn-outline-info" onclick="location.href='../auth/login'">로그인</button>
+      <button type="button" class="btn btn-outline-info" onclick="location.href='../auth/form'">로그인</button>
       <%} %>
     </div>
   </nav>

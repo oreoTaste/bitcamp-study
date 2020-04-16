@@ -4,6 +4,7 @@
     trimDirectiveWhitespaces="true"%>
 
 <jsp:include page="/header.jsp"/>
+<div class="container">
 
 <h1>사진 입력(JSP + EL)</h1>
 <form action='add' method='post' enctype='multipart/form-data'>
@@ -12,13 +13,13 @@
 내용:<br>
 <textarea name='title' rows='5' cols='60'></textarea><br>
 <hr>
-사진: <input name='photo' type='file'><br>
-사진: <input name='photo' type='file'><br>
-사진: <input name='photo' type='file'><br>
-사진: <input name='photo' type='file'><br>
-사진: <input name='photo' type='file'><br>
+사진: <input name='photoFiles' type='file'><br>
+사진: <input name='photoFiles' type='file'><br>
+사진: <input name='photoFiles' type='file'><br>
+사진: <input name='photoFiles' type='file'><br>
+사진: <input name='photoFiles' type='file'><br>
 <button>제출</button>
 </form>
-
+</div>
 <jsp:include page="/footer.jsp"/>
     

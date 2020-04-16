@@ -20,7 +20,7 @@
 	
 	<div>
 		<a href='delete?no=${board.getNo()}'>삭제</a> ..
-    <a href='update?no=${board.getNo()}'>변경</a> ..
+    <a href='updateForm?no=${board.getNo()}'>변경</a> ..
     <a href='list'>게시글 목록으로 돌아가기</a>
 	</div>
 </div>

@@ -1,8 +1,8 @@
 <%@page import="com.eomcs.lms.domain.Member"%>
-<%@page import="com.eomcs.lms.domain.Lesson"%>
 <%@ page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <jsp:include page="/header.jsp" />
 
@@ -11,38 +11,23 @@
 	입력값 : ${keyword}
 	<hr>
 	
-검색결과 : <br>
+검색결과 :
 	<table border='1'>
 		<tr>
-		  <th>레슨번호</th>
-		  <th>수업명</th>
-		  <th>수업내용</th>
-		  <th>시작일</th>
-		  <th>종료일</th>
-		  <th>총시간</th>
-		  <th>일시간</th>
-		</tr>
-		
-		<%
-		List<Member> member = (List<Member>)request.getAttribute("member");
-		
-		for(Member m : member) {
-		%>
-		
-		<tr>
-		  <td><a href='detail?no=${m.getNo()}'>${m.getNo()}</a></td>
-		  <td><a href='detail?no=${m.getNo()}'>${m.getTitle()}</a></td>
-		  <td><a href='detail?no=${m.getNo()}'>${m.getContext()}</a></td>
-		  <td><a href='detail?no=${m.getNo()}'>${m.getStartDate()}</a></td>
-		  <td><a href='detail?no=${m.getNo()}'>${m.getEndDate()}</a></td>
-		  <td><a href='detail?no=${m.getNo()}'>${m.getTotalHour()}</a></td>
-		  <td><a href='detail?no=${m.getNo()}'>${m.getDailyHour()}</a></td>
-		</tr>
-		
-		<%
-    }
-		%>
-		</table>
+      <td>번호</td><td>이름</td><td>이메일</td><td>암호</td><td>사진</td><td>전화</td><td>등록일</td>
+    </tr>
+	<c:forEach items="${list}" var="item">
+    <tr>
+      <td>${item.no}</td>
+      <td>${item.name}</td>
+      <td>${item.email}</td>
+      <td>${item.password}</td>
+      <td>${item.photo}</td>
+      <td>${item.tel}</td>
+      <td>${item.registeredDate}</td>
+    </tr>
+	</c:forEach>
+	</table>
 </div>
 
 <jsp:include page="/footer.jsp" />

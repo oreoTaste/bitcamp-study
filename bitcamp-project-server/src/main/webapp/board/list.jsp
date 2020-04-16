@@ -8,7 +8,7 @@
 
 <div class='container'>
 	<h1>게시글</h1>
-	<a href='add'>새글</a><br>
+	<a href='form'>새글</a><br>
 	<table border='1'>
 		<tr>
 			<th>번호</th>

@@ -13,7 +13,7 @@
     <form action='search'>
     <input type='text' size='80' name='keyword' value='수업명을 입력해주세요'/>
     </form>
-    <a href='add' method='get'>신규수업</a>
+    <a href='form' method='get'>신규수업</a>
     <table border='1'>
     <tr>
     <th>레슨번호</th>

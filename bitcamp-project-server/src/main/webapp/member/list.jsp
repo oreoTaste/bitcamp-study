@@ -18,7 +18,7 @@
 		</form>
 	</div>
 
-	<a href='add'>멤버 추가</a><br>
+	<a href='form'>멤버 추가</a><br>
 
 	<table border='1'>
 		<tr>

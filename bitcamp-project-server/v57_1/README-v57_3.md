@@ -7,11 +7,17 @@
 
 ## 실습 소스 및 결과
 
-- src/main/java/com/eomcs/lms/filter/CharacterEncodingFilter.java 추가
-- src/main/java/com/eomcs/lms/web/XxxController.java 추가
-- src/main/java/com/eomcs/lms/servlet/XxxServlet.java 삭제
-- src/main/java/com/eomcs/lms/servlet/DispatcherServlet.java 변경
-- src/main/java/com/eomcs/lms/servlet/AppInitServlet.java 삭제
+- src/main/java/com/eomcs/lms/web/BoardController.java 추가
+- src/main/java/com/eomcs/lms/web/LessonController.java 추가
+- src/main/java/com/eomcs/lms/web/AuthController.java 추가
+- src/main/java/com/eomcs/lms/web/MemberController.java 추가
+- src/main/java/com/eomcs/lms/web/PhotoBoardController.java 추가
+- src/main/java/com/eomcs/lms/servlet/BoardXxxServlet.java 삭제
+- src/main/java/com/eomcs/lms/servlet/LessonXxxServlet.java 삭제
+- src/main/java/com/eomcs/lms/servlet/LoginServlet.java 삭제
+- src/main/java/com/eomcs/lms/servlet/LogoutXxxServlet.java 삭제
+- src/main/java/com/eomcs/lms/servlet/MemberXxxServlet.java 삭제
+- src/main/java/com/eomcs/lms/servlet/PhotoBoardXxxServlet.java 삭제
 - src/main/java/com/eomcs/lms/ContextLoaderListener.java 변경
 
 ## 실습  
@@ -35,3 +41,7 @@
 - com.eomcs.lms.web.PhotoBoardController 추가
   - com.eomcs.lms.web.PhotoBoardXxxController 삭제
 
+### 훈련3: 페이지 컨트롤러에 있는 여러 개의 요청 핸들러를 관리 목록에 등록한다.
+
+- com.eomcs.lms.ContextLoaderListener 변경
+  - 페이지 컨트롤러에서 모든 @RequestMapping 메서드를 찾아 등록한다.

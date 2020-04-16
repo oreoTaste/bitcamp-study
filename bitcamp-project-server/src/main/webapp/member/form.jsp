@@ -15,15 +15,15 @@
       </tr>
       <tr>
       <td>이메일</td>
-      <td><input name='email' type='text' style='width:300px'></td>
+      <td><input name='email' type="email" style='width:300px'></td>
       </tr>
       <tr>
       <td>비밀번호</td>
-      <td><input name='password' type='text' style='width:300px'></td>
+      <td><input name='password' type="password" style='width:300px'></td>
       </tr>
       <tr>
       <td>사진</td>
-      <td><input name='photo' type='file' style='width:300px'></td>
+      <td><input name='photoFile' type='file' style='width:300px'></td>
       </tr>
       <tr>
       <td>전화번호</td>

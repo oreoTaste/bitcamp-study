@@ -39,11 +39,11 @@ div.container {
     <div class='collapse navbar-collapse' id='navbarText'>
       <ul class='navbar-nav mr-auto'>
         <li class='nav-item'>
-          <a class='nav-link' href='board/list'>게시글 목록 보기</a></li>
+          <a class='nav-link' href='app/board/list'>게시글 목록 보기</a></li>
         <li class='nav-item'>
-          <a class='nav-link' href='lesson/list'>수업목록 보기</a></li>
+          <a class='nav-link' href='app/lesson/list'>수업목록 보기</a></li>
         <li class='nav-item'>
-          <a class='nav-link' href='member/list'>멤버목록 보기</a>
+          <a class='nav-link' href='app/member/list'>멤버목록 보기</a>
         <li class='nav-item active'>
       </ul>
       <% 
@@ -55,9 +55,9 @@ div.container {
       '<%=loginUser.getName()%>'님 환영
       </span>
       
-      <button type="button" class="btn btn-outline-info" onclick="location.href='auth/logout'">로그아웃</button>
+      <button type="button" class="btn btn-outline-info" onclick="location.href='app/auth/logout'">로그아웃</button>
       <%} else {%>
-      <button type="button" class="btn btn-outline-info" onclick="location.href='auth/login'">로그인</button>
+      <button type="button" class="btn btn-outline-info" onclick="location.href='app/auth/form'">로그인</button>
       <%} %>
     </div>
   </nav>

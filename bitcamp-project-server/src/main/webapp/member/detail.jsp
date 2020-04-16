@@ -1,47 +1,58 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <jsp:include page="/header.jsp" />
-<jsp:useBean id="member" class="com.eomcs.lms.domain.Member"
-	scope="request" />
 
 <div class='container'>
-	<h1>멤버 세부정보</h1>
+
+<h1>멤버 세부정보</h1>
+
+<c:if test="${not empty member}">
+
 	<form action='update' method='post' enctype='multipart/form-data'>
-		<img src='../upload/member/${member.getPhoto()}' height='40'><br>
-	</form>
-	<table border='1'>
+	<img src='${pageContext.servletContext.contextPath}/upload/member/${member.photo}' height='80'><br>
+	<table border='1' style='width: 70%'>
 		<tr>
-			<th>번호</th>
-			<th>이름</th>
-			<th>이메일</th>
-			<th>암호</th>
-			<th>사진</th>
-			<th>전화</th>
-			<th>등록일</th>
+			<td>번호</td>
+			<td><input style='width: 90%' readonly name='no' value='${member.no}'></td>
+    </tr>
+    <tr>
+    	<td>이름</td>
+    	<td><input style='width: 90%' name='name' value='${member.name}'></td>
+    </tr>
+    <tr>
+			<td>이메일</td>
+			<td><input style='width: 90%' name='email' value='${member.email}'></td>
+    </tr>
+    <tr>
+			<td>암호</td>
+			<td><input style='width: 90%' name='password' value='${member.password}'></td>
+    </tr>
+    <tr>
+			<td>사진</td>
+			<td><input style='width: 90%' name='photo' value='${member.photo}'></td>
+    </tr>
+    <tr>
+			<td>전화</td>
+			<td><input style='width: 90%' name='tel' value='${member.tel}'></td>
+    </tr>
+    <tr>
+			<td>등록일</td>
+			<td><input readonly style='width: 90%' type='date' name='registeredDate' value='${member.registeredDate}'></td>
 		</tr>
-		<tr>
-			<td>${member.getNo()}</td>
-			<td>${member.getName()}</td>
-			<td>${member.getEmail()}</td>
-			<td>${member.getPassword()}</td>
-			<td>${member.getPhoto()}</td>
-			<td>${member.getTel()}</td>
-			<td>${member.getRegisteredDate()}</td>
-		</tr>
+			
 	</table>
 
-	<br>
-	<table border='1'>
-	<tr>
-	<form action="delete" method="post">
-	<button name='no' value='${member.getNo()}'>삭제</button>
-		..
-		</form>
-	<button onclick="location.href='update?no=${member.getNo()}'">수정</button>
-	..
-	<button onclick="location.href='list'">수업정보로 돌아가기</button>
-  </tr>
-	</table>
+<p><button>변경</button>
+<a href='delete?no=${member.no}'>삭제</a></p>
+</form>
+</c:if>
+
+<c:if test="${empty member}">
+<p>해당 회원이 없습니다.</p>
+</c:if>
+
+
 </div>
 <jsp:include page="/footer.jsp" />
