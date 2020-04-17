@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+  
+  <context:component-scan base-package="bitcamp"/>
+  
+  <!-- WebMVC 관련 애노테이션을 처리할 도우미 객체를 등록하기 -->
+  <!--
+  contextLoaderListener에서 IoC컨테이너는 웹관련 애노테이션을 처리하지 못한다. 
+  따라서! @Component, @Controller, @Service 등의 애노테이션이 붙은 클래스에 대해
+  객체를 생성하지만, @RequestMapping, @ResponseBody등과 같은 웹관련 애노테이션은 인식하지 못한다.
+   -->
+  <mvc:annotation-driven/>
+  
+</beans>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
