@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-@Controller 
+@Controller
 @RequestMapping("/c02_2")
 public class Controller02_2 {
 
@@ -23,7 +23,7 @@ public class Controller02_2 {
 
   // 테스트:
   //   http://.../app2/c02_2/name=kim;age=20
-  @GetMapping(value="{value}", produces="text/plain;charset=UTF-8")
+  @GetMapping(value="{value}",produces="text/plain;charset=UTF-8")
   @ResponseBody
   public String handler2(
       @PathVariable("value") String value,
@@ -34,11 +34,11 @@ public class Controller02_2 {
       @MatrixVariable("age") int age
       */
       // 매트릭스 변수명을 생략하면 아규먼트의 이름을 사용한다.
-      @MatrixVariable String name,
-      @MatrixVariable int age
+      @MatrixVariable int age,
+      @MatrixVariable String name
       ) {
     
-    // @MatrixVariable 애노테이션을 사용하려면 
+    // @MatrixVariable 애노테이션을 사용하려면
     // IoC 컨테이너에서 이 애노테이션을 활성화시키는 설정을 추가해야 한다.
     // 1) XML 설정
     //    => <mvc:annotation-driven enable-matrix-variables="true"/>
@@ -86,7 +86,7 @@ public class Controller02_2 {
       @MatrixVariable(name="name", pathVar="team") String name1,
       @MatrixVariable(name="qty", pathVar="team") int qty1,
       @MatrixVariable(name="name", pathVar="task") String name2,
-      @MatrixVariable(name="qty", pathVar="task") int qty2      
+      @MatrixVariable(name="qty", pathVar="task") int qty2
       ) {
     
     return String.format(

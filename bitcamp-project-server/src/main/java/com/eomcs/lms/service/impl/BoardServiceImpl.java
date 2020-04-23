@@ -20,13 +20,13 @@ public class BoardServiceImpl implements BoardService {
   }
 
   @Override
-  public boolean delete(int boardNo) throws Exception {
-    return boardDao.delete(boardNo) > 0;
+  public boolean delete(int number) throws Exception {
+    return boardDao.delete(number) > 0;
   }
 
   @Override
-  public Board get(int boardNo) throws Exception {
-    return boardDao.findByNo(boardNo);
+  public Board get(int number) throws Exception {
+    return boardDao.findByNo(number);
   }
 
   @Override

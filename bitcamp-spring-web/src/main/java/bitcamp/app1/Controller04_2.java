@@ -45,7 +45,6 @@ public class Controller04_2 {
       PrintWriter out,
       @RequestParam("name1") String name1, // 애노테이션을 붙이면 필수 항목으로 인지한다.
                                            // 따라서 파라미터 값이 없으면 예외가 발생한다.
-      
       String name2, // 애노테이션을 붙이지 않으면 선택 항목으로 인지한다.
                    // 따라서 파라미터 값이 없으면 null을 받는다.
       

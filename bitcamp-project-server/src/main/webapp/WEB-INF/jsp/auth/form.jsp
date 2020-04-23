@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"
     trimDirectiveWhitespaces="true"%>
 
-<jsp:include page="/header.jsp"/>
+<jsp:include page="../header.jsp"/>
 
 <div class="container">
 <h1>로그인(JSP + EL + JSTL)</h1>
@@ -14,5 +14,5 @@
 </form>
 </div>
 
-<jsp:include page="/footer.jsp"/>
+<jsp:include page="../footer.jsp"/>
     

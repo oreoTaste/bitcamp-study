@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.eomcs.lms.domain.Member;
 
-@WebFilter("/*")
+@WebFilter("/app/*")
 public class AuthFilter implements Filter{
 
   @Override

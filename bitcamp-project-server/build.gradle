@@ -16,6 +16,11 @@ tasks.withType(JavaCompile) {
 }
 
 dependencies {
+  // Spring의 MultipartResolver를 사용하는법
+  // 1. Servlet 3.0에서 제공하는 multipart 사용하기
+  // 2. 아니면 다음과 같이 Apatch의 multipart 처리 라이브러리를 추가/사용하기
+  implementation 'commons-fileupload:commons-fileupload:1.4'
+
   // Spring WebMVC 라이브러리
   implementation 'org.springframework:spring-webmvc:5.2.5.RELEASE'
 

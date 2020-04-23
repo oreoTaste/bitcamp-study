@@ -4,7 +4,7 @@
 	pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<jsp:include page="/header.jsp" />
+<jsp:include page="../header.jsp" />
 
 <div class='container'>
 	<h1>수업 정보 검색</h1>
@@ -30,4 +30,4 @@
 	</table>
 </div>
 
-<jsp:include page="/footer.jsp" />
+<jsp:include page="../footer.jsp" />

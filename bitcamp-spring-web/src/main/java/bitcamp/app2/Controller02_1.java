@@ -5,25 +5,28 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-@Controller 
+@Controller
 @RequestMapping("/c02_1")
 public class Controller02_1 {
 
   // 테스트:
   //   http://localhost:8080/java-spring-webmvc/app2/c02_1?name=kim&age=20
   @GetMapping
-  @ResponseBody
-  public String handler1(String name, int age) {
+  @ResponseBody // 뷰자체를 리턴할때는 @ResponseBody를 쓴다.
+  public String handler1(
+      @RequestParam("name")
+      String name2, int age) {
     // 클라이언트에서 값을 받는 일반적인 방법
     // => Query String 으로 받는다.
     // => 즉 URL 다음에 "?변수=값&변수=값" 형태로 값을 받는다.
-    // => Query String의 값을 request handler에서 받으려면 
+    // => Query String의 값을 request handler에서 받으려면
     //    아규먼트를 선언하면 된다.
-    //    아규먼트 앞에 @RequestParam을 붙여도 되고 
+    //    아규먼트 앞에 @RequestParam을 붙여도 되고
     //    아규먼트이 이름이 요청 파라미터의 이름과 같다면 @RequestParam을 생략해도 된다.
-    return String.format("name=%s, age=%d", name, age);
+    return String.format("name=%s, age=%d\n", name2, age);
   }
 
   // 테스트:
@@ -40,7 +43,7 @@ public class Controller02_1 {
       @PathVariable int age
       ) {
     // URL path에 값을 포함하여 전달할 수 있고, 그 값을 아규먼트로 받을 수 있다.
-    // URL path에 포함된 값을 받으려면 request handler의 URL을 설정할 때 
+    // URL path에 포함된 값을 받으려면 request handler의 URL을 설정할 때
     // 다음의 문법으로 선언해야 한다.
     // => .../{변수명}/{변수명}
     // 이렇게 선언된 변수 값을 받으려면 다음과 같이 아규먼트를 선언해야 한다.

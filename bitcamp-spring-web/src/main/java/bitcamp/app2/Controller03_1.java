@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-@Controller 
+@Controller
 @RequestMapping("/c03_1")
 public class Controller03_1 {
 
@@ -31,7 +31,7 @@ public class Controller03_1 {
   public String handler2(HttpSession session) {
     // HttpSession 객체를 사용하려면 아규먼트로 받아야 한다.
     //
-    return String.format("name=%s, age=%s", 
+    return String.format("name=%s, age=%s",
         session.getAttribute("name"),
         session.getAttribute("age"));
   }

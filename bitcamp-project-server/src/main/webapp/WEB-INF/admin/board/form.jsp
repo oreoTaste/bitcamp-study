@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
 
-<jsp:include page="/header.jsp" />
+<jsp:include page="../header.jsp" />
 
 <div class='container'>
 <h1>게시물입력</h1>
@@ -16,4 +16,4 @@
 
 </div>
 
-<jsp:include page="/footer.jsp" />
+<jsp:include page="../footer.jsp" />

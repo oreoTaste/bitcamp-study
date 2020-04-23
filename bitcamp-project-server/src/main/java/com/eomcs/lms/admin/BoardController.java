@@ -1,4 +1,4 @@
-package com.eomcs.lms.web;
+package com.eomcs.lms.admin;
 
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
