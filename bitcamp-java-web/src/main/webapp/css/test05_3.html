@@ -10,17 +10,28 @@
     => 위,아래 여백은 다른 태그의 여백과 겹쳐서 표현한다.
        여백이 큰 값으로 겹친다.
   */
+
   body {
-    border: 2px solid blue;
-  }
-  div {
-    margin: 10px;
-    border: 2px solid gray;
+    border: 10px solid blue;
+    padding: 0px;
   }
 
+  div {
+    margin: 10px;
+    border: 5px solid gray;
+  }
+
+/*박스형 or 인라인태그(위아래 marin을 무시한다)*/
   a {
     border: 1px solid red;
-    margin: 10px;
+    margin : 10px;
+    /*
+    line-height: 300%;
+    */
+  }
+
+  #linkbar {
+    margin:10px 0px 0px 0px;
   }
 
   #content {
@@ -54,9 +65,11 @@
   암호: <input type="password" name="pwd"><br>
   <button>로그인</button>
   <button>회원가입</button><br>
+  <div id="linkbar">
   <a href="http://www.facebook.com/bit">페이스북</a>
   <a href="http://www.google.com/bit">구글</a>
   <a href="http://www.twitter.com/bit">트위터</a>
+  </div>
   </div>
 
   <div id="content">

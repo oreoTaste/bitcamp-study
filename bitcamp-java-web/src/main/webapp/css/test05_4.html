@@ -13,13 +13,11 @@
     => height = 콘텐츠높이 + 좌,우 패딩높이 + 좌,우 테두리높이+ 좌,우 마진높이
   */
   body {
-    border: solid 1px black;
-    padding: 20px;
+    border: solid 5px grey;
+    padding: 20px 10px;
   }
   div {
     border: 10px solid red;
-    padding: 30px;
-    padding-right: 80px;
     margin: 10px;
     background-color: blue;
     color: white;
@@ -28,14 +26,19 @@
   }
   
   #menu {
-    padding-right: 10px;
+    box-sizing:content-box;
+    border-left-width:50px;
+    padding-left:30px;
   }
   
   #content {
     background-color: gray;
     /* border-box 라고 설정하면 width, height는 
        콘텐트 크기가 아니라 박스 크기가 된다. */
-    box-sizing: border-box;
+    box-sizing: content-box;
+    border-left-width:50px;
+    padding-left:30px;
+
   }
   
   #footer {
@@ -47,9 +50,9 @@
   </style>
 </head>
 <body>
-  <div id="menu">menu</div>
-  <div id="content">content</div>
-  <div id="footer">content</div>
+  <div id="menu">menu okok</div>
+  <div id="content">content okok</div>
+  <div id="footer">footer okok</div>
 </body>
 </html>
 

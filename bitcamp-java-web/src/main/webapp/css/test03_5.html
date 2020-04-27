@@ -13,18 +13,21 @@
         대상자:상태명 {...}
         대상자[속성명] {...}
    */
-  h1:nth-child(2) { /* 첫 번째 대상을 지정한다 */
+  h1 {
+     padding-left : 30px;
+   }
+  h1:nth-child(3) { /* 첫 번째 대상을 지정한다 */
     background-color: gray;
   }
   h1:nth-child(10) {
     background-color: red;
   }
   h1:nth-child(2n) {
-    border-left: 10px solid black;
+    border-left: 30px solid black;
   }
 
   h1:nth-child(2n + 1) {
-    border-right: 10px solid yellow;
+    border-right: 30px solid yellow;
   }
   </style>
 </head>
