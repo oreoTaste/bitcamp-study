@@ -8,16 +8,16 @@
   <h1>요점 정리 - 4.객체와 프로퍼티</h1>
   
 <script>
-var obj1 = new Object();
-obj1.name = "홍길동";
-obj1.age = 20;
+var obj1 = new Object(); //HashMap<String, Object> obj = new HashMap<>();
+obj1.name = "홍길동"; // obj.put("name", "홍길동");
+obj1.age = 20; // obj.put("age", 20);
 obj1.working = true;
 obj1.hello = function() {
   console.log("안녕하세요, " + this.name + "님!");
-};
+}; // obj.put("hello", 함수)
 
 console.log(obj1);
-obj1.hello();
+obj1.hello(); // obj.get("hello")();
 
 // 자바스크립트 객체 정의 단축 표기법
 // => JavaScript Object Notation(JSON) 데이터 포맷의 근원이다.
@@ -30,6 +30,12 @@ var obj2 = {
     },
     hello2() {
       console.log("안녕하세요, " + this.name + "님2!")
+    }
+    hello3() {
+    	console.log("안녕하세요,", + this.name + "님3!");
+    }
+    hello4:function() {
+    	console.log("안녕하세요," this.name + "님4"!);
     }
 };
 

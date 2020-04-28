@@ -17,13 +17,14 @@
   <button id="btn1">HTML 가져오기</button>
   
 <script>
+
 var tag1 = document.getElementById("btn1");
 
 tag1.onclick = function() {
-  // 서버에 요청
+  // 서버에 요청 
   var xhr = new XMLHttpRequest();
   xhr.open("GET", "exam06.jsp", false);
-  xhr.send();
+  xhr.send(); //동기방식
   
   // 서버가 보낸 데이터를 div 태그에 넣기
   var tag2 = document.getElementById("d1");

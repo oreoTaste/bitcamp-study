@@ -5,17 +5,47 @@
   <title>exam</title>
 </head>
 <body>
+  <div id="cover">
   <h1>요점 정리 - 5.HTML 태그와 DOM 트리 객체</h1>
-  <p id="p1">오호라!</p>
+  <p id="p">1!</p>
+  <p>2!</p>
+  <p>3!</p>
+  <p>4!</p>
+  <p>5!</p>
   <button id="btn1">확인</button>
+  </div>
   
 <script>
-var tag1 = document.getElementById("btn1");
 
+document.getElementById("btn1").onclick = function() {
+//  var p = document.createElement("p");
+//  p.innerHTML = "some new <b> text</b>";
+//  var node = document.createTextNode("some new <b> text</b>");
+//  document.createTextNode ==> ""를 생성한다는 말
+
+  var cover = document.getElementById("cover");
+  var p1 = cover.firstChild;
+//  cover.removeChild(document.getElementById("p1"));
+//  cover.removeChild(p1);
+  var len = cover.childNodes;
+  for(var x = 0; x < len.length; x++) {
+	  cover.removeChild(p1);
+  }
+};
+
+/*
+document.getElementById("btn1").onclick = function() {
+	var tag2 = document.getElementById("p1");
+	tag2.innerHTML = "비트캠프!";
+};
+*/
+/*
+var tag1 = document.getElementById("btn1");
 tag1.onclick = function() { // Observer 패턴: 리스너 => 이벤트 리스너 => 콜백함수(callback; cb)
   var tag2 = document.getElementById("p1");
   tag2.innerHTML = "비트캠프!";
 };
+*/
 
 </script>  
 </body>

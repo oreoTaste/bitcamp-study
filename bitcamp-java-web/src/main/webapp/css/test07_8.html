@@ -37,6 +37,7 @@ var btn = document.getElementById('signupBtn');
 btn.addEventListener('click', function() {
   // 입력 상자에 들어있는 값을 검사하여 이메일 중복 여부에 따라
   // 아이콘을 출력한다.
+
   if (email.value == "hong@test.com") { // 존재하는 사용자일 경우
     email.style["background-image"] = "url('no.jpeg')";
   } else {

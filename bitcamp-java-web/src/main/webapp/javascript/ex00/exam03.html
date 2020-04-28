@@ -8,15 +8,26 @@
   <h1>요점 정리 - 3.함수 정의와 호출</h1>
   
 <script>
+/*1급함수 : 1st class function*/
 function plus(a, b) {
   return a + b;
 }
 
-console.log(plus(10, 20));
+function minus(a, b) {
+	return a - b;
+}
+
+console.log(plus(10, 20)); // 30
 
 var ok = plus;
 
-console.log(ok(100, 200));
+console.log(ok(100, 200)); // 300
+
+console.log(minus(100, 200)); // -100
+
+var no = minus;
+
+console.log(no(100, 200)); // -100
 
 </script>  
 </body>

@@ -20,9 +20,8 @@
   <button id="btn1">데이터 가져오기</button>
   
 <script>
-var tag1 = document.getElementById("btn1");
 
-tag1.onclick = function() {
+document.getElementById("btn1").onclick = function() {
   // 서버에 요청
   var xhr = new XMLHttpRequest;
   xhr.open("GET", "exam07.jsp", false);
