@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>ex02</title>
+</head>
+<body>
+<h1>변수 - let</h1>
+<script>
+"use strict"
+
+var v1 = "때가쏙";
+{
+    var v1 = "비트";
+    console.log(v1);
+}
+console.log(v1);
+
+let v2 = "때가쏙 ";
+{
+    let v2 = "비트";
+    let v3 = "짱";
+    console.log(v2, v3);
+}
+console.log(v2
+    //, v3  // let은 지역변수이다. 오류발생
+);
+
+for(var i = 0; i < 5 ; i++) {
+    console.log(">> i:" + i); // 0~4
+}
+console.log(">>>>i:" + i); // 5
+
+for(let j = 0; j < 5; j++) {
+    console.log(">> j:" + j); // 0~4
+}
+// console.log(">>>>j:" + j); // let은 지역변수이므로 오류발생
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

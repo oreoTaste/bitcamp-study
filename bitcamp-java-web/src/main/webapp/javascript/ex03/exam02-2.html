@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>ex03</title>
+</head>
+<body>
+<h1>함수 - 함수의 OverLoading</h1>
+
+<script>
+
+/*이건 Overriding*/
+var v1 = 100;
+var v1 = true;
+var v1 = "hello";
+console.log(v1);
+
+/* 이것도 Overriding (OverLoading은 없다!!!)*/
+function f1(a) { 
+	console.log("f1(a):",a);
+}
+
+function f1() { 
+	console.log("f1():",a);
+}
+
+function f1(a, b, c) { 
+	console.log("f1(a, b, c):", a, b, c);
+	/*대처법*/
+	if(typeof c == function) {
+		console.log("불라불라");
+		// 이런식으로 가능
+	}
+}
+
+f1(100);
+f1();
+f1(100, 200, 300);
+
+</script>
+</body>
+</html>
+
+
+
+
+

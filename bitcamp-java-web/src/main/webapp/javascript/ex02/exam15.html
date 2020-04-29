@@ -12,6 +12,7 @@
 var v1 = "홍길동"; // window.v1
 
 function f1() {
+    console.log("변경전:" + window.v1);
     var v1 = 100; // f1() 함수에서만 사용되는 로컬 변수이다.
     
     // 함수 안에 글로벌 변수와 같은 이름의 변수가 있을 경우,
@@ -22,7 +23,7 @@ function f1() {
     // window를 생략하지 말라!
     window.v1 = "임꺽정";
     
-    console.log("f1():", v1, window.v1);
+    console.log("f1():", v1, "변경후:" + window.v1);
 }
 
 f1();

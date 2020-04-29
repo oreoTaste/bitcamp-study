@@ -8,7 +8,8 @@
 <h1>함수 - 클로저(closure)와 바깥 함수의 로컬 변수</h1>
 <script>
 "use strict"
-// 함수 안에 정의된 함수를 보통 클로저(closure)라 부른다.
+// "함수 안에 정의된 함수"를 보통 클로저(closure)라 부른다.
+//  (혹은 inner class, 중첩함수가 필요로 하는 변수를 모아놓은 별도 메모리를 closure라고 하기도 한다.)
 // => inner functoin, nested function 이라고도 표현한다.
 // => 클로저의 핵심 개념 
 //    closure에서 바깥 함수의 로컬 변수를 사용할 때, 
@@ -20,20 +21,21 @@
 //
 
 function createGreeting(name) {
-  var message = name + "님 반갑습니다!";
+  let message = name + "님 반갑습니다!";
   
-  // 클로저 만들기
+  // 클로저 만들기 : 필요로 하는 변수정보가 있으면
+  // Autowired처럼 클로저 내부에 정보를 저장해둔다.
   var f = function() {
-    console.log(message); // 클로저에서 바깥 함수의 변수를 사용하기
+    console.log(message);
   };
   
   return f;
 }
 
-var test1 = createGreeting("홍길동");
+createGreeting("홍길동")();
 var test2 = createGreeting("임꺽정");
 
-test1();
+//test1();
 test2();
 
 </script>

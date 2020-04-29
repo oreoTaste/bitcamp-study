@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>ex03</title>
+</head>
+<body>
+<h1>함수 - 함수 아규먼트와 함수 내장 변수 arguments</h1>
+<script>
+// 자바스크립트의 함수는 함수를 호출할 때 전달한 값들을 보관할 배열 변수를 내장하고 있다. 
+// => 그 내장 변수의 이름은 "arguments" 이다.
+function f1(a) { 
+	console.log("a =", a);
+
+	console.log("11111111111111111");
+  var arr = Array.from(arguments);
+  arr.forEach(function(value) {
+    console.log(value);
+  });
+
+
+  console.log("5555555555555555");
+  arr.reduce(function(sum, value) {
+    console.log(sum, value)
+    return sum + value;
+  });
+}
+
+f1(100, 200, 300, 400, 500);
+</script>
+</body>
+</html>
+
+
+
+
+
