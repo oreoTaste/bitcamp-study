@@ -32,19 +32,21 @@ var obj2 = new Member("hong", "1111");
 var obj3 = new Board("제목", "내용");
 
 // 객체가 지정된 생성자를 통해 초기화 되었는 지 검사
-console.log(obj1 instanceof Score);  // true
-console.log(obj2 instanceof Member); // true
-console.log(obj3 instanceof Board);  // true
+console.log("obj1 instanceof Score", obj1 instanceof Score);  // true
+console.log("obj2 instanceof Member", obj2 instanceof Member); // true
+console.log("obj3 instanceof Board", obj3 instanceof Board);  // true
 
+console.log("------------------------------------");
 // 상위 생성자를 통해 초기화되었는지 확인할 수 있다. 
-console.log(obj1 instanceof Object); // true
-console.log(obj2 instanceof Object); // true
-console.log(obj3 instanceof Object); // true
+console.log("obj1 instanceof Object", obj1 instanceof Object); // true
+console.log("obj2 instanceof Object", obj2 instanceof Object); // true
+console.log("obj3 instanceof Object", obj3 instanceof Object); // true
 
+console.log("------------------------------------");
 // 특정 생성자와 상관없다면?
-console.log(obj1 instanceof Member); // false
-console.log(obj2 instanceof Board);  // false
-console.log(obj3 instanceof Score);  // false
+console.log("obj1 instanceof Member", obj1 instanceof Member); // false
+console.log("obj2 instanceof Board", obj2 instanceof Board);  // false
+console.log("obj3 instanceof Score", obj3 instanceof Score);  // false
 
 </script>
 </body>

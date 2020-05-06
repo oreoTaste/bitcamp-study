@@ -8,6 +8,26 @@
 <h1>함수 - 함수 아규먼트와 함수 내장 변수 arguments</h1>
 <script>
 
+var map = new Map();
+map.set("name", "홍길동");
+map.set("age", 10);
+
+map.forEach(function(value, key, map){
+  console.log(key, value);
+  console.log(map.get(key));
+});
+
+console.log("wowowowowowowo");
+
+var arr100 = [100,200,300,400];
+arr100.forEach(function(value, key, map) {
+  console.log(key, value);
+  console.log(map);
+});
+
+console.log("첫번째첫번째첫번째첫번째첫번째첫번째첫번째첫번");
+
+
 function f1(a) { 
 	console.log("a =", a);
   console.log(arguments);

@@ -29,6 +29,7 @@ document.getElementById("btn1").addEventListener("click", function(e) {
 	// #btn1을 눌렀을 때 #btn2에 "ohora" 이벤트를 발생시키기
 	// 1) CustomEvent 만들기
 	// => 이벤트 객체에 데이터를 첨부할 때는 "detail"이라는 이름으로 데이터를 첨부하라!
+
 	var myEvent = new CustomEvent("ohora", 
 	    {detail: "hello"}); 
 	
@@ -38,7 +39,7 @@ document.getElementById("btn1").addEventListener("click", function(e) {
 
 // "ohora" 이벤트를 처리하고 싶다면, 
 // 다음과 같이 이벤트 이름을 "ohora"로 지정하라!
-document.getElementById("btn2").addEventListener("ohora", function(e) {
+document.getElementById("btn2").addEventListener("myEvent", function(e) {
     console.log("버튼2...", e.detail);
 });
 

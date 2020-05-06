@@ -25,11 +25,16 @@ var obj = {
     working: true
 };
 
-var i;
-for (i in obj) { // i 변수에 저장되는 것은 객체에 저장된 값의 이름이다. 즉 프로퍼티명이다.
+for (let j of Object.values(obj)) {
+    console.log(j);
+//    console.log(ob[j]);
+}
+
+console.log("---------------------");
+
+for (let i in obj) { // i 변수에 저장되는 것은 객체에 저장된 값의 이름이다. 즉 프로퍼티명이다.
 	console.log(i, obj[i]);
 }
-console.log("---------------------");
 
 </script>
 </body>

@@ -6,7 +6,7 @@
 </head>
 <body>
 <h1>이벤트 - 리스너 등록하기</h1>
-<button id="btn1" onclick="var str='Hello'; window.alert(str);">버튼1</button><br>
+<button id="btn1" onclick="var str = 'hello'; window.alert(str);">버튼1</button><br>
 <button id="btn2">버튼2</button><br>
 <button id="btn3">버튼3</button><br>
 
@@ -37,7 +37,7 @@
 // 2) 태그 객체의 onclick 프로퍼티에 함수를 등록한다.
 //    => 사용자가 태그를 클릭하면 onclick이라는 이름으로 등록된 함수를 호출한다.
 //    => HTML 태그와 자바스크립트 코드가 분리되어 있어서 유지보수하기 쉽다.
-//    => 이 방식은 한 개의 이벤트에 대해 오직 한 개의 리스너만 등록할 수 있다.
+//    => 이 방식은 이벤트에 대해 오직 한 개의 리스너만 등록할 수 있다.
 // 
 // 3) 태그 객체의 addEventListener()를 이용하여 호출될 함수를 등록한다.
 //    => 사용자가 태그를 클릭하면 해당 이벤트에 등록된 함수가 호출된다.
@@ -48,32 +48,47 @@
 var btn2 = document.getElementById("btn2");
 //var btn2 = document.querySelector("#btn2"); // 둘 중 아무거나 사용하면 된다.
 
-btn2.onclick = function() {
-    var str = "Hello2!";
+// 2-1.
+function f1() {
+    var str = "test2";
     window.alert(str);
 };
+btn2.onclick = f1;
+
+// 2-2.
+btn2.onclick = function() {
+    console.log(this);
+};
+
+// 2-3.
+btn2.onclick = () => window.confirm("confirm" + this);
 
 // 방법3:
-// => addEventListener(이벤트명, 리스너);
+// => addEventListener("이벤트명", 리스너);
 // => 주의! 
 //    클릭 이벤트의 이름은 "onclick"이 아니라, "click"이다.
-//
+// 3-1.
 var btn3 = document.querySelector("#btn3");
 btn3.addEventListener("click", () => {
-    console.log(this); // arrow function 문법으로 정의한 리스너의 소속은 window 객체이다.
+    console.log(this); // arrow function 에서 this는 window 객체이다
     var str = "Hi1!!";
     window.alert(str); 
 });
+
+// 3-2.
 btn3.addEventListener("click", () => {
-    console.log(this);
+    console.log(this); // arrow function 에서 this는 window 객체이다
     var str = "Hi2!!";
     window.alert(str);
 });
-btn3.addEventListener("click", function() {
-  console.log(this); // 일반 함수 문법으로 정의한 리스너의 소속은 태그 객체이다.
+
+// 3-3.
+function btn3Click () {
+    console.log(this); // 일반 함수 문법으로 정의한 리스너의 소속은 태그 객체이다.
     var str = "Hi3!!";
     window.alert(str);
-});
+}
+btn3.addEventListener("click", btn3Click);
 
 </script>
 </body>

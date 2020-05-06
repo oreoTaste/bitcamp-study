@@ -13,6 +13,8 @@
 
 // 태그 객체의 onclick 프로퍼티에 리스너 등록하고 이벤트 정보 추출
 document.getElementById("btn1").onclick = function(e) {
+	console.log(e.constructor.name);
+	console.log(e instanceof MouseEvent);
 	console.log(
 			e.altKey, e.ctrlKey, e.button, 
 			e.offsetX, e.offsetY, 

@@ -27,14 +27,12 @@ function Score(name, kor, eng, math) {
     // 즉 메모리 낭비가 발생한다.
     // 해결책?
     // => 객체가 사용하는 함수를 공유하면 메모리 낭비 문제를 해결할 수 있다.
-    /*
-    this.sum = function() { 
-        return this.kor + this.eng + this.math
-    };
-    this.aver = function() { 
-        return this.sum() / 3
-    }
-    */
+    // this.sum = function() { 
+    //     return this.kor + this.eng + this.math
+    // };
+    // this.aver = function() { 
+    //     return this.sum() / 3
+    // }
 }
 
 // 1) 자바스크립트 함수는 객체이다. 즉 "함수 = 객체 + 함수코드" 이다.
@@ -53,6 +51,8 @@ var scores = []; //new Array();
 scores[0] = new Score("홍길동", 100, 100, 100);
 scores[1] = new Score("임꺽정", 90, 90, 90);
 scores[2] = new Score("유관순", 80, 80, 80);
+
+console.log(scores[0]);
 
 for (var score of scores) {
     // Score() 함수로 초기화시킨 객체에는 sum()과 aver() 함수가 들어 있지 않다.

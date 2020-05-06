@@ -13,14 +13,17 @@
 var count = 0;
 function f1() { 
     console.log("f1()....." + (++count));
-    if(count>= 10) {
+    if(count>= 3) {
         console.log("완료!");
-        clearInterval(timerId);
+        window.clearInterval(v2);
     }
 }
 
+function v1() {setTimeout(f1, 1000)};
+var v2 = setInterval(v1, 2000);
+
 // f1() 함수를 2초 마다 호출하라!
-var timerId = window.setInterval(f1, 1000);
+//var timerId = window.setInterval(f1, 1000);
 
 </script>
 

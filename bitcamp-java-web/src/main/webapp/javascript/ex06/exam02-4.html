@@ -12,13 +12,14 @@
 "use strict"
 
 // addEventListener() 사용
-document.getElementById("btn1").addEventListener("click", function(e) {
+document.querySelector("#btn1").addEventListener("click", function(e) {
 	console.log(
 		e.altKey, e.ctrlKey, e.button, 
 		e.offsetX, e.offsetY, 
 		e.clientX, e.clientY, 
 		e.screenX, e.screenY)
 });
+
 </script>
 </body>
 </html>

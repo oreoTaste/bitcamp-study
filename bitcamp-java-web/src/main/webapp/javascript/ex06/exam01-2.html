@@ -16,6 +16,7 @@
 // 태그의 onclick 속성에 긴 코드를 넣기 불편해서 
 // 보통 함수를 호출하는 코드를 넣기도 한다.
 
+// 2.
 function btn2Click() {
     var str = "Hello!";
     window.alert(str);
@@ -23,11 +24,18 @@ function btn2Click() {
 
 // 차라리 그냥 onclick 프로퍼티에 함수를 등록하는 것이 더 낫다.
 // => 되도록 HTML 태그에 자바스크립트 코드를 두지 않는 것이 유지보수에 좋기 때문이다.
-var btn3 = document.querySelector("#btn3");
-btn3.onclick = () => {
-    var str = "Hello!!";
+// 3-1.
+// var btn3 = document.querySelector("#btn3");
+// btn3.onclick = () => {
+//     var str = "Hello!!";
+//     window.alert(str);
+// };
+
+// 3-2.
+btn3.addEventListener("click", function() {
+    var str = "Hello!!!!!!";
     window.alert(str);
-};
+});
 
 </script>
 </body>

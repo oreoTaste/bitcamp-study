@@ -26,21 +26,21 @@ button {padding: 30px;}
 // 세 번째 파라미터의 값을 true로 설정하라. 기본은 false이다.
 // => true : target 또는 capture 단계에서 호출된다.
 // => false(기본) : target 또는 bubble 단계에서 호출된다. 
-document.getElementById("btn1").addEventListener("click", function(e) {
+document.querySelector("#btn1").addEventListener("click", function(e) {
 	console.log("버튼1...");
 }, true);
 
-document.getElementById("btn2").addEventListener("click", function(e) {
+document.querySelector("#btn2").addEventListener("click", function(e) {
     console.log("버튼2...");
 });
 
 // 캡쳐 단계에서 호출되도록 설정한다.
-document.getElementById("d2").addEventListener("click", function(e) {
+document.querySelector("#d2").addEventListener("click", function(e) {
     console.log("d2...");
 }, true);
 
 //캡쳐 단계에서 호출되도록 설정한다.
-document.getElementById("d1").addEventListener("click", function(e) {
+document.querySelector("#d1").addEventListener("click", function(e) {
     console.log("d1...");
 }, true);
 

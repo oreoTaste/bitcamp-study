@@ -13,18 +13,21 @@
 //
 
 var obj = new Object();
+console.log("obj", obj);
 
 // 기본 객체 안에는 다음의 함수들이 들어 있다.
-console.log(obj.toString());
-console.log(obj.valueOf());
-console.log(obj.hasOwnProperty("toString")); // false
-console.log(obj.hasOwnProperty("hashCode")); // false
+console.log("obj.toString()", obj.toString());
+console.log("obj.valueOf()", obj.valueOf());
+console.log("obj.hasOwnProperty('toString()')", obj.hasOwnProperty("toString")); // false
+console.log("obj.hasOwnProperty('valueOf')", obj.hasOwnProperty("hashCode")); // false
 // => hasOwnProperty()는 기본 객체에 추가한 프로퍼티인지 검사한다.
 
 // 이렇게 준비된 객체에 프로퍼티를 추가하고 싶다면 다음의 문법을 사용하라!
 // 객체.프로퍼티명 = 값;
 // 객체["프로퍼티명"] = 값;
 // 객체['프로퍼티명'] = 값;
+
+console.log("----------------------------------------------------------")
 
 // 객체에 값을 저장할 수 있다.
 obj.title = "제목입니다.";
@@ -34,14 +37,33 @@ obj['viewCount'] = 120;
 // 물론 그 값으로 함수 객체의 주소를 저장할 수 있다.
 obj.plus = (a, b) => console.log("합계=", a + b);
 
-console.log(obj.hasOwnProperty("title"));  // true
-console.log(obj.hasOwnProperty("content")); // true
-console.log(obj.hasOwnProperty("viewCount")); // true
-console.log(obj.hasOwnProperty("plus")); // true
+function f1(a,b) {
+    return a+b;
+}
 
-console.log(obj["title"]);
-console.log(obj['content']);
-console.log(obj.viewCount);
+obj.plus1 = f1;
+obj.plus2 = function(a,b) {
+    return a + b;
+}
+obj.plus3 = (a,b) => a + b;
+console.log(obj.hasOwnProperty("plus1"));
+console.log(obj.hasOwnProperty("plus2"));
+console.log(obj.hasOwnProperty("plus3"));
+
+console.log(obj.plus1(100,200));
+console.log(obj['plus2'](100,200));
+console.log(obj["plus3"](100,200));
+
+console.log("=======================================================================")
+
+console.log("obj.hasOwnProperty('title')", obj.hasOwnProperty("title"));  // true
+console.log("obj.hasOwnProperty('content')", obj.hasOwnProperty("content")); // true
+console.log("obj.hasOwnProperty('viewCount')", obj.hasOwnProperty("viewCount")); // true
+console.log("obj.hasOwnProperty('plus')", obj.hasOwnProperty("plus")); // true
+
+console.log("obj['title']", obj["title"]);
+console.log("obj['content']", obj['content']);
+console.log("obj['viewCount']", obj.viewCount);
 obj.plus(100, 200);
 
 </script>

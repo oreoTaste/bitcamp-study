@@ -19,12 +19,17 @@ var obj = {
     working: true
 };
 
-// 일반 객체는 for...of 반복문을 사용할 수 없다.
-/* 실행 오류 발생!
-for (var i of obj) { 
-	console.log(i);
+for (let i in obj) {
+    console.log(i, obj[i]);
 }
-*/
+
+
+// 일반 객체는 for...of 반복문을 사용할 수 없다.
+// 실행 오류 발생!
+// for (let i of obj) { 
+// 	console.log(i);
+// }
+
 console.log("---------------------");
 
 var obj2 = new Map(); // Map으로 초기화시킨 객체는 iterable 객체이다. 
@@ -34,7 +39,7 @@ obj2.set("tel", "1111-1111");
 obj2.set("working", true);
 
 for (var x of obj2) { // x는 key와 value를 저장한 배열이다. 
-    console.log(x);
+    //console.log(x);
     console.log(x[0], "=", x[1]);
 }
 console.log("-----------------")

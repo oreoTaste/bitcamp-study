@@ -28,21 +28,21 @@ tbody tr:hover {
   </tr>
 </thead>
 <tbody>
-  <tr>
+  <tr data-no="1">
     <td>1</td> 
-    <td><a href="#">제</a></td>
+    <td><a href="#">제목</a></td>
     <td>홍길동</td>
     <td>2019-4-29</td>
     <td>100</td>
   </tr>
-  <tr>
+  <tr data-no="2">
     <td>2</td> 
     <td><a href="#">제목</a></td>
     <td>임꺽정</td>
     <td>2019-4-29</td>
     <td>800</td>
   </tr>
-  <tr>
+  <tr data-no="3">
     <td>3</td> 
     <td><a href="#">제목입니다.</a></td>
     <td>유관순</td>
@@ -58,13 +58,18 @@ tbody tr:hover {
 // 그 자식 태그를 클릭했을 때만 호출되기 때문에 불편할 경우가 있다.
 // 예) 제목을 출력하는 a 태그에 click 리스너를 등록하면 
 //    정확하게 제목을 클릭해야만 동작할 것이다.
-//var el = document.querySelectorAll("tbody a");
-
+// var el = document.querySelectorAll("tbody a");
+var cnt = 0;
 // 이런 경우 부모 태그에 리스너를 등록하면 훨씬 더 광범위하게 클릭 이벤트를 발생시킬 수 있다.
 var el = document.querySelectorAll("tbody tr");
+
 for (var e of el) {
   e.addEventListener("click", function(e) {
-    window.alert("제목을 눌렀음!");
+      // e.target은 이벤트가 발생한 객체를 가리킨다.
+    console.log("e.target:", e.target);
+    console.log("e.currentTarget:", e.currentTarget);
+  
+    window.alert(e.currentTarget.getAttribute("data-no") + "번 제목을 눌렀음!("+ ++cnt + ")");
   });
 }
 </script>

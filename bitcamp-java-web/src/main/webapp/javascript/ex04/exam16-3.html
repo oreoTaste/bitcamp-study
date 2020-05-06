@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>ex04</title>
+</head>
+<body>
+<h1>객체 - 상속 3 : prototype.constructor을 사용한 상속구현(레알)</h1>
+<script>
+"use strict"
+// 생성자를 정의할때 상위 생성자를 지정하면 자바의 상속을 할 수 있다.
+
+function Member(id, pwd) {
+	this.id = id;
+	this.pwd = pwd;
+}
+
+function Student(id, pwd, school, working) {
+	Member.call(this);
+	this.id = id;
+	this.pwd = pwd;
+	this.school = school;
+	this.working = working;
+}
+
+// Student의 프로토타입을 Member의 프로토타입으로 바꾼다.
+Student.prototype = Object.create(Member.prototype);
+
+// Student의 프로토타입의 constructor는 자기자신 Student로 지정한다.	
+Student.prototype.constructor = Student;
+
+
+var obj1 = new Member("hong", "1111");
+var obj2 = new Student("park", "2222", "대학교", true);
+
+console.log(obj1.constructor);
+console.log(obj2.constructor);
+
+// 객체가 지정된 생성자를 통해 초기화 되었는 지 검사
+console.log("obj1 instanceof Object", obj1 instanceof Object);  // true
+console.log("obj1 instanceof Member", obj1 instanceof Member); // true
+console.log("obj1 instanceof Student", obj1 instanceof Student); // false
+
+// 객체가 지정된 생성자를 통해 초기화 되었는 지 검사
+console.log("obj2 instanceof Object", obj2 instanceof Object);  // true
+console.log("obj2 instanceof Member", obj2 instanceof Member); // false
+console.log("obj2 instanceof Student", obj2 instanceof Student); // true
+
+
+</script>
+</body>
+</html>
+
+
+
+
+

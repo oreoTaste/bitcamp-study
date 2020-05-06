@@ -32,10 +32,10 @@ button {padding: 30px;}
 //
 document.getElementById("btn1").addEventListener("click", function(e) {
 	console.log("버튼1...1");
-	e.stopPropagation();
 });
 document.getElementById("btn1").addEventListener("click", function(e) {
     console.log("버튼1...2");
+    e.stopPropagation();
 });
 document.getElementById("btn1").addEventListener("click", function(e) {
     console.log("버튼1...3");
@@ -47,10 +47,10 @@ document.getElementById("btn1").addEventListener("click", function(e) {
 //
 document.getElementById("btn2").addEventListener("click", function(e) {
     console.log("버튼2...1");
-    e.stopImmediatePropagation();
 });
 document.getElementById("btn2").addEventListener("click", function(e) {
     console.log("버튼2...2");
+    e.stopImmediatePropagation();
 });
 document.getElementById("btn2").addEventListener("click", function(e) {
     console.log("버튼2...3");
