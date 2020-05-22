@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8'>
+<title>jQuery만들기</title>
+</head>
+<body>
+
+	<h1>jQuery 사용</h1>
+	<h1>Ajax POST 요청</h1>
+
+	<input id='v1' type='text'>
+	<select id='op'>
+		<option value='+'>+</option>
+		<option value='-'>-</option>
+		<option value='*'>*</option>
+		<option value='/'>/</option>
+	</select>
+	<input id='v2' type='text'>
+	<button id='computeBtn'>=</button>
+	<input id='result' type='text'>
+
+
+	<script src="jquery16.js"></script>
+	<script>
+    
+    $('#computeBtn').click(function() {
+    	$.ajax('test16.jsp', {
+    		method:'POST',
+    		data: {
+	          v1: encodeURIComponent($('#v1').val()),
+            v2: encodeURIComponent($('#v2').val()),
+            op: encodeURIComponent($('#op').val())
+    		},
+    		success: (data) => {
+    			$('#result').val(data);
+    		}
+    	});
+    });
+    
+    </script>
+
+</body>
+</html>

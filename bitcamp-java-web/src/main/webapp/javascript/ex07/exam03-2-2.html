@@ -35,9 +35,15 @@ document.querySelector("#btn1").onclick = () => {
     // => 10초 후에(넉넉하게 잡아서 15초 후에) responseText 변수를 사용하게 한다.
     // => 타임아웃에 함수를 등록해서 15초가 지난 후에 호출되면 
     //    responseText 변수의 값을 꺼내게 한다.
-    window.setTimeout(() => {
-      ta.value = xhr.responseText;
-    }, 15000);
+    
+    var value = xhr.responseText;
+    console.log("_"+value+"_");
+    while(value != null) {
+    	ta.value=xhr.responseText;
+    }
+    //window.setTimeout(() => {
+    //  ta.value = xhr.responseText;
+    //}, 15000);
     
     // 이 해결 방식의 문제점은
     // 서버의 응답 시간이 바뀌더라도 무조건 15초를 기다렸다가 값을 꺼낸다는 것이다.

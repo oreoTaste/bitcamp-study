@@ -6,12 +6,22 @@
 </head>
 <body>
 <h1>이벤트 - 이벤트 정보 다루기 I</h1>
-<button id="btn1" onclick='console.log("altKey: "+event.altKey, "CtrlKey: "+event.ctrlKey, "button: "+event.button, 
-"offsetX: "+event.offsetX, "offsetY: "+event.offsetY, "clientX: "+event.clientX, "clientY: "+event.clientY,
-"screenX: "+event.screenX, "screenY: "+event.screenY)'>버튼1</button><br>
+<button id="btn1">버튼1</button><br>
 
 <script>
 "use strict"
+
+var btn1 = document.querySelector("#btn1").addEventListener("click", function(){
+    console.log("altKey: "+event.altKey);
+    console.log("CtrlKey: "+event.ctrlKey);
+    console.log("button: "+event.button);
+    console.log("offsetX: "+event.offsetX);
+    console.log("offsetY: "+event.offsetY);
+    console.log("clientX: "+event.clientX);
+    console.log("clientY: "+event.clientY);
+    console.log("screenX: "+event.screenX); 
+    console.log("screenY: "+event.screenY);
+});
 
 // 이벤트가 발생하면 웹브라우저는 이벤트 정보를 담은 객체를 전달한다.
 // 이벤트 종류별로 생성되는 객체가 다르다. 

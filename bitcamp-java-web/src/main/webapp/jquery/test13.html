@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title>jQuery만들기</title>
+</head>
+<body>
+    <h1>jQuery 사용후</h1>
+    <button id='btn1'>버튼 추가</button>
+    <div id='d1'>
+        <button class='mybtn'>버튼!</button>
+        <button>버튼xxxxx</button>
+    </div> 
+    
+    
+    
+    <script src="jquery13.js"></script>
+    <script>
+    
+    var d1 = $('#d1').css('border', '2px dashed red')
+                     .css('margin', '10px')
+                     .css('min-height', '100px');
+    
+    var btn1 = $('#btn1').click(function() {
+    	
+    $('<button>')
+    .html('추가버튼!')
+    .addClass('mybtn')
+    .appendTo(d1)
+    });
+
+    /*
+    $('.mybtn').on('click', (e) => {
+    	alert('기존 이벤트');
+    });
+    */
+    
+    $('#d1').on('click', '.mybtn', (e) => {
+      alert('새로 등록한 이벤트');
+    });
+    </script>
+
+</body>
+</html>

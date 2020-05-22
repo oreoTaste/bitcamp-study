@@ -32,14 +32,14 @@ button {padding: 30px;}
 //
 document.getElementById("btn1").addEventListener("click", function(e) {
 	console.log("버튼1...1");
-});
+}, true);
 document.getElementById("btn1").addEventListener("click", function(e) {
     console.log("버튼1...2");
     e.stopPropagation();
-});
+}, true);
 document.getElementById("btn1").addEventListener("click", function(e) {
     console.log("버튼1...3");
-});
+}, true);
 
 //방법2: Event.stopImmediatePropagation()을 호출하라!
 //=> 이벤트 bubbling을 막는다. 
@@ -47,26 +47,26 @@ document.getElementById("btn1").addEventListener("click", function(e) {
 //
 document.getElementById("btn2").addEventListener("click", function(e) {
     console.log("버튼2...1");
-});
+}, true);
 document.getElementById("btn2").addEventListener("click", function(e) {
     console.log("버튼2...2");
     e.stopImmediatePropagation();
-});
+}, true);
 document.getElementById("btn2").addEventListener("click", function(e) {
     console.log("버튼2...3");
-});
+}, true);
 
 document.getElementById("d2").addEventListener("click", function(e) {
     console.log("d2...");
-});
+}, true);
 
 document.getElementById("d1").addEventListener("click", function(e) {
     console.log("d1...");
-});
+}, true);
 
 document.body.addEventListener("click", function(e) {
     console.log("body...");
-});
+}, true);
 </script>
 </body>
 </html>

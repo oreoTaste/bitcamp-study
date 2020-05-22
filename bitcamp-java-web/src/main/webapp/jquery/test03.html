@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title>jQuery만들기</title>
+</head>
+<body>
+    <h1>jQuery 사용후</h1>
+    <div id='d1'>이전값</div> 
+    <div id='d2'></div>
+    
+    
+    <script src="jquery03.js"></script>
+    <script>
+        //var d1 = document.querySelector('#d1');
+        var tag = $('#d1');
+        var tag2 = $('#d2');
+        
+        var content = tag.html();
+        tag2.html(content);
+        tag.html('바꾼 값');
+        
+        tag.style.color='red';
+        tag.style.backgroundColor = 'gray';
+        // d1.style['background-color'] ='gray';
+        tag.onclick = function() {
+        	alert('okok');
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title>jQuery만들기</title>
+</head>
+<body>
+    <h1>jQuery 사용후</h1>
+    <button id='btn1'>버어튼</button>
+    <div id='d1'></div> 
+    
+    <script src="jquery08.js"></script>
+    <script>
+    
+    var d1 = $('#d1');
+    d1.css('border', '2px dashed red');
+    d1.css('margin', '10px');
+    d1.css('min-height', '100px');
+    
+    var btn1 = $('#btn1');
+    btn1.click(function() {
+    	
+    	var btn = $('<button>');
+    	btn.html('버튼!');
+    	
+    	btn.click(()=> {alert('와우');});
+    	
+    	d1.append(btn);
+    	
+    });
+    
+    </script>
+
+</body>
+</html>

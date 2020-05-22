@@ -34,7 +34,11 @@ document.querySelector("#btn1").onclick = () => {
     // 서버에 연결하기 전에 등록해야 한다.
     // 즉 open()을 호출하기 전에 등록해야 한다.
     xhr.onreadystatechange = () => {
+    if(xhr.readyState == 4) {
         console.log("현재 요청 상태: ", xhr.readyState);
+            console.log(xhr.readyState);
+        	  ta.value = xhr.responseText;
+        }
     };
     
     xhr.open("GET", "test3.jsp", true);

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<!-- 버튼추가 -->
+<fb:login-button scope="public_profile,email" onlogin="checkLoginState();"></fb:login-button>
+
+
+<script>
+  // 초기화될때 사용할 함수를 미리 등록한다.
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '178404756776711',
+      cookie     : true,
+      xfbml      : true,
+      version    : 'v7.0'
+    });
+    FB.AppEvents.logPageView();   
+  };
+
+  // 로그인 상태 확인
+  FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+  });
+  
+  
+  
+  function checkLoginState() {
+	  console.log("로그인이 수행된 이후 상황")
+    FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+    });
+  }
+  
+  // FB 라이브러리 퍼오는 코드
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "https://connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
+
+</body>
+</html>

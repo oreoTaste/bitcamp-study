@@ -21,7 +21,7 @@ document.getElementById("btn1").addEventListener("click", (e) => {
     console.log(e);
     //=> 있다!
     //   이벤트 객체에 이벤트가 발생된 태그의 주소가 들어 있다.
-    console.log(e.target);
+    console.log(e.currentTarget);
     // 이벤트가 발생한 객체의 속성 값 알아내기
     console.log(e.target.getAttribute("data-no"));
 });
