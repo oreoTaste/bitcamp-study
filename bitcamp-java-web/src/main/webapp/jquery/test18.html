@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8'>
+<title>jQuery만들기</title>
+</head>
+<body>
+
+	<h1>jQuery 사용</h1>
+	<button id='btn'>데이터 가져오기</button>
+	<table id='boardTable' border='1'>
+	<thead>
+	 <tr>
+     <th>번호</th>
+     <th>제목</th>
+     <th>작성자</th>
+     <th>조회수</th>
+	 </tr>
+	</thead>
+	
+	<tbody>
+	</tbody>
+	</table>
+
+	<script src="jquery17.js"></script>
+	<script>
+  
+	$('#btn').click(function() {
+		$.get(
+				'test18.jsp',
+				(data) => {
+					// 서버에서 HTML을 받아서 삽입하기
+					$('#boardTable tbody').html(data);
+				});
+	});
+	
+    
+  </script>
+
+</body>
+</html>
