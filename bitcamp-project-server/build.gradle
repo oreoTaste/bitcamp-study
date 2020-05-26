@@ -16,6 +16,9 @@ tasks.withType(JavaCompile) {
 }
 
 dependencies {
+  // Tiles-Jsp 라이브러리
+  implementation 'org.apache.tiles:tiles-test:3.0.8'
+
   // Spring의 MultipartResolver를 사용하는법
   // 1. Servlet 3.0에서 제공하는 multipart 사용하기
   // 2. 아니면 다음과 같이 Apatch의 multipart 처리 라이브러리를 추가/사용하기
