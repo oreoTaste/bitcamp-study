@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>c05_3</title>
+</head>
+<body>
+
+<h1>JSON 데이터 받기</h1>
+<button id="btn1" type="button"> JSP. 파일로 생성한JSON 데이터 받기</button><br>
+<button id="btn2" type="button"> Gson 객체가 생성한 JSON 데이터 받기(by 페이지 컨트롤러)</button><br>
+<button id="btn3" type="button"> Jackson또는 Gson 객체가 생성한 JSON 데이터 받기(by 프론트 컨트롤러)</button><br>
+
+<script>
+document.querySelector("#btn3").onclick = () => {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState != 4 || xhr.status != 200)
+        return;
+      displayData(xhr.responseText);
+    };
+    xhr.open("GET", "../../app2/c05_1/h3", true);
+    xhr.send();
+  };
+
+document.querySelector("#btn2").onclick = () => {
+	  var xhr = new XMLHttpRequest();
+	  xhr.onreadystatechange = () => {
+	    if (xhr.readyState != 4 || xhr.status != 200)
+	      return;
+	      displayData(xhr.responseText);
+	  };
+	  xhr.open("GET", "../../app2/c05_1/h2", true);
+	  xhr.send();
+	};
+
+
+
+document.querySelector("#btn1").onclick = () => {
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = () => {
+    if (xhr.readyState != 4 || xhr.status != 200)
+      return;
+    displayData(xhr.responseText);
+  };
+  
+  xhr.open("GET", "../../app2/c05_1/h1", true);
+  xhr.send();
+};
+
+
+function displayData(jsonStr) {
+	  var arr = JSON.parse(jsonStr);
+	  for(let i = 0; i < arr.length; i++) {
+        console.log(arr[i].no, 
+				        		arr[i].title, 
+				        		arr[i].writer, 
+				        		arr[i].viewCount, 
+				        		arr[i].createdDate);
+    }
+}
+
+</script>
+
+</body>
+</html>
+
+

@@ -45,7 +45,7 @@ public class Controller05_2 {
   //   http://.../app2/c05_2/h2
   @GetMapping(value="h2", produces="text/plain;charset=UTF-8")
   public String handler2() {
-    return "안녕하세요!"; // String 타입은 그대로 출력한다. 
+    return "안녕하세요!"; // String 타입은 그대로 출력한다.
                        // 단 출력 문자열의 인코딩을 지정해야 한글이 깨지지 않는다.
   }
   
@@ -60,11 +60,12 @@ public class Controller05_2 {
   //   http://.../app2/c05_2/h4
   @GetMapping("h4")
   public Object handler4() {
-    // primitive 타입이나 String 타입의 값을 JSON 형식으로 출력하려면 
+    // primitive 타입이나 String 타입의 값을 JSON 형식으로 출력하려면
     // 도메인 객체나 맵 객체 담아 리턴하라!
     HashMap<String,Object> content = new HashMap<>();
     content.put("v1", 100);
     content.put("v2", "Hello");
+    content.put("v3", "하하");
     
     return content;
   }

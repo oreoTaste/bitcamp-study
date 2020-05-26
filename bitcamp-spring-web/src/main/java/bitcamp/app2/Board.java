@@ -1,9 +1,9 @@
 package bitcamp.app2;
 
-import java.util.Date;
+import java.sql.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class Board { 
+public class Board {
   protected int no;
   protected String title;
   protected String content;
@@ -18,7 +18,7 @@ public class Board {
   }
   
   public Board(
-      int no, String title, String content, String writer, 
+      int no, String title, String content, String writer,
       int viewCount, Date createdDate) {
     this.no = no;
     this.title = title;

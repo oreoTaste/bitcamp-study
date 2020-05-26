@@ -37,6 +37,7 @@ public class Controller05_3 {
   //   http://.../html/app2/c05_3.html
   @RequestMapping(value="h3", produces="text/plain;charset=UTF-8")
   public Object handler3(@RequestBody String content) throws Exception {
+    System.out.println("h3");
     System.out.println(content);
     System.out.println(URLDecoder.decode(content, "UTF-8"));
     return "OK!";
@@ -51,6 +52,7 @@ public class Controller05_3 {
   //   http://.../html/app2/c05_3.html
   @RequestMapping(value="h4", produces="text/plain;charset=UTF-8")
   public Object handler4(@RequestBody Map<String,Object> content) throws Exception {
+    System.out.println("h4");
     System.out.println(content);
     return "OK!";
   }
@@ -59,11 +61,12 @@ public class Controller05_3 {
   // => HttpMessageConverter 구현체(예: MappingJackson2HttpMessageConverter)가
   //    클라이언트가 보낸 데이터를 도메인 객체(예: Board, Member, Lesson 등)에 담아준다.
   // => Json 데이터의 프로퍼티 명과 도메인 객체의 프로퍼티 명이 일치해야 한다.
-  // 
+  //
   // 테스트
   //   http://.../html/app2/c05_3.html
   @RequestMapping(value="h5", produces="text/plain;charset=UTF-8")
   public Object handler5(@RequestBody Board content) throws Exception {
+    System.out.println("h5");
     System.out.println(content);
     
     // 주의!
@@ -72,15 +75,15 @@ public class Controller05_3 {
     //    예) 2019-05-01 ===> java.util.Date 객체 변환 성공!
     // => 만약 이 형태가 아니면 변환할 수 없어 실행 오류가 발생한다.
     //    예) 2019-5-1 ===> 변환 오류!
-    // 
+    //
     // @JsonFormat 애노테이션 사용
     // => 이 애노테이션은 MappingJackson2HttpMessageConverter를 위한 것이다.
     //    GsonHttpMessageConverter는 이 애노테이션을 인식하지 않는다.
-    // => 도메인 객체의 프로퍼티에 이 애노테이션을 붙이면 
+    // => 도메인 객체의 프로퍼티에 이 애노테이션을 붙이면
     //    2019-05-01 이나 2019-5-1 모두 처리할 수 있다.
-    // => 뿐만 아니라, 도메인 객체를 JSON 문자열로 변환할 때도 
+    // => 뿐만 아니라, 도메인 객체를 JSON 문자열로 변환할 때도
     //    해당 형식으로 변환된다.
-    // 
+    //
     
     return "OK!";
   }

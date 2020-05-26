@@ -17,6 +17,19 @@
     <welcome-file>default.htm</welcome-file>
   </welcome-file-list>
 
+  <!-- 오류 발생시 오류 내용을 출력하는 페이지를 직접 설정하자 
+  <error-page>
+    <location>/WEB-INF/jsp2/error1_post.jsp</location>
+  </error-page>
+  -->
+  
+  <!-- 오류 발생시 오류 내용을 출력하는 페이지를 페이지컨트롤러로 경유하기
+  -->
+  <error-page>
+    <location>/app2/error</location>
+  </error-page>
+  
+  
 </web-app>
 
 

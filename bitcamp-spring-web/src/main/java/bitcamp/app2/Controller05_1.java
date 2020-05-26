@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.gson.Gson;
 
-@Controller 
+@Controller
 @RequestMapping("/c05_1")
 public class Controller05_1 {
 
@@ -48,20 +48,20 @@ public class Controller05_1 {
   // 테스트:
   //   http://.../app2/c05_1/h2
   @GetMapping(value="h2", produces="text/plain;charset=UTF-8")
-  @ResponseBody
+  @ResponseBody // 이거 콘텐츠야~~라는 뜻
   public String handler2() {
     return new Gson().toJson(this.list);
   }
   
   
   // 3) Google Gson 라이브러리를 사용하여 JSON 형식의 콘텐트 출력하기 II
-  // => 페이지 컨트롤러의 리턴 값이 String이 아니면 
-  //    프론트 컨트롤러는 
-  //    Google의 Gson 라이브러리나 Jackson 라이브러리를 사용하여 
+  // => 페이지 컨트롤러의 리턴 값이 String이 아니면
+  //    프론트 컨트롤러는
+  //    Google의 Gson 라이브러리나 Jackson 라이브러리를 사용하여
   //    자동으로 JSON 형식의 문자열로 만들어 클라이언트로 출력한다.
   // => 단 Gson 또는 Jackson 라이브러리가 있어야 한다.
   //    둘 다 있다면 Jackson 라이브러리가 기본으로 사용된다.
-  // => build.gradle 파일에서 gson 또는 jackson 라이브러리를 추가하는 부분의 
+  // => build.gradle 파일에서 gson 또는 jackson 라이브러리를 추가하는 부분의
   //    주석을 참고하라!
   // 테스트:
   //   http://.../app2/c05_1/h3
